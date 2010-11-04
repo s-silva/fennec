@@ -1,0 +1,71 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "codec aac", "codec aac.vcproj", "{A0DF125A-73BD-4D55-B9E4-60B2B470E049}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7D52252D-C68F-4313-8876-DFF8E314134D} = {7D52252D-C68F-4313-8876-DFF8E314134D}
+		{F470BB4A-7675-4D6A-B310-41F33AC6F987} = {F470BB4A-7675-4D6A-B310-41F33AC6F987}
+		{5EFCFACB-1835-422C-ACDA-E3B3A2F51387} = {5EFCFACB-1835-422C-ACDA-E3B3A2F51387}
+		{AA2D0EFE-E73D-40AD-ADCE-8A2B54F34C6F} = {AA2D0EFE-E73D-40AD-ADCE-8A2B54F34C6F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libfaad", "..\..\faad2\libfaad\libfaad.vcproj", "{5EFCFACB-1835-422C-ACDA-E3B3A2F51387}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mp4ff", "..\..\faad2\common\mp4ff\mp4ff.vcproj", "{F470BB4A-7675-4D6A-B310-41F33AC6F987}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libfaac_dll", "..\..\faac\libfaac\libfaac_dll_drm.vcproj", "{AA2D0EFE-E73D-40AD-ADCE-8A2B54F34C6F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmp4v2", "..\..\faac\common\mp4v2\libmp4v260.vcproj", "{7D52252D-C68F-4313-8876-DFF8E314134D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug DRM|Win32 = Debug DRM|Win32
+		Debug|Win32 = Debug|Win32
+		Release DRM|Win32 = Release DRM|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A0DF125A-73BD-4D55-B9E4-60B2B470E049}.Debug DRM|Win32.ActiveCfg = Debug|Win32
+		{A0DF125A-73BD-4D55-B9E4-60B2B470E049}.Debug DRM|Win32.Build.0 = Debug|Win32
+		{A0DF125A-73BD-4D55-B9E4-60B2B470E049}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A0DF125A-73BD-4D55-B9E4-60B2B470E049}.Debug|Win32.Build.0 = Debug|Win32
+		{A0DF125A-73BD-4D55-B9E4-60B2B470E049}.Release DRM|Win32.ActiveCfg = Release|Win32
+		{A0DF125A-73BD-4D55-B9E4-60B2B470E049}.Release DRM|Win32.Build.0 = Release|Win32
+		{A0DF125A-73BD-4D55-B9E4-60B2B470E049}.Release|Win32.ActiveCfg = Release|Win32
+		{A0DF125A-73BD-4D55-B9E4-60B2B470E049}.Release|Win32.Build.0 = Release|Win32
+		{5EFCFACB-1835-422C-ACDA-E3B3A2F51387}.Debug DRM|Win32.ActiveCfg = Debug|Win32
+		{5EFCFACB-1835-422C-ACDA-E3B3A2F51387}.Debug DRM|Win32.Build.0 = Debug|Win32
+		{5EFCFACB-1835-422C-ACDA-E3B3A2F51387}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5EFCFACB-1835-422C-ACDA-E3B3A2F51387}.Debug|Win32.Build.0 = Debug|Win32
+		{5EFCFACB-1835-422C-ACDA-E3B3A2F51387}.Release DRM|Win32.ActiveCfg = Release|Win32
+		{5EFCFACB-1835-422C-ACDA-E3B3A2F51387}.Release DRM|Win32.Build.0 = Release|Win32
+		{5EFCFACB-1835-422C-ACDA-E3B3A2F51387}.Release|Win32.ActiveCfg = Release|Win32
+		{5EFCFACB-1835-422C-ACDA-E3B3A2F51387}.Release|Win32.Build.0 = Release|Win32
+		{F470BB4A-7675-4D6A-B310-41F33AC6F987}.Debug DRM|Win32.ActiveCfg = Debug|Win32
+		{F470BB4A-7675-4D6A-B310-41F33AC6F987}.Debug DRM|Win32.Build.0 = Debug|Win32
+		{F470BB4A-7675-4D6A-B310-41F33AC6F987}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F470BB4A-7675-4D6A-B310-41F33AC6F987}.Debug|Win32.Build.0 = Debug|Win32
+		{F470BB4A-7675-4D6A-B310-41F33AC6F987}.Release DRM|Win32.ActiveCfg = Release|Win32
+		{F470BB4A-7675-4D6A-B310-41F33AC6F987}.Release DRM|Win32.Build.0 = Release|Win32
+		{F470BB4A-7675-4D6A-B310-41F33AC6F987}.Release|Win32.ActiveCfg = Release|Win32
+		{F470BB4A-7675-4D6A-B310-41F33AC6F987}.Release|Win32.Build.0 = Release|Win32
+		{AA2D0EFE-E73D-40AD-ADCE-8A2B54F34C6F}.Debug DRM|Win32.ActiveCfg = Debug DRM|Win32
+		{AA2D0EFE-E73D-40AD-ADCE-8A2B54F34C6F}.Debug DRM|Win32.Build.0 = Debug DRM|Win32
+		{AA2D0EFE-E73D-40AD-ADCE-8A2B54F34C6F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AA2D0EFE-E73D-40AD-ADCE-8A2B54F34C6F}.Debug|Win32.Build.0 = Debug|Win32
+		{AA2D0EFE-E73D-40AD-ADCE-8A2B54F34C6F}.Release DRM|Win32.ActiveCfg = Release DRM|Win32
+		{AA2D0EFE-E73D-40AD-ADCE-8A2B54F34C6F}.Release DRM|Win32.Build.0 = Release DRM|Win32
+		{AA2D0EFE-E73D-40AD-ADCE-8A2B54F34C6F}.Release|Win32.ActiveCfg = Release|Win32
+		{AA2D0EFE-E73D-40AD-ADCE-8A2B54F34C6F}.Release|Win32.Build.0 = Release|Win32
+		{7D52252D-C68F-4313-8876-DFF8E314134D}.Debug DRM|Win32.ActiveCfg = Debug|Win32
+		{7D52252D-C68F-4313-8876-DFF8E314134D}.Debug DRM|Win32.Build.0 = Debug|Win32
+		{7D52252D-C68F-4313-8876-DFF8E314134D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7D52252D-C68F-4313-8876-DFF8E314134D}.Debug|Win32.Build.0 = Debug|Win32
+		{7D52252D-C68F-4313-8876-DFF8E314134D}.Release DRM|Win32.ActiveCfg = Release|Win32
+		{7D52252D-C68F-4313-8876-DFF8E314134D}.Release DRM|Win32.Build.0 = Release|Win32
+		{7D52252D-C68F-4313-8876-DFF8E314134D}.Release|Win32.ActiveCfg = Release|Win32
+		{7D52252D-C68F-4313-8876-DFF8E314134D}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

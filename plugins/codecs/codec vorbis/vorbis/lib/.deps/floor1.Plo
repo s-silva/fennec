@@ -1,0 +1,82 @@
+floor1.lo floor1.o: floor1.c /usr/include/stdlib.h \
+  /usr/include/machine/ansi.h /usr/include/ppc/ansi.h \
+  /usr/include/machine/types.h /usr/include/ppc/types.h \
+  /usr/include/sys/cdefs.h /usr/include/alloca.h /usr/include/string.h \
+  /usr/include/math.h /usr/include/architecture/ppc/math.h \
+  /Users/pm/MoreAmpDev/libs/libogg/inst/include/ogg/ogg.h \
+  /Users/pm/MoreAmpDev/libs/libogg/inst/include/ogg/os_types.h \
+  /usr/include/sys/types.h /usr/include/sys/appleapiopts.h \
+  /usr/include/machine/endian.h /usr/include/ppc/endian.h \
+  /Users/pm/MoreAmpDev/libs/libogg/inst/include/ogg/config_types.h \
+  ../include/vorbis/codec.h codec_internal.h envelope.h mdct.h codebook.h \
+  psy.h smallft.h backends.h bitrate.h os.h ../config.h misc.h \
+  /usr/include/memory.h highlevel.h registry.h scales.h \
+  /usr/include/stdio.h
+
+/usr/include/stdlib.h:
+
+/usr/include/machine/ansi.h:
+
+/usr/include/ppc/ansi.h:
+
+/usr/include/machine/types.h:
+
+/usr/include/ppc/types.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/alloca.h:
+
+/usr/include/string.h:
+
+/usr/include/math.h:
+
+/usr/include/architecture/ppc/math.h:
+
+/Users/pm/MoreAmpDev/libs/libogg/inst/include/ogg/ogg.h:
+
+/Users/pm/MoreAmpDev/libs/libogg/inst/include/ogg/os_types.h:
+
+/usr/include/sys/types.h:
+
+/usr/include/sys/appleapiopts.h:
+
+/usr/include/machine/endian.h:
+
+/usr/include/ppc/endian.h:
+
+/Users/pm/MoreAmpDev/libs/libogg/inst/include/ogg/config_types.h:
+
+../include/vorbis/codec.h:
+
+codec_internal.h:
+
+envelope.h:
+
+mdct.h:
+
+codebook.h:
+
+psy.h:
+
+smallft.h:
+
+backends.h:
+
+bitrate.h:
+
+os.h:
+
+../config.h:
+
+misc.h:
+
+/usr/include/memory.h:
+
+highlevel.h:
+
+registry.h:
+
+scales.h:
+
+/usr/include/stdio.h:

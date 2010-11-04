@@ -1,0 +1,4 @@
+EXPORTS
+ fennec_initialize_input
+ fennec_initialize_encoder
+ 

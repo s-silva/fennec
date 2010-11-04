@@ -1,0 +1,73 @@
+<html>
+<head>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=Windows-1252">
+</head>
+<body>
+<pre>
+<table width=100% bgcolor=#CFCFE5><tr> <td> <font face=arial size=+3>
+Build Log
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>
+<h3>------- Build started: Project: mpglib, Configuration: Release|Win32 -------
+</h3>
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Command Lines
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Creating temporary file "e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\encoders\encoder lame\lame\mpglib\Release\BAT000001.bat" with contents
+[
+@echo off
+copy ..\configMS.h ..\config.h
+
+if errorlevel 1 goto VCReportError
+goto VCEnd
+:VCReportError
+echo Project : error PRJ0019: A tool returned an error code from "Performing Custom Build Step on configMS"
+exit 1
+:VCEnd
+]
+Creating command line ""e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\encoders\encoder lame\lame\mpglib\Release\BAT000001.bat""
+Creating temporary file "e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\encoders\encoder lame\lame\mpglib\Release\RSP000002.rsp" with contents
+[
+/O2 /I "../libmp3lame" /I "../include" /I ".." /D "NDEBUG" /D "HAVE_MPGLIB" /D "_WINDOWS" /D "USE_LAYER_2" /D "WIN32" /D "HAVE_CONFIG_H" /FD /EHsc /ML /Fp".\Release/mpglib_vc6.pch" /Fo".\Release/" /Fd".\Release/" /W3 /c
+".\tabinit.c"
+".\layer3.c"
+".\layer2.c"
+".\layer1.c"
+".\interface.c"
+".\decode_i386.c"
+".\dct64_i386.c"
+".\common.c"
+]
+Creating command line "cl.exe @"e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\encoders\encoder lame\lame\mpglib\Release\RSP000002.rsp" /nologo"
+Creating temporary file "e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\encoders\encoder lame\lame\mpglib\Release\RSP000003.rsp" with contents
+[
+/OUT:"Release\mpglib.lib" /NOLOGO
+".\Release\common.obj"
+".\Release\dct64_i386.obj"
+".\Release\decode_i386.obj"
+".\Release\interface.obj"
+".\Release\layer1.obj"
+".\Release\layer2.obj"
+".\Release\layer3.obj"
+".\Release\tabinit.obj"
+]
+Creating command line "lib.exe @"e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\encoders\encoder lame\lame\mpglib\Release\RSP000003.rsp""
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Output Window
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Performing Custom Build Step on configMS
+        1 file(s) copied.
+Compiling...
+tabinit.c
+layer3.c
+layer2.c
+layer1.c
+interface.c
+decode_i386.c
+dct64_i386.c
+common.c
+Generating Code...
+Creating library...
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Results
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>
+Build log was saved at "file://e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\encoders\encoder lame\lame\mpglib\Release\BuildLog.htm"
+mpglib - 0 error(s), 0 warning(s)</pre></table><table   width=100% height=20 bgcolor=#CFCFE5><tr><td><font face=arial size=+2>
+</font></table></body></html>

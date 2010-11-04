@@ -1,0 +1,66 @@
+
+
+/*
+ * this is not used.
+ */
+int set_primary_buffer(void)
+{ 
+	DSBUFFERDESC          dsbdesc; 
+	HRESULT               hr; 
+	WAVEFORMATEXTENSIBLE  wfx;
+	LPDIRECTSOUNDBUFFER   dspb;
+
+	/* format information */
+ 
+	memset(&wfx, 0, sizeof(WAVEFORMATEXTENSIBLE));
+
+	wfx.Format.cbSize                = sizeof(WAVEFORMATEXTENSIBLE);
+	wfx.Format.nSamplesPerSec        = splayer.frequency;
+	wfx.Format.wBitsPerSample        = (WORD)splayer.output_bps;
+	wfx.Format.nChannels             = (WORD)splayer.channels;
+	wfx.Format.wFormatTag            = WAVE_FORMAT_EXTENSIBLE;
+	wfx.Format.nAvgBytesPerSec       = splayer.frequency * splayer.channels * (splayer.output_bps / 8);
+	wfx.Format.nBlockAlign           = (WORD)(splayer.channels * (splayer.output_bps / 8));
+
+	wfx.Samples.wReserved           = 0;
+	wfx.Samples.wSamplesPerBlock    = 0;
+	wfx.Samples.wValidBitsPerSample = splayer.output_bps;
+
+	splayer.wfx.dwChannelMask = 0xFFFFFFFF;
+
+	if(splayer.output_float)
+		wfx.SubFormat = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT ;
+	else
+		wfx.SubFormat = KSDATAFORMAT_SUBTYPE_PCM;
+
+
+	/* buffer info. */
+
+
+	memset(&dsbdesc, 0, sizeof(DSBUFFERDESC));
+
+    splayer.dsb.dwSize        = sizeof(DSBUFFERDESC);
+    splayer.dsb.dwFlags       = DSBCAPS_PRIMARYBUFFER;
+    splayer.dsb.dwBufferBytes = 0;
+    splayer.dsb.lpwfxFormat   = 0;
+
+	hr = splayer.ds->SetCooperativeLevel(window_audio, DSSCL_WRITEPRIMARY); 
+
+	if(!SUCCEEDED(hr))return -1;
+
+	hr = splayer.ds->CreateSoundBuffer(&dsbdesc, &dspb, 0);
+
+	if(!SUCCEEDED(hr))return -1;
+
+	hr = dspb->SetFormat((LPWAVEFORMATEX)&wfx); 
+
+    if(!SUCCEEDED(hr))
+	{
+		dspb->Release();
+		return -1;
+	}
+
+	dspb->Release();
+	return 0;
+} 
+

@@ -1,0 +1,48 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "decoder mod", "decoder mod.vcproj", "{C1DADD15-608A-42EC-9358-400B16DD2D39}"
+	ProjectSection(ProjectDependencies) = postProject
+		{95185D49-D035-4DCC-8C35-BBB5B3FA0581} = {95185D49-D035-4DCC-8C35-BBB5B3FA0581}
+		{803CAC7B-C33E-4C73-A5D2-D9508B6AA6F4} = {803CAC7B-C33E-4C73-A5D2-D9508B6AA6F4}
+		{89414EA5-BDAC-4266-ADB1-9BA1E67AAF22} = {89414EA5-BDAC-4266-ADB1-9BA1E67AAF22}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unzip", "..\..\unzip\unzip.vcproj", "{803CAC7B-C33E-4C73-A5D2-D9508B6AA6F4}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unrar", "..\..\unrar\UNRAR.vcproj", "{95185D49-D035-4DCC-8C35-BBB5B3FA0581}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unlha", "..\..\unlha\unlha.vcproj", "{89414EA5-BDAC-4266-ADB1-9BA1E67AAF22}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{C1DADD15-608A-42EC-9358-400B16DD2D39}.Debug.ActiveCfg = Debug|Win32
+		{C1DADD15-608A-42EC-9358-400B16DD2D39}.Debug.Build.0 = Debug|Win32
+		{C1DADD15-608A-42EC-9358-400B16DD2D39}.Release.ActiveCfg = Release|Win32
+		{C1DADD15-608A-42EC-9358-400B16DD2D39}.Release.Build.0 = Release|Win32
+		{803CAC7B-C33E-4C73-A5D2-D9508B6AA6F4}.Debug.ActiveCfg = Debug|Win32
+		{803CAC7B-C33E-4C73-A5D2-D9508B6AA6F4}.Debug.Build.0 = Debug|Win32
+		{803CAC7B-C33E-4C73-A5D2-D9508B6AA6F4}.Release.ActiveCfg = Release|Win32
+		{803CAC7B-C33E-4C73-A5D2-D9508B6AA6F4}.Release.Build.0 = Release|Win32
+		{95185D49-D035-4DCC-8C35-BBB5B3FA0581}.Debug.ActiveCfg = Debug|Win32
+		{95185D49-D035-4DCC-8C35-BBB5B3FA0581}.Debug.Build.0 = Debug|Win32
+		{95185D49-D035-4DCC-8C35-BBB5B3FA0581}.Release.ActiveCfg = Release|Win32
+		{95185D49-D035-4DCC-8C35-BBB5B3FA0581}.Release.Build.0 = Release|Win32
+		{89414EA5-BDAC-4266-ADB1-9BA1E67AAF22}.Debug.ActiveCfg = Debug|Win32
+		{89414EA5-BDAC-4266-ADB1-9BA1E67AAF22}.Debug.Build.0 = Debug|Win32
+		{89414EA5-BDAC-4266-ADB1-9BA1E67AAF22}.Release.ActiveCfg = Release|Win32
+		{89414EA5-BDAC-4266-ADB1-9BA1E67AAF22}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

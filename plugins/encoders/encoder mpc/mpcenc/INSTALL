@@ -1,0 +1,14 @@
+Known prerequisites:
+- cmake >= 2.2
+- ossaudio libraries (OpenBSD only)
+
+Steps:
+'cmake .'
+	- Generate the build system
+'make'
+	- Compile mppenc binary
+'make install'
+	- Install freshly compiled binary on your system
+
+Notes:
+- If you need to install mppenc in another directory than the default one, call cmake with this command instead 'cmake -DCMAKE_INSTALL_PREFIX:=/myPath'

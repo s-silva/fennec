@@ -1,0 +1,112 @@
+<html>
+<head>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=Windows-1252">
+</head>
+<body>
+<pre>
+<table width=100% bgcolor=#CFCFE5><tr> <td> <font face=arial size=+3>
+Build Log
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>
+<h3>------- Build started: Project: libpng, Configuration: DLL ASM Debug|Win32 -------
+</h3>
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Command Lines
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Creating temporary file "c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_ASM_Debug\BAT00000A.bat" with contents
+[
+@echo off
+nmake -f PRJ0041.mak IntDir=.\Win32_DLL_ASM_Debug
+
+if errorlevel 1 goto VCReportError
+goto VCEnd
+:VCReportError
+echo Project : error PRJ0019: A tool returned an error code from "Create dummy include files to prevent "Cannot find missing dependency..." warnings."
+exit 1
+:VCEnd
+]
+Creating command line ""c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_ASM_Debug\BAT00000A.bat""
+Creating temporary file "c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_ASM_Debug\RSP00000B.rsp" with contents
+[
+/Od /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "_DEBUG" /D "DEBUG" /D "PNG_DEBUG=1" /D "PNG_USE_PNGVCRD" /D "PNG_BUILD_DLL" /D "ZLIB_DLL" /D "PNG_LIBPNG_SPECIALBUILD" /D "_WINDLL" /FD /EHsc /RTC1 /MDd /Yu"png.h" /Fp".\Win32_DLL_ASM_Debug/libpng13d.pch" /Fo".\Win32_DLL_ASM_Debug/" /Fd".\Win32_DLL_ASM_Debug/vc70.pdb" /W3 /c /ZI
+"\png\libpng-1.2.18\pngwutil.c"
+"\png\libpng-1.2.18\pngwtran.c"
+"\png\libpng-1.2.18\pngwrite.c"
+"\png\libpng-1.2.18\pngwio.c"
+"\png\libpng-1.2.18\pngvcrd.c"
+"\png\libpng-1.2.18\pngtrans.c"
+"\png\libpng-1.2.18\pngset.c"
+"\png\libpng-1.2.18\pngrutil.c"
+"\png\libpng-1.2.18\pngrtran.c"
+"\png\libpng-1.2.18\pngrio.c"
+"\png\libpng-1.2.18\pngread.c"
+"\png\libpng-1.2.18\pngpread.c"
+"\png\libpng-1.2.18\pngmem.c"
+"\png\libpng-1.2.18\pngget.c"
+]
+Creating command line "cl.exe @"c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_ASM_Debug\RSP00000B.rsp" /nologo"
+Creating temporary file "c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_ASM_Debug\RSP00000C.rsp" with contents
+[
+/Od /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "_DEBUG" /D "DEBUG" /D "PNG_DEBUG=1" /D "PNG_USE_PNGVCRD" /D "PNG_BUILD_DLL" /D "ZLIB_DLL" /D "PNG_LIBPNG_SPECIALBUILD" /D "_WINDLL" /FD /EHsc /RTC1 /MDd /Yc"png.h" /Fp".\Win32_DLL_ASM_Debug/libpng13d.pch" /Fo".\Win32_DLL_ASM_Debug/" /Fd".\Win32_DLL_ASM_Debug/vc70.pdb" /W3 /c /ZI
+"\png\libpng-1.2.18\pngerror.c"
+]
+Creating command line "cl.exe @"c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_ASM_Debug\RSP00000C.rsp" /nologo"
+Creating temporary file "c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_ASM_Debug\RSP00000D.rsp" with contents
+[
+/Od /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "_DEBUG" /D "DEBUG" /D "PNG_DEBUG=1" /D "PNG_USE_PNGVCRD" /D "PNG_BUILD_DLL" /D "ZLIB_DLL" /D "PNG_LIBPNG_SPECIALBUILD" /D "_WINDLL" /FD /EHsc /RTC1 /MDd /Fo".\Win32_DLL_ASM_Debug/" /Fd".\Win32_DLL_ASM_Debug/vc70.pdb" /W3 /c /ZI
+"\png\libpng-1.2.18\png.c"
+]
+Creating command line "cl.exe @"c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_ASM_Debug\RSP00000D.rsp" /nologo"
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Output Window
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Create dummy include files to prevent "Cannot find missing dependency..." warnings.
+Microsoft (R) Program Maintenance Utility Version 7.10.3077
+Copyright (C) Microsoft Corporation.  All rights reserved.
+Compiling...
+pngerror.c
+c:\png\libpng-1.2.18\pngerror.c(116) : warning C4114: same type qualifier used more than once
+Compiling...
+pngwutil.c
+pngwtran.c
+pngwrite.c
+pngwio.c
+pngvcrd.c
+c:\png\libpng-1.2.18\pngvcrd.c(315) : error C2065: 'PNG_ASM_FLAG_MMX_READ_COMBINE_ROW' : undeclared identifier
+c:\png\libpng-1.2.18\pngvcrd.c(1219) : error C2065: 'PNG_ASM_FLAG_MMX_READ_INTERLACE' : undeclared identifier
+c:\png\libpng-1.2.18\pngvcrd.c(3700) : error C2065: 'PNG_ASM_FLAG_MMX_READ_FILTER_SUB' : undeclared identifier
+c:\png\libpng-1.2.18\pngvcrd.c(3703) : error C2065: 'PNG_ASM_FLAG_MMX_READ_FILTER_UP' : undeclared identifier
+c:\png\libpng-1.2.18\pngvcrd.c(3706) : error C2065: 'PNG_ASM_FLAG_MMX_READ_FILTER_AVG' : undeclared identifier
+c:\png\libpng-1.2.18\pngvcrd.c(3709) : error C2065: 'PNG_ASM_FLAG_MMX_READ_FILTER_PAETH' : undeclared identifier
+c:\png\libpng-1.2.18\pngvcrd.c(3739) : error C2039: 'mmx_bitdepth_threshold' : is not a member of 'png_struct_def'
+        c:\png\libpng-1.2.18\png.h(1115) : see declaration of 'png_struct_def'
+c:\png\libpng-1.2.18\pngvcrd.c(3740) : error C2039: 'mmx_rowbytes_threshold' : is not a member of 'png_struct_def'
+        c:\png\libpng-1.2.18\png.h(1115) : see declaration of 'png_struct_def'
+c:\png\libpng-1.2.18\pngvcrd.c(3768) : error C2039: 'mmx_bitdepth_threshold' : is not a member of 'png_struct_def'
+        c:\png\libpng-1.2.18\png.h(1115) : see declaration of 'png_struct_def'
+c:\png\libpng-1.2.18\pngvcrd.c(3769) : error C2039: 'mmx_rowbytes_threshold' : is not a member of 'png_struct_def'
+        c:\png\libpng-1.2.18\png.h(1115) : see declaration of 'png_struct_def'
+c:\png\libpng-1.2.18\pngvcrd.c(3796) : error C2039: 'mmx_bitdepth_threshold' : is not a member of 'png_struct_def'
+        c:\png\libpng-1.2.18\png.h(1115) : see declaration of 'png_struct_def'
+c:\png\libpng-1.2.18\pngvcrd.c(3797) : error C2039: 'mmx_rowbytes_threshold' : is not a member of 'png_struct_def'
+        c:\png\libpng-1.2.18\png.h(1115) : see declaration of 'png_struct_def'
+c:\png\libpng-1.2.18\pngvcrd.c(3834) : error C2039: 'mmx_bitdepth_threshold' : is not a member of 'png_struct_def'
+        c:\png\libpng-1.2.18\png.h(1115) : see declaration of 'png_struct_def'
+c:\png\libpng-1.2.18\pngvcrd.c(3835) : error C2039: 'mmx_rowbytes_threshold' : is not a member of 'png_struct_def'
+        c:\png\libpng-1.2.18\png.h(1115) : see declaration of 'png_struct_def'
+pngtrans.c
+c:\png\libpng-1.2.18\pngtrans.c(255) : warning C4114: same type qualifier used more than once
+c:\png\libpng-1.2.18\pngtrans.c(290) : warning C4114: same type qualifier used more than once
+c:\png\libpng-1.2.18\pngtrans.c(325) : warning C4114: same type qualifier used more than once
+pngset.c
+pngrutil.c
+pngrtran.c
+pngrio.c
+pngread.c
+pngpread.c
+pngmem.c
+pngget.c
+Generating Code...
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Results
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>
+Build log was saved at "file://c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_ASM_Debug\BuildLog.htm"
+libpng - 14 error(s), 4 warning(s)</pre></table><table   width=100% height=20 bgcolor=#CFCFE5><tr><td><font face=arial size=+2>
+</font></table></body></html>

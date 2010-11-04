@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "decoder ac3", "decoder ac3.vcproj", "{D737C427-F43A-4D68-9CE2-B6BE79A6E8FE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D2461864-457D-4BA0-B85B-B11DFCE4E279} = {D2461864-457D-4BA0-B85B-B11DFCE4E279}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libac3dec", "..\..\libac3dec\libac3dec.vcproj", "{D2461864-457D-4BA0-B85B-B11DFCE4E279}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{D737C427-F43A-4D68-9CE2-B6BE79A6E8FE}.Debug.ActiveCfg = Debug|Win32
+		{D737C427-F43A-4D68-9CE2-B6BE79A6E8FE}.Debug.Build.0 = Debug|Win32
+		{D737C427-F43A-4D68-9CE2-B6BE79A6E8FE}.Release.ActiveCfg = Release|Win32
+		{D737C427-F43A-4D68-9CE2-B6BE79A6E8FE}.Release.Build.0 = Release|Win32
+		{D2461864-457D-4BA0-B85B-B11DFCE4E279}.Debug.ActiveCfg = Debug|Win32
+		{D2461864-457D-4BA0-B85B-B11DFCE4E279}.Debug.Build.0 = Debug|Win32
+		{D2461864-457D-4BA0-B85B-B11DFCE4E279}.Release.ActiveCfg = Release|Win32
+		{D2461864-457D-4BA0-B85B-B11DFCE4E279}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

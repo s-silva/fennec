@@ -1,0 +1,128 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+dialog_report DIALOGEX 0, 0, 289, 209
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
+    WS_CAPTION | WS_SYSMENU
+CAPTION "fennec debug - reporting"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",button_ok,228,188,54,14
+    PUSHBUTTON      "Cancel",button_cancel,228,173,54,14
+    PUSHBUTTON      "&Pause",button_pause,228,128,54,14
+    CONTROL         "Errors",check_error,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,228,7,54,10
+    CONTROL         "Information",check_information,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,228,40,54,10
+    CONTROL         "Sub Errors",check_suberrors,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,228,18,54,10
+    CONTROL         "Warnings",check_warnings,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,228,29,54,10
+    CONTROL         "Stepping",check_stepping,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,228,51,54,10
+    LTEXT           "Fennec Report Tracker",IDC_STATIC,228,64,54,40,
+                    SS_SUNKEN | WS_DISABLED
+    CONTROL         "Follow",check_follow,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,228,108,54,10
+    EDITTEXT        text,7,7,214,195,ES_MULTILINE | ES_AUTOHSCROLL | 
+                    WS_VSCROLL | WS_HSCROLL
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,228,121,53,1
+    PUSHBUTTON      "&Clear",button_clear,228,146,54,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    dialog_report, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 282
+        VERTGUIDE, 221
+        VERTGUIDE, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 202
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON                    "icon1.ico"
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

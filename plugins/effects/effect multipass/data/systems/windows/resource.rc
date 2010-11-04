@@ -1,0 +1,126 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_SETTINGS DIALOGEX 0, 0, 241, 151
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Settings"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",slider_highpass,"msctls_trackbar32",TBS_TOP | 
+                    TBS_NOTICKS | WS_TABSTOP,54,7,154,12
+    DEFPUSHBUTTON   "OK",IDOK,184,130,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,129,130,50,14
+    LTEXT           "Highpass:",IDC_STATIC,7,7,39,12,SS_CENTERIMAGE
+    CONTROL         "",slider_lowpass,"msctls_trackbar32",TBS_TOP | 
+                    TBS_NOTICKS | WS_TABSTOP,54,26,154,12
+    CONTROL         "",slider_bandpass,"msctls_trackbar32",TBS_TOP | 
+                    TBS_NOTICKS | WS_TABSTOP,54,45,154,12
+    LTEXT           "Lowpass:",IDC_STATIC,7,26,35,12,SS_CENTERIMAGE
+    LTEXT           "Bandpass:",IDC_STATIC,7,45,45,12,SS_CENTERIMAGE
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,121,227,1
+    CONTROL         "",slider_allpass,"msctls_trackbar32",TBS_TOP | 
+                    TBS_NOTICKS | WS_TABSTOP,54,64,154,12
+    LTEXT           "Lowpass Mix:",IDC_STATIC,7,65,43,11
+    CONTROL         "",slider_notch,"msctls_trackbar32",TBS_TOP | 
+                    TBS_NOTICKS | WS_TABSTOP,54,83,154,12
+    LTEXT           "Notch:",IDC_STATIC,7,84,33,11
+    CONTROL         "",check_highpass,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    213,7,21,16
+    CONTROL         "",check_lowpass,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    213,24,21,16
+    CONTROL         "",check_bandpass,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    213,43,21,16
+    CONTROL         "",check_allpass,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    213,62,21,16
+    CONTROL         "",check_notch,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,213,
+                    80,21,16
+    CONTROL         "Log",check_log,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,
+                    104,60,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_SETTINGS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 234
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 144
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,130 @@
+<html>
+<head>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=Windows-1252">
+</head>
+<body>
+<pre>
+<table width=100% bgcolor=#CFCFE5><tr> <td> <font face=arial size=+3>
+Build Log
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>
+<h3>------- Build started: Project: libpng, Configuration: DLL Debug|Win32 -------
+</h3>
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Command Lines
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Creating temporary file "c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_Debug\BAT00000E.bat" with contents
+[
+@echo off
+nmake -f PRJ0041.mak IntDir=.\Win32_DLL_Debug
+
+if errorlevel 1 goto VCReportError
+goto VCEnd
+:VCReportError
+echo Project : error PRJ0019: A tool returned an error code from "Create dummy include files to prevent "Cannot find missing dependency..." warnings."
+exit 1
+:VCEnd
+]
+Creating command line ""c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_Debug\BAT00000E.bat""
+Creating temporary file "c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_Debug\RSP00000F.rsp" with contents
+[
+/Od /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "_DEBUG" /D "DEBUG" /D "PNG_DEBUG=1" /D "PNG_BUILD_DLL" /D "ZLIB_DLL" /D "_WINDLL" /FD /EHsc /RTC1 /MDd /Yu"png.h" /Fp".\Win32_DLL_Debug/libpng13d.pch" /Fo".\Win32_DLL_Debug/" /Fd".\Win32_DLL_Debug/vc70.pdb" /W3 /c /ZI
+"\png\libpng-1.2.18\pngwutil.c"
+"\png\libpng-1.2.18\pngwtran.c"
+"\png\libpng-1.2.18\pngwrite.c"
+"\png\libpng-1.2.18\pngwio.c"
+"\png\libpng-1.2.18\pngtrans.c"
+"\png\libpng-1.2.18\pngset.c"
+"\png\libpng-1.2.18\pngrutil.c"
+"\png\libpng-1.2.18\pngrtran.c"
+"\png\libpng-1.2.18\pngrio.c"
+"\png\libpng-1.2.18\pngread.c"
+"\png\libpng-1.2.18\pngpread.c"
+"\png\libpng-1.2.18\pngmem.c"
+"\png\libpng-1.2.18\pngget.c"
+]
+Creating command line "cl.exe @"c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_Debug\RSP00000F.rsp" /nologo"
+Creating temporary file "c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_Debug\RSP000010.rsp" with contents
+[
+/Od /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "_DEBUG" /D "DEBUG" /D "PNG_DEBUG=1" /D "PNG_BUILD_DLL" /D "ZLIB_DLL" /D "_WINDLL" /FD /EHsc /RTC1 /MDd /Yc"png.h" /Fp".\Win32_DLL_Debug/libpng13d.pch" /Fo".\Win32_DLL_Debug/" /Fd".\Win32_DLL_Debug/vc70.pdb" /W3 /c /ZI
+"\png\libpng-1.2.18\pngerror.c"
+]
+Creating command line "cl.exe @"c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_Debug\RSP000010.rsp" /nologo"
+Creating temporary file "c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_Debug\RSP000011.rsp" with contents
+[
+/Od /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "_DEBUG" /D "DEBUG" /D "PNG_DEBUG=1" /D "PNG_BUILD_DLL" /D "ZLIB_DLL" /D "_WINDLL" /FD /EHsc /RTC1 /MDd /Fo".\Win32_DLL_Debug/" /Fd".\Win32_DLL_Debug/vc70.pdb" /W3 /c /ZI
+"\png\libpng-1.2.18\png.c"
+]
+Creating command line "cl.exe @"c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_Debug\RSP000011.rsp" /nologo"
+Creating command line "rc.exe /d "_DEBUG" /d "PNG_DEBUG=1" /l 0x409 /I "..\.." /I "..\..\..\zlib" /I ".\Win32_DLL_Debug" /fo".\Win32_DLL_Debug/pngw32.res" "\png\libpng-1.2.18\scripts\pngw32.rc""
+Creating temporary file "c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_Debug\RSP000012.rsp" with contents
+[
+/OUT:".\Win32_DLL_Debug/libpng13d.dll" /NOLOGO /DLL /DEF:"..\..\scripts\pngw32.def" /DEBUG /PDB:".\Win32_DLL_Debug/libpng.pdb"  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
+".\win32_dll_debug\png.obj"
+".\win32_dll_debug\pngerror.obj"
+".\win32_dll_debug\pngget.obj"
+".\win32_dll_debug\pngmem.obj"
+".\win32_dll_debug\pngpread.obj"
+".\win32_dll_debug\pngread.obj"
+".\win32_dll_debug\pngrio.obj"
+".\win32_dll_debug\pngrtran.obj"
+".\win32_dll_debug\pngrutil.obj"
+".\win32_dll_debug\pngset.obj"
+".\win32_dll_debug\pngtrans.obj"
+".\win32_dll_debug\pngwio.obj"
+".\win32_dll_debug\pngwrite.obj"
+".\win32_dll_debug\pngwtran.obj"
+".\win32_dll_debug\pngwutil.obj"
+".\win32_dll_debug\pngw32.res"
+]
+Creating command line "link.exe @"c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_Debug\RSP000012.rsp""
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Output Window
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Create dummy include files to prevent "Cannot find missing dependency..." warnings.
+Microsoft (R) Program Maintenance Utility Version 7.10.3077
+Copyright (C) Microsoft Corporation.  All rights reserved.
+Compiling...
+pngerror.c
+c:\png\libpng-1.2.18\pngerror.c(116) : warning C4114: same type qualifier used more than once
+Compiling...
+pngwutil.c
+pngwtran.c
+pngwrite.c
+pngwio.c
+pngtrans.c
+c:\png\libpng-1.2.18\pngtrans.c(255) : warning C4114: same type qualifier used more than once
+c:\png\libpng-1.2.18\pngtrans.c(290) : warning C4114: same type qualifier used more than once
+c:\png\libpng-1.2.18\pngtrans.c(325) : warning C4114: same type qualifier used more than once
+pngset.c
+pngrutil.c
+pngrtran.c
+pngrio.c
+pngread.c
+pngpread.c
+pngmem.c
+pngget.c
+Generating Code...
+Compiling...
+png.c
+Compiling resources...
+Linking...
+   Creating library .\Win32_DLL_Debug/libpng13d.lib and object .\Win32_DLL_Debug/libpng13d.exp
+png.obj : error LNK2019: unresolved external symbol __imp__crc32 referenced in function _png_reset_crc
+png.obj : error LNK2019: unresolved external symbol __imp__inflateReset referenced in function _png_reset_zstream
+pngpread.obj : error LNK2019: unresolved external symbol __imp__inflateReset referenced in function _png_push_handle_unknown
+pngrutil.obj : error LNK2019: unresolved external symbol __imp__inflateReset referenced in function _png_handle_cHRM
+pngpread.obj : error LNK2019: unresolved external symbol __imp__inflate referenced in function _png_process_IDAT_data
+pngread.obj : error LNK2001: unresolved external symbol __imp__inflate
+pngrutil.obj : error LNK2001: unresolved external symbol __imp__inflate
+pngread.obj : error LNK2019: unresolved external symbol __imp__inflateInit_ referenced in function _png_create_read_struct_2
+pngread.obj : error LNK2019: unresolved external symbol __imp__inflateEnd referenced in function _png_read_destroy
+pngwrite.obj : error LNK2019: unresolved external symbol __imp__deflate referenced in function _png_write_flush
+pngwutil.obj : error LNK2001: unresolved external symbol __imp__deflate
+pngwrite.obj : error LNK2019: unresolved external symbol __imp__deflateEnd referenced in function _png_write_destroy
+pngwutil.obj : error LNK2019: unresolved external symbol __imp__deflateInit2_ referenced in function _png_write_IHDR
+pngwutil.obj : error LNK2019: unresolved external symbol __imp__deflateReset referenced in function _png_write_compressed_data_out
+.\Win32_DLL_Debug/libpng13d.dll : fatal error LNK1120: 9 unresolved externals
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Results
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>
+Build log was saved at "file://c:\png\libpng-1.2.18\projects\visualc71\Win32_DLL_Debug\BuildLog.htm"
+libpng - 15 error(s), 4 warning(s)</pre></table><table   width=100% height=20 bgcolor=#CFCFE5><tr><td><font face=arial size=+2>
+</font></table></body></html>

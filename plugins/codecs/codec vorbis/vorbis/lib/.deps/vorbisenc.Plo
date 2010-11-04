@@ -1,0 +1,124 @@
+vorbisenc.lo vorbisenc.o: vorbisenc.c /usr/include/stdlib.h \
+  /usr/include/machine/ansi.h /usr/include/ppc/ansi.h \
+  /usr/include/machine/types.h /usr/include/ppc/types.h \
+  /usr/include/sys/cdefs.h /usr/include/alloca.h /usr/include/string.h \
+  /usr/include/math.h /usr/include/architecture/ppc/math.h \
+  ../include/vorbis/codec.h \
+  /Users/pm/MoreAmpDev/libs/libogg/inst/include/ogg/ogg.h \
+  /Users/pm/MoreAmpDev/libs/libogg/inst/include/ogg/os_types.h \
+  /usr/include/sys/types.h /usr/include/sys/appleapiopts.h \
+  /usr/include/machine/endian.h /usr/include/ppc/endian.h \
+  /Users/pm/MoreAmpDev/libs/libogg/inst/include/ogg/config_types.h \
+  ../include/vorbis/vorbisenc.h codec_internal.h envelope.h mdct.h \
+  codebook.h psy.h smallft.h backends.h bitrate.h os.h ../config.h misc.h \
+  /usr/include/memory.h highlevel.h modes/setup_44.h modes/floor_all.h \
+  books/floor/floor_books.h modes/residue_44.h \
+  books/coupled/res_books_stereo.h modes/psych_44.h modes/setup_44u.h \
+  modes/residue_44u.h books/uncoupled/res_books_uncoupled.h \
+  modes/setup_32.h modes/setup_8.h modes/psych_8.h modes/residue_8.h \
+  modes/setup_11.h modes/psych_11.h modes/setup_16.h modes/psych_16.h \
+  modes/residue_16.h modes/setup_22.h modes/setup_X.h
+
+/usr/include/stdlib.h:
+
+/usr/include/machine/ansi.h:
+
+/usr/include/ppc/ansi.h:
+
+/usr/include/machine/types.h:
+
+/usr/include/ppc/types.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/alloca.h:
+
+/usr/include/string.h:
+
+/usr/include/math.h:
+
+/usr/include/architecture/ppc/math.h:
+
+../include/vorbis/codec.h:
+
+/Users/pm/MoreAmpDev/libs/libogg/inst/include/ogg/ogg.h:
+
+/Users/pm/MoreAmpDev/libs/libogg/inst/include/ogg/os_types.h:
+
+/usr/include/sys/types.h:
+
+/usr/include/sys/appleapiopts.h:
+
+/usr/include/machine/endian.h:
+
+/usr/include/ppc/endian.h:
+
+/Users/pm/MoreAmpDev/libs/libogg/inst/include/ogg/config_types.h:
+
+../include/vorbis/vorbisenc.h:
+
+codec_internal.h:
+
+envelope.h:
+
+mdct.h:
+
+codebook.h:
+
+psy.h:
+
+smallft.h:
+
+backends.h:
+
+bitrate.h:
+
+os.h:
+
+../config.h:
+
+misc.h:
+
+/usr/include/memory.h:
+
+highlevel.h:
+
+modes/setup_44.h:
+
+modes/floor_all.h:
+
+books/floor/floor_books.h:
+
+modes/residue_44.h:
+
+books/coupled/res_books_stereo.h:
+
+modes/psych_44.h:
+
+modes/setup_44u.h:
+
+modes/residue_44u.h:
+
+books/uncoupled/res_books_uncoupled.h:
+
+modes/setup_32.h:
+
+modes/setup_8.h:
+
+modes/psych_8.h:
+
+modes/residue_8.h:
+
+modes/setup_11.h:
+
+modes/psych_11.h:
+
+modes/setup_16.h:
+
+modes/psych_16.h:
+
+modes/residue_16.h:
+
+modes/setup_22.h:
+
+modes/setup_X.h:

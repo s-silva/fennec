@@ -1,0 +1,141 @@
+<html>
+<head>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=Windows-1252">
+</head>
+<body>
+<pre>
+<table width=100% bgcolor=#CFCFE5><tr> <td> <font face=arial size=+3>
+Build Log
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>
+<h3>------- Build started: Project: libFLAC_static, Configuration: Release|Win32 -------
+</h3>
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Command Lines
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Creating temporary file "e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec flac\flac\src\libFLAC\Release_static\BAT000012.bat" with contents
+[
+@echo off
+nasmw.exe -f win32 -d OBJ_FORMAT_win32 -i ia32/ ia32/lpc_asm.nasm -o ia32/lpc_asm.obj
+
+if errorlevel 1 goto VCReportError
+goto VCEnd
+:VCReportError
+echo Project : error PRJ0019: A tool returned an error code from "Performing Custom Build Step"
+exit 1
+:VCEnd
+]
+Creating command line ""e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec flac\flac\src\libFLAC\Release_static\BAT000012.bat""
+Creating temporary file "e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec flac\flac\src\libFLAC\Release_static\BAT000013.bat" with contents
+[
+@echo off
+nasmw.exe -f win32 -d OBJ_FORMAT_win32 -i ia32/ ia32/fixed_asm.nasm -o ia32/fixed_asm.obj
+
+if errorlevel 1 goto VCReportError
+goto VCEnd
+:VCReportError
+echo Project : error PRJ0019: A tool returned an error code from "Performing Custom Build Step"
+exit 1
+:VCEnd
+]
+Creating command line ""e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec flac\flac\src\libFLAC\Release_static\BAT000013.bat""
+Creating temporary file "e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec flac\flac\src\libFLAC\Release_static\BAT000014.bat" with contents
+[
+@echo off
+nasmw.exe -f win32 -d OBJ_FORMAT_win32 -i ia32/ ia32/cpu_asm.nasm -o ia32/cpu_asm.obj
+
+if errorlevel 1 goto VCReportError
+goto VCEnd
+:VCReportError
+echo Project : error PRJ0019: A tool returned an error code from "Performing Custom Build Step"
+exit 1
+:VCEnd
+]
+Creating command line ""e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec flac\flac\src\libFLAC\Release_static\BAT000014.bat""
+Creating temporary file "e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec flac\flac\src\libFLAC\Release_static\RSP000015.rsp" with contents
+[
+/O2 /Op /I ".\include" /I "..\..\include" /D "VERSION=\"1.1.2\"" /D "FLAC__NO_DLL" /D "FLAC__CPU_IA32" /D "FLAC__HAS_NASM" /D "FLAC__USE_3DNOW" /D "WIN32" /D "NDEBUG" /D "_LIB" /D "_MBCS" /FD /EHsc /MT /YX"stdafx.h" /Fp".\Release_static/libFLAC_static.pch" /Fo".\Release_static/" /Fd".\Release_static/" /W3 /c
+".\stream_encoder_framing.c"
+".\stream_encoder.c"
+".\stream_decoder.c"
+".\seekable_stream_encoder.c"
+".\seekable_stream_decoder.c"
+".\metadata_object.c"
+".\metadata_iterators.c"
+".\memory.c"
+".\md5.c"
+".\lpc.c"
+".\format.c"
+".\float.c"
+".\fixed.c"
+".\file_encoder.c"
+".\file_decoder.c"
+".\crc.c"
+".\cpu.c"
+".\bitmath.c"
+".\bitbuffer.c"
+]
+Creating command line "cl.exe @"e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec flac\flac\src\libFLAC\Release_static\RSP000015.rsp" /nologo"
+Creating temporary file "e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec flac\flac\src\libFLAC\Release_static\RSP000016.rsp" with contents
+[
+/OUT:".\..\..\obj\release\lib\libFLAC_static.lib" /NOLOGO
+".\Release_static\bitbuffer.obj"
+".\Release_static\bitmath.obj"
+".\Release_static\cpu.obj"
+".\Release_static\crc.obj"
+".\Release_static\file_decoder.obj"
+".\Release_static\file_encoder.obj"
+".\Release_static\fixed.obj"
+".\Release_static\float.obj"
+".\Release_static\format.obj"
+".\Release_static\lpc.obj"
+".\Release_static\md5.obj"
+".\Release_static\memory.obj"
+".\Release_static\metadata_iterators.obj"
+".\Release_static\metadata_object.obj"
+".\Release_static\seekable_stream_decoder.obj"
+".\Release_static\seekable_stream_encoder.obj"
+".\Release_static\stream_decoder.obj"
+".\Release_static\stream_encoder.obj"
+".\Release_static\stream_encoder_framing.obj"
+".\ia32\cpu_asm.obj"
+".\ia32\fixed_asm.obj"
+".\ia32\lpc_asm.obj"
+]
+Creating command line "lib.exe @"e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec flac\flac\src\libFLAC\Release_static\RSP000016.rsp""
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Output Window
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Performing Custom Build Step
+ia32/lpc_asm.nasm:1503: warning: label alone on a line without a colon might be in error
+Performing Custom Build Step
+ia32/fixed_asm.nasm:306: warning: label alone on a line without a colon might be in error
+Performing Custom Build Step
+ia32/cpu_asm.nasm:73: warning: label alone on a line without a colon might be in error
+ia32/cpu_asm.nasm:90: warning: label alone on a line without a colon might be in error
+ia32/cpu_asm.nasm:92: warning: label alone on a line without a colon might be in error
+ia32/cpu_asm.nasm:100: warning: label alone on a line without a colon might be in error
+Compiling...
+stream_encoder_framing.c
+stream_encoder.c
+stream_decoder.c
+seekable_stream_encoder.c
+seekable_stream_decoder.c
+metadata_object.c
+metadata_iterators.c
+memory.c
+md5.c
+lpc.c
+format.c
+float.c
+fixed.c
+file_encoder.c
+file_decoder.c
+crc.c
+cpu.c
+bitmath.c
+bitbuffer.c
+Creating library...
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Results
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>
+Build log was saved at "file://e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec flac\flac\src\libFLAC\Release_static\BuildLog.htm"
+libFLAC_static - 0 error(s), 6 warning(s)</pre></table><table   width=100% height=20 bgcolor=#CFCFE5><tr><td><font face=arial size=+2>
+</font></table></body></html>

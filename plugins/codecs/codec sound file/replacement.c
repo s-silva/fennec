@@ -1,0 +1,61 @@
+/**----------------------------------------------------------------------------
+
+ Fennec Codec Plug-in 1.0 (Sound Files).
+ Copyright (C) 2007 Chase <c-h@users.sf.net>
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------**/
+
+/*long int lrint(double flt)
+{
+	int intgr;
+
+	_asm
+	{
+		fld   flt
+		fistp intgr
+	};
+
+	return intgr;
+}*/
+
+/*long int lrintf(float flt)
+{
+	int intgr;
+
+	_asm
+	{
+		fld   flt
+		fistp intgr
+	};
+
+	return intgr;
+}*/
+
+__int64 __divdi3(__int64 x, __int64 y)
+{
+	return x / y;
+}
+
+__int64 __moddi3(__int64 x, __int64 y)
+{
+	return x % y;
+}
+
+/*-----------------------------------------------------------------------------
+ 2007
+-----------------------------------------------------------------------------*/

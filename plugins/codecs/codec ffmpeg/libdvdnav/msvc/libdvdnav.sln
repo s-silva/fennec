@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Microsoft", "libdvdnav.vcproj", "{758D34AE-9C01-4380-B828-3BB22F1C3CB3}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{758D34AE-9C01-4380-B828-3BB22F1C3CB3}.Debug.ActiveCfg = Debug|Win32
+		{758D34AE-9C01-4380-B828-3BB22F1C3CB3}.Debug.Build.0 = Debug|Win32
+		{758D34AE-9C01-4380-B828-3BB22F1C3CB3}.Release.ActiveCfg = Release|Win32
+		{758D34AE-9C01-4380-B828-3BB22F1C3CB3}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

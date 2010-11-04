@@ -1,0 +1,11 @@
+pack 1 - tablets
+----------------
+
+	1 - aac
+	2 - audio (unknown)
+	3 - module
+	4 - mp3
+	5 - mpc
+	6 - ogg
+	7 - sound file
+	8 - wma

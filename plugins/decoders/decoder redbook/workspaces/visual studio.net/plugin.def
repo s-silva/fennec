@@ -1,0 +1,9 @@
+EXPORTS
+	fennec_initialize_input
+	audiocd_load
+	audiocd_tray_eject
+	audiocd_tray_load
+	audiocd_check
+	audiocd_gettrackscount
+	audiocd_gettracksize
+	

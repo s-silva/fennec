@@ -1,0 +1,84 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "in_flac", "in_flac.vcproj", "{AAFBC416-01D2-4E73-884A-2BC36E1E8B52}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6358CC35-D37E-4090-A7E4-392E281C59E8} = {6358CC35-D37E-4090-A7E4-392E281C59E8}
+		{DC257E4F-2EC6-4DF1-A356-4DE09587C0BA} = {DC257E4F-2EC6-4DF1-A356-4DE09587C0BA}
+		{DC900A5C-0ACA-4D8A-A642-87CDCA5B2E1E} = {DC900A5C-0ACA-4D8A-A642-87CDCA5B2E1E}
+		{85021261-AF53-4E91-B675-E2F43B94A4BC} = {85021261-AF53-4E91-B675-E2F43B94A4BC}
+		{659A0A8D-D702-48C7-8E1D-D9376F4905F3} = {659A0A8D-D702-48C7-8E1D-D9376F4905F3}
+		{D9AF21B1-0BF6-4F3F-B73F-B948148FCBEB} = {D9AF21B1-0BF6-4F3F-B73F-B948148FCBEB}
+		{EFA77BF7-43ED-40EA-BBC6-444EA9E5AB2D} = {EFA77BF7-43ED-40EA-BBC6-444EA9E5AB2D}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "plugin_common_static", "..\plugin_common\plugin_common_static.vcproj", "{D9AF21B1-0BF6-4F3F-B73F-B948148FCBEB}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libFLAC_static", "..\libFLAC\libFLAC_static.vcproj", "{85021261-AF53-4E91-B675-E2F43B94A4BC}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "getopt_static", "..\share\getopt\getopt_static.vcproj", "{DC900A5C-0ACA-4D8A-A642-87CDCA5B2E1E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "grabbag_static", "..\share\grabbag\grabbag_static.vcproj", "{659A0A8D-D702-48C7-8E1D-D9376F4905F3}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "replaygain_analysis_static", "..\share\replaygain_analysis\replaygain_analysis_static.vcproj", "{6358CC35-D37E-4090-A7E4-392E281C59E8}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "replaygain_synthesis_static", "..\share\replaygain_synthesis\replaygain_synthesis_static.vcproj", "{DC257E4F-2EC6-4DF1-A356-4DE09587C0BA}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utf8_static", "..\share\utf8\utf8_static.vcproj", "{EFA77BF7-43ED-40EA-BBC6-444EA9E5AB2D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{AAFBC416-01D2-4E73-884A-2BC36E1E8B52}.Debug.ActiveCfg = Debug|Win32
+		{AAFBC416-01D2-4E73-884A-2BC36E1E8B52}.Debug.Build.0 = Debug|Win32
+		{AAFBC416-01D2-4E73-884A-2BC36E1E8B52}.Release.ActiveCfg = Release|Win32
+		{AAFBC416-01D2-4E73-884A-2BC36E1E8B52}.Release.Build.0 = Release|Win32
+		{D9AF21B1-0BF6-4F3F-B73F-B948148FCBEB}.Debug.ActiveCfg = Debug|Win32
+		{D9AF21B1-0BF6-4F3F-B73F-B948148FCBEB}.Debug.Build.0 = Debug|Win32
+		{D9AF21B1-0BF6-4F3F-B73F-B948148FCBEB}.Release.ActiveCfg = Release|Win32
+		{D9AF21B1-0BF6-4F3F-B73F-B948148FCBEB}.Release.Build.0 = Release|Win32
+		{85021261-AF53-4E91-B675-E2F43B94A4BC}.Debug.ActiveCfg = Debug|Win32
+		{85021261-AF53-4E91-B675-E2F43B94A4BC}.Debug.Build.0 = Debug|Win32
+		{85021261-AF53-4E91-B675-E2F43B94A4BC}.Release.ActiveCfg = Release|Win32
+		{85021261-AF53-4E91-B675-E2F43B94A4BC}.Release.Build.0 = Release|Win32
+		{DC900A5C-0ACA-4D8A-A642-87CDCA5B2E1E}.Debug.ActiveCfg = Debug|Win32
+		{DC900A5C-0ACA-4D8A-A642-87CDCA5B2E1E}.Debug.Build.0 = Debug|Win32
+		{DC900A5C-0ACA-4D8A-A642-87CDCA5B2E1E}.Release.ActiveCfg = Release|Win32
+		{DC900A5C-0ACA-4D8A-A642-87CDCA5B2E1E}.Release.Build.0 = Release|Win32
+		{659A0A8D-D702-48C7-8E1D-D9376F4905F3}.Debug.ActiveCfg = Debug|Win32
+		{659A0A8D-D702-48C7-8E1D-D9376F4905F3}.Debug.Build.0 = Debug|Win32
+		{659A0A8D-D702-48C7-8E1D-D9376F4905F3}.Release.ActiveCfg = Release|Win32
+		{659A0A8D-D702-48C7-8E1D-D9376F4905F3}.Release.Build.0 = Release|Win32
+		{6358CC35-D37E-4090-A7E4-392E281C59E8}.Debug.ActiveCfg = Debug|Win32
+		{6358CC35-D37E-4090-A7E4-392E281C59E8}.Debug.Build.0 = Debug|Win32
+		{6358CC35-D37E-4090-A7E4-392E281C59E8}.Release.ActiveCfg = Release|Win32
+		{6358CC35-D37E-4090-A7E4-392E281C59E8}.Release.Build.0 = Release|Win32
+		{DC257E4F-2EC6-4DF1-A356-4DE09587C0BA}.Debug.ActiveCfg = Debug|Win32
+		{DC257E4F-2EC6-4DF1-A356-4DE09587C0BA}.Debug.Build.0 = Debug|Win32
+		{DC257E4F-2EC6-4DF1-A356-4DE09587C0BA}.Release.ActiveCfg = Release|Win32
+		{DC257E4F-2EC6-4DF1-A356-4DE09587C0BA}.Release.Build.0 = Release|Win32
+		{EFA77BF7-43ED-40EA-BBC6-444EA9E5AB2D}.Debug.ActiveCfg = Debug|Win32
+		{EFA77BF7-43ED-40EA-BBC6-444EA9E5AB2D}.Debug.Build.0 = Debug|Win32
+		{EFA77BF7-43ED-40EA-BBC6-444EA9E5AB2D}.Release.ActiveCfg = Release|Win32
+		{EFA77BF7-43ED-40EA-BBC6-444EA9E5AB2D}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
