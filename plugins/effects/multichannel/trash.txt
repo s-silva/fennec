@@ -1,0 +1,81 @@
+	fennec_sample  *din, bl, br, apl, apr;
+	unsigned int    i, c = (*bsize) / (bitspersample / 8), cx, j;
+	static   double t;
+	unsigned long   sz;
+
+
+	fennec_sample *bkp = malloc((*bsize) + 1);
+
+	memcpy(bkp, sbuffer, *bsize);
+
+
+	sz = ((*bsize) * 6) / channels;
+
+	if(avbsize < sz)
+		sbuffer = fr(sbuffer, sz);
+	
+	din = (fennec_sample*) (((char*)sbuffer) + apointer);
+
+
+	if(last_frequency != freqency)
+	{
+		lowpass_init(5000, freqency);
+		last_frequency = freqency;
+	}
+
+	cx = sz / (bitspersample / 8);
+
+#define room
+#ifdef room
+
+	for(i=0, j=0; i<cx; j+=channels)
+	{
+		bl = bkp[j];
+		br = bkp[j + 1];
+
+		/* left */        din[i++] = volumes[0] * bl;
+		/* right */       din[i++] = volumes[1] * br;
+		/* center */      din[i++] = volumes[2] * (bl + br) / 2;
+		/* LFE */         din[i++] = volumes[3] * lowpass_process((bl + br) / 2);
+		/* rear left */   din[i++] = volumes[4] * delay_l(-bl, freqency) * 1;
+		/* rear right */  din[i++] = volumes[5] * delay_r(-br, freqency) * 1;
+	}
+
+#else
+	{
+		POINT pt;
+		GetCursorPos(&pt);
+		t = (double)pt.x / 1024.0 * pi * 2;
+
+	}
+
+	for(i=0, j=0; i<cx; j+=channels)
+	{
+		bl = bkp[j];
+		br = bkp[j + 1];
+
+
+		/* left */        din[i++] = apl = bl * max(sin(t), 0);
+		/* right */       din[i++] = apr = bl * max(cos(t), 0);
+
+		/* center */      din[i++] = (apl + apr) / 2;
+		/* LFE */         din[i++] = lowpass_process((bl + br) / 2);
+
+		/* rear left */   din[i++] = bl * max(cos(t-pi), 0);
+		/* rear right */  din[i++] = bl * max(sin(t-pi), 0);
+
+
+		//t+=0.00001;
+
+		if(t > (pi * 2))t = 0;
+	}
+
+#endif
+	//for(i=0; i<c; i++)
+	//{
+	//	din[i] = effect_process(din[i], freqency, i % channels);
+	//}
+
+	*bsize = sz;
+
+	free(bkp);

@@ -1,0 +1,132 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_SETTINGS DIALOGEX 0, 0, 211, 209
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
+    WS_CAPTION | WS_SYSMENU
+CAPTION "Settings"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,154,188,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,101,188,50,14
+    LTEXT           "Bitrate:",IDC_STATIC,13,39,66,12,SS_CENTERIMAGE
+    LTEXT           "Frequency:",IDC_STATIC,13,55,66,12,SS_CENTERIMAGE
+    LTEXT           "Channels:",IDC_STATIC,13,148,66,12,SS_CENTERIMAGE
+    COMBOBOX        combo_bitrate_1,84,39,112,30,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        combo_freq_1,84,55,112,30,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        combo_channels,84,148,112,30,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,183,196,1
+    LTEXT           "Bitrate:",IDC_STATIC,14,106,65,12,SS_CENTERIMAGE
+    LTEXT           "Frequency:",IDC_STATIC,14,122,65,12,SS_CENTERIMAGE
+    COMBOBOX        combo_bitrate_2,84,106,112,30,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        combo_freq_2,84,122,112,30,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    GROUPBOX        "MPEG 2",IDC_STATIC,7,78,197,65
+    GROUPBOX        "MPEG 1",IDC_STATIC,7,7,197,68
+    CONTROL         "MPEG 1",option_1,"Button",BS_AUTORADIOBUTTON,16,23,91,
+                    10
+    CONTROL         "MPEG 2",option_2,"Button",BS_AUTORADIOBUTTON,15,90,91,
+                    10
+    CONTROL         "Variable Bitrate",check_vbr2,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,125,90,71,10
+    LTEXT           "Quality:",IDC_STATIC,13,165,66,12,SS_CENTERIMAGE
+    COMBOBOX        combo_quality,84,165,112,30,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Variable Bitrate",check_vbr1,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,125,23,71,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_SETTINGS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 204
+        VERTGUIDE, 79
+        VERTGUIDE, 84
+        VERTGUIDE, 196
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 202
+        HORZGUIDE, 23
+        HORZGUIDE, 39
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

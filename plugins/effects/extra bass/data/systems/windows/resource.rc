@@ -1,0 +1,127 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_SETTINGS DIALOGEX 0, 0, 211, 166
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Settings"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_VALUE,"msctls_trackbar32",TBS_TOP | TBS_NOTICKS | 
+                    WS_TABSTOP,63,7,141,12
+    DEFPUSHBUTTON   "OK",IDOK,154,145,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,101,145,50,14
+    LTEXT           "Gain:",IDC_STATIC,7,7,56,12,SS_CENTERIMAGE
+    CONTROL         "",IDC_BAND,"msctls_trackbar32",TBS_TOP | TBS_NOTICKS | 
+                    WS_TABSTOP,63,31,141,12
+    LTEXT           "0 dB",IDC_STATIC,63,19,15,8
+    LTEXT           "20 dB",IDC_STATIC,185,19,19,8
+    LTEXT           "20 Hz",IDC_STATIC,63,43,19,11
+    LTEXT           "350Hz",IDC_STATIC,181,43,23,11
+    CONTROL         "",IDC_PREAMP,"msctls_trackbar32",TBS_TOP | TBS_NOTICKS | 
+                    WS_TABSTOP,63,54,141,12
+    LTEXT           "Band (Lowpass):",IDC_STATIC,7,31,56,12,SS_CENTERIMAGE
+    LTEXT           "Preamp:",IDC_STATIC,7,54,56,12,SS_CENTERIMAGE
+    LTEXT           "No Changes",IDC_STATIC,63,66,40,8
+    LTEXT           "Lowest",IDC_STATIC,180,66,24,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,138,196,1
+    LTEXT           "Tip: Use ""wave display"" visualization to see the results. It would help you to finely tune this effect (clipping, boost and preamp).",
+                    IDC_STATIC,7,100,197,30,SS_SUNKEN
+    CONTROL         "",IDC_SHAPE,"msctls_trackbar32",TBS_TOP | TBS_NOTICKS | 
+                    WS_TABSTOP,63,77,141,12
+    LTEXT           "Shape:",IDC_STATIC,7,76,56,12,SS_CENTERIMAGE
+    CONTROL         "Normalize (Auto Preamp)",IDC_NORMAL,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,144,93,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_SETTINGS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 204
+        VERTGUIDE, 63
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 159
+        HORZGUIDE, 19
+        HORZGUIDE, 31
+        HORZGUIDE, 43
+        HORZGUIDE, 54
+        HORZGUIDE, 66
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,75 @@
+<html>
+<head>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=Windows-1252">
+</head>
+<body>
+<pre>
+<table width=100% bgcolor=#CFCFE5><tr> <td> <font face=arial size=+3>
+Build Log
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>
+<h3>------- Build started: Project: codec sound file, Configuration: Release|Win32 -------
+</h3>
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Command Lines
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Creating temporary file "e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\workspaces\visual studio.net\Release\RSP000001.rsp" with contents
+[
+/O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_USRDLL" /D "CODECSOUNDFILE_EXPORTS" /D "_WINDLL" /D "_UNICODE" /D "UNICODE" /FD /EHsc /MT /GS /Fo"Release/" /Fd"Release/vc70.pdb" /W3 /c /Wp64 /Zi /TC
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\libsamplerate\src\src_zoh.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\libsamplerate\src\src_sinc.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\libsamplerate\src\src_linear.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\libsamplerate\src\samplerate.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\include\system.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\replacement.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\general encoder.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\general decoder.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\audio encoder.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\audio decoder.c"
+]
+Creating command line "cl.exe @"e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\workspaces\visual studio.net\Release\RSP000001.rsp" /nologo"
+Creating command line "rc.exe /d "_UNICODE" /d "UNICODE" /fo"Release/resource.res" "\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\data\resource.rc""
+Creating temporary file "e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\workspaces\visual studio.net\Release\RSP000002.rsp" with contents
+[
+/OUT:"../../../../../../binaries/plugins/codec sound file.dll" /INCREMENTAL:NO /NOLOGO /DLL /DEF:"plugin.def" /DEBUG /PDB:"Release/codec sound file.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /IMPLIB:"Release/codec sound file.lib" /MACHINE:X86 libsndfile.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ".\libsndfile.lib"
+".\Release\audio decoder.obj"
+".\Release\audio encoder.obj"
+".\Release\general decoder.obj"
+".\Release\general encoder.obj"
+".\Release\replacement.obj"
+".\Release\system.obj"
+".\Release\samplerate.obj"
+".\Release\src_linear.obj"
+".\Release\src_sinc.obj"
+".\Release\src_zoh.obj"
+".\Release\resource.res"
+]
+Creating command line "link.exe @"e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\workspaces\visual studio.net\Release\RSP000002.rsp""
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Output Window
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Compiling...
+src_zoh.c
+src_sinc.c
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\libsamplerate\src\src_sinc.c(325) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+src_linear.c
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\libsamplerate\src\src_linear.c(77) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\libsamplerate\src\src_linear.c(101) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+samplerate.c
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\libsamplerate\src\samplerate.c(441) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\libsamplerate\src\samplerate.c(454) : warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\libsamplerate\src\samplerate.c(464) : warning C4244: '=' : conversion from 'long' to 'short', possible loss of data
+system.c
+replacement.c
+general encoder.c
+general decoder.c
+audio encoder.c
+audio decoder.c
+Generating Code...
+Compiling resources...
+Linking...
+   Creating library Release/codec sound file.lib and object Release/codec sound file.exp
+libsndfile.lib(sndfile.o) : warning LNK4217: locally defined symbol __iob imported in function _sf_perror
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Results
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>
+Build log was saved at "file://e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec sound file\workspaces\visual studio.net\Release\BuildLog.htm"
+codec sound file - 0 error(s), 7 warning(s)</pre></table><table   width=100% height=20 bgcolor=#CFCFE5><tr><td><font face=arial size=+2>
+</font></table></body></html>

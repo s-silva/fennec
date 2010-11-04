@@ -1,0 +1,6 @@
+*.ncb
+*.opt
+*.aps
+*.plg
+Debug
+Release

@@ -1,0 +1,121 @@
+<html>
+<head>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=Windows-1252">
+</head>
+<body>
+<pre>
+<table width=100% bgcolor=#CFCFE5><tr> <td> <font face=arial size=+3>
+Build Log
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>
+<h3>------- Build started: Project: libmp3lame, Configuration: Release|Win32 -------
+</h3>
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Command Lines
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Creating temporary file "e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\encoders\encoder lame\lame\libmp3lame\Release\BAT000004.bat" with contents
+[
+@echo off
+copy ..\configMS.h ..\config.h
+
+if errorlevel 1 goto VCReportError
+goto VCEnd
+:VCReportError
+echo Project : error PRJ0019: A tool returned an error code from "Performing Custom Build Step on configMS"
+exit 1
+:VCEnd
+]
+Creating command line ""e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\encoders\encoder lame\lame\libmp3lame\Release\BAT000004.bat""
+Creating temporary file "e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\encoders\encoder lame\lame\libmp3lame\Release\RSP000005.rsp" with contents
+[
+/O2 /G7 /I "../" /I "../mpglib" /I "../include" /I ".." /D "NDEBUG" /D "_WINDOWS" /D "HAVE_MPGLIB" /D "WIN32" /D "HAVE_CONFIG_H" /FD /EHsc /ML /Fp".\Release/libmp3lame_vc6.pch" /Fo".\Release/" /Fd".\Release/" /W3 /c  /GAy /QIfdiv /QI0f
+".\version.c"
+".\VbrTag.c"
+".\vbrquantize.c"
+".\util.c"
+".\takehiro.c"
+".\set_get.c"
+".\reservoir.c"
+".\quantize_pvt.c"
+".\quantize.c"
+".\psymodel.c"
+".\presets.c"
+".\newmdct.c"
+".\mpglib_interface.c"
+".\lame.c"
+".\id3tag.c"
+".\gain_analysis.c"
+".\fft.c"
+".\encoder.c"
+".\bitstream.c"
+]
+Creating command line "cl.exe @"e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\encoders\encoder lame\lame\libmp3lame\Release\RSP000005.rsp" /nologo"
+Creating temporary file "e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\encoders\encoder lame\lame\libmp3lame\Release\RSP000006.rsp" with contents
+[
+/O2 /G7 /I "../" /I "../mpglib" /I "../include" /I ".." /D "NDEBUG" /D "_WINDOWS" /D "HAVE_MPGLIB" /D "WIN32" /D "HAVE_CONFIG_H" /FD /EHsc /ML /Fp".\Release/libmp3lame_vc6.pch" /Fo".\Release/" /Fd".\Release/" /W1 /c  /GAy /QIfdiv /QI0f
+".\tables.c"
+]
+Creating command line "cl.exe @"e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\encoders\encoder lame\lame\libmp3lame\Release\RSP000006.rsp" /nologo"
+Creating temporary file "e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\encoders\encoder lame\lame\libmp3lame\Release\RSP000007.rsp" with contents
+[
+/OUT:"Release\libmp3lame.lib" /NOLOGO "\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\encoders\encoder lame\lame\mpglib\Release\mpglib.lib"
+".\Release\bitstream.obj"
+".\Release\encoder.obj"
+".\Release\fft.obj"
+".\Release\gain_analysis.obj"
+".\Release\id3tag.obj"
+".\Release\lame.obj"
+".\Release\mpglib_interface.obj"
+".\Release\newmdct.obj"
+".\Release\presets.obj"
+".\Release\psymodel.obj"
+".\Release\quantize.obj"
+".\Release\quantize_pvt.obj"
+".\Release\reservoir.obj"
+".\Release\set_get.obj"
+".\Release\tables.obj"
+".\Release\takehiro.obj"
+".\Release\util.obj"
+".\Release\vbrquantize.obj"
+".\Release\VbrTag.obj"
+".\Release\version.obj"
+]
+Creating command line "lib.exe @"e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\encoders\encoder lame\lame\libmp3lame\Release\RSP000007.rsp""
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Output Window
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Performing Custom Build Step on configMS
+        1 file(s) copied.
+Compiling...
+version.c
+VbrTag.c
+vbrquantize.c
+util.c
+takehiro.c
+takehiro.c(141) : warning C4307: '*' : integral constant overflow
+takehiro.c(142) : warning C4307: '*' : integral constant overflow
+takehiro.c(143) : warning C4307: '*' : integral constant overflow
+takehiro.c(144) : warning C4307: '*' : integral constant overflow
+takehiro.c(160) : warning C4307: '*' : integral constant overflow
+takehiro.c(161) : warning C4307: '*' : integral constant overflow
+set_get.c
+reservoir.c
+quantize_pvt.c
+quantize.c
+psymodel.c
+presets.c
+newmdct.c
+mpglib_interface.c
+lame.c
+id3tag.c
+gain_analysis.c
+fft.c
+encoder.c
+bitstream.c
+Generating Code...
+Compiling...
+tables.c
+Creating library...
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Results
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>
+Build log was saved at "file://e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\encoders\encoder lame\lame\libmp3lame\Release\BuildLog.htm"
+libmp3lame - 0 error(s), 6 warning(s)</pre></table><table   width=100% height=20 bgcolor=#CFCFE5><tr><td><font face=arial size=+2>
+</font></table></body></html>

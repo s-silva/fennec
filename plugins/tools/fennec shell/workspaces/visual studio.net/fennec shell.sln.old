@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fennec shell", "fennec shell.vcproj", "{EA64C77D-FCAE-4801-83F2-A186506FBFEA}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{EA64C77D-FCAE-4801-83F2-A186506FBFEA}.Debug.ActiveCfg = Debug|Win32
+		{EA64C77D-FCAE-4801-83F2-A186506FBFEA}.Debug.Build.0 = Debug|Win32
+		{EA64C77D-FCAE-4801-83F2-A186506FBFEA}.Release.ActiveCfg = Release|Win32
+		{EA64C77D-FCAE-4801-83F2-A186506FBFEA}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

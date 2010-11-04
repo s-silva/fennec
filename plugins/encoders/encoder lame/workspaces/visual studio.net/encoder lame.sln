@@ -1,0 +1,103 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "encoder lame", "encoder lame.vcproj", "{409C0029-80A5-42D8-9412-B7D2E171FAD6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34} = {E316772F-5D8F-4F2A-8F71-094C3E859D34}
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421} = {5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmp3lame", "..\..\lame\libmp3lame\libmp3lame_vc7.vcproj", "{E316772F-5D8F-4F2A-8F71-094C3E859D34}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421} = {5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mpglib", "..\..\lame\mpglib\mpglib_vc7.vcproj", "{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Debug GTK = Debug GTK
+		dll debug = dll debug
+		dll release = dll release
+		dll release Nasm = dll release Nasm
+		LAME debug = LAME debug
+		LAME release = LAME release
+		LAME release Nasm = LAME release Nasm
+		Release = Release
+		Release GTK = Release GTK
+		Release NASM = Release NASM
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Debug.ActiveCfg = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Debug.Build.0 = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Debug GTK.ActiveCfg = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Debug GTK.Build.0 = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.dll debug.ActiveCfg = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.dll debug.Build.0 = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.dll release.ActiveCfg = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.dll release.Build.0 = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.dll release Nasm.ActiveCfg = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.dll release Nasm.Build.0 = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.LAME debug.ActiveCfg = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.LAME debug.Build.0 = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.LAME release.ActiveCfg = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.LAME release.Build.0 = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.LAME release Nasm.ActiveCfg = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.LAME release Nasm.Build.0 = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Release.ActiveCfg = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Release.Build.0 = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Release GTK.ActiveCfg = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Release GTK.Build.0 = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Release NASM.ActiveCfg = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Release NASM.Build.0 = Release|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.Debug.ActiveCfg = Debug|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.Debug.Build.0 = Debug|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.Debug GTK.ActiveCfg = Debug GTK|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.Debug GTK.Build.0 = Debug GTK|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.dll debug.ActiveCfg = dll debug|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.dll debug.Build.0 = dll debug|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.dll release.ActiveCfg = dll release|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.dll release.Build.0 = dll release|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.dll release Nasm.ActiveCfg = dll release Nasm|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.dll release Nasm.Build.0 = dll release Nasm|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.LAME debug.ActiveCfg = LAME debug|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.LAME debug.Build.0 = LAME debug|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.LAME release.ActiveCfg = LAME release|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.LAME release.Build.0 = LAME release|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.LAME release Nasm.ActiveCfg = LAME release Nasm|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.LAME release Nasm.Build.0 = LAME release Nasm|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.Release.ActiveCfg = Release|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.Release.Build.0 = Release|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.Release GTK.ActiveCfg = Release GTK|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.Release GTK.Build.0 = Release GTK|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.Release NASM.ActiveCfg = Release NASM|Win32
+		{E316772F-5D8F-4F2A-8F71-094C3E859D34}.Release NASM.Build.0 = Release NASM|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.Debug.ActiveCfg = Debug|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.Debug.Build.0 = Debug|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.Debug GTK.ActiveCfg = Debug GTK|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.Debug GTK.Build.0 = Debug GTK|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.dll debug.ActiveCfg = dll debug|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.dll debug.Build.0 = dll debug|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.dll release.ActiveCfg = dll release|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.dll release.Build.0 = dll release|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.dll release Nasm.ActiveCfg = dll release Nasm|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.dll release Nasm.Build.0 = dll release Nasm|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.LAME debug.ActiveCfg = LAME debug|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.LAME debug.Build.0 = LAME debug|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.LAME release.ActiveCfg = LAME release|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.LAME release.Build.0 = LAME release|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.LAME release Nasm.ActiveCfg = LAME release Nasm|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.LAME release Nasm.Build.0 = LAME release Nasm|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.Release.ActiveCfg = Release|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.Release.Build.0 = Release|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.Release GTK.ActiveCfg = Release GTK|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.Release GTK.Build.0 = Release GTK|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.Release NASM.ActiveCfg = Release NASM|Win32
+		{5CCD2FB5-67E2-4C48-8F7B-49F28BF8D421}.Release NASM.Build.0 = Release NASM|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

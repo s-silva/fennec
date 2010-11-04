@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "icons", "icons.vcproj", "{56A9BA71-43BC-49D4-8B8B-4B6DFCFBD43A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{56A9BA71-43BC-49D4-8B8B-4B6DFCFBD43A}.Debug.ActiveCfg = Debug|Win32
+		{56A9BA71-43BC-49D4-8B8B-4B6DFCFBD43A}.Debug.Build.0 = Debug|Win32
+		{56A9BA71-43BC-49D4-8B8B-4B6DFCFBD43A}.Release.ActiveCfg = Release|Win32
+		{56A9BA71-43BC-49D4-8B8B-4B6DFCFBD43A}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

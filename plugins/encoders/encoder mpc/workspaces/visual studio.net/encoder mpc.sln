@@ -1,0 +1,48 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "encoder mpc", "encoder mpc.vcproj", "{409C0029-80A5-42D8-9412-B7D2E171FAD6}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Debug GTK = Debug GTK
+		dll debug = dll debug
+		dll release = dll release
+		dll release Nasm = dll release Nasm
+		LAME debug = LAME debug
+		LAME release = LAME release
+		LAME release Nasm = LAME release Nasm
+		Release = Release
+		Release GTK = Release GTK
+		Release NASM = Release NASM
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Debug.ActiveCfg = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Debug.Build.0 = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Debug GTK.ActiveCfg = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Debug GTK.Build.0 = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.dll debug.ActiveCfg = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.dll debug.Build.0 = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.dll release.ActiveCfg = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.dll release.Build.0 = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.dll release Nasm.ActiveCfg = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.dll release Nasm.Build.0 = Debug|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.LAME debug.ActiveCfg = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.LAME debug.Build.0 = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.LAME release.ActiveCfg = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.LAME release.Build.0 = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.LAME release Nasm.ActiveCfg = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.LAME release Nasm.Build.0 = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Release.ActiveCfg = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Release.Build.0 = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Release GTK.ActiveCfg = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Release GTK.Build.0 = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Release NASM.ActiveCfg = Release|Win32
+		{409C0029-80A5-42D8-9412-B7D2E171FAD6}.Release NASM.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,28 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "decoder mpeg audio", "decoder mpeg audio.vcproj", "{259CA255-E5F2-49EE-94E9-DF79F78F24CB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D43F8E88-728F-4A72-A7B2-3231363516FD} = {D43F8E88-728F-4A72-A7B2-3231363516FD}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmad", "..\..\libmad\msvc++\libmad.vcproj", "{D43F8E88-728F-4A72-A7B2-3231363516FD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{259CA255-E5F2-49EE-94E9-DF79F78F24CB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{259CA255-E5F2-49EE-94E9-DF79F78F24CB}.Debug|Win32.Build.0 = Debug|Win32
+		{259CA255-E5F2-49EE-94E9-DF79F78F24CB}.Release|Win32.ActiveCfg = Release|Win32
+		{259CA255-E5F2-49EE-94E9-DF79F78F24CB}.Release|Win32.Build.0 = Release|Win32
+		{D43F8E88-728F-4A72-A7B2-3231363516FD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D43F8E88-728F-4A72-A7B2-3231363516FD}.Debug|Win32.Build.0 = Debug|Win32
+		{D43F8E88-728F-4A72-A7B2-3231363516FD}.Release|Win32.ActiveCfg = Release|Win32
+		{D43F8E88-728F-4A72-A7B2-3231363516FD}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

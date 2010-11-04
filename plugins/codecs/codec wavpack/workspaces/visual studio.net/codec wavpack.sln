@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "codec wavpack", "codec wavpack.vcproj", "{D737C427-F43A-4D68-9CE2-B6BE79A6E8FE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5CCCB9CF-0384-458F-BA08-72B73866840F} = {5CCCB9CF-0384-458F-BA08-72B73866840F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libwavpack", "..\..\wavpack\src\libwavpack (vs7.1).vcproj", "{5CCCB9CF-0384-458F-BA08-72B73866840F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{D737C427-F43A-4D68-9CE2-B6BE79A6E8FE}.Debug.ActiveCfg = Debug|Win32
+		{D737C427-F43A-4D68-9CE2-B6BE79A6E8FE}.Debug.Build.0 = Debug|Win32
+		{D737C427-F43A-4D68-9CE2-B6BE79A6E8FE}.Release.ActiveCfg = Release|Win32
+		{D737C427-F43A-4D68-9CE2-B6BE79A6E8FE}.Release.Build.0 = Release|Win32
+		{5CCCB9CF-0384-458F-BA08-72B73866840F}.Debug.ActiveCfg = Debug|Win32
+		{5CCCB9CF-0384-458F-BA08-72B73866840F}.Debug.Build.0 = Debug|Win32
+		{5CCCB9CF-0384-458F-BA08-72B73866840F}.Release.ActiveCfg = Release|Win32
+		{5CCCB9CF-0384-458F-BA08-72B73866840F}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

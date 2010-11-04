@@ -1,0 +1,125 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_SETTINGS DIALOGEX 0, 0, 209, 190
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Settings"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_VALUE,"msctls_trackbar32",TBS_TOP | TBS_NOTICKS | 
+                    WS_TABSTOP,48,7,154,12
+    DEFPUSHBUTTON   "OK",IDOK,152,169,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,101,169,50,14
+    LTEXT           "Highpass:",IDC_STATIC,7,7,39,12,SS_CENTERIMAGE
+    CONTROL         "",IDC_BAND,"msctls_trackbar32",TBS_TOP | TBS_NOTICKS | 
+                    WS_TABSTOP,48,31,154,12
+    CONTROL         "",IDC_PREAMP,"msctls_trackbar32",TBS_TOP | TBS_NOTICKS | 
+                    WS_TABSTOP,48,54,154,12
+    LTEXT           "Lowpass:",IDC_STATIC,7,31,35,12,SS_CENTERIMAGE
+    LTEXT           "Wet:",IDC_STATIC,7,54,35,12,SS_CENTERIMAGE
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,159,195,1
+    CONTROL         "",slider_damp,"msctls_trackbar32",TBS_TOP | TBS_NOTICKS | 
+                    WS_TABSTOP,48,74,154,12
+    LTEXT           "Dry:",IDC_STATIC,7,74,33,11
+    CONTROL         "",slider_diffusion,"msctls_trackbar32",TBS_TOP | 
+                    TBS_NOTICKS | WS_TABSTOP,48,94,154,12
+    LTEXT           "Diffusion:",IDC_STATIC,7,95,33,11
+    CONTROL         "",slider_delay,"msctls_trackbar32",TBS_TOP | 
+                    TBS_NOTICKS | WS_TABSTOP,48,113,154,12
+    LTEXT           "Room Size:",IDC_STATIC,7,135,40,11
+    CONTROL         "",slider_phase,"msctls_trackbar32",TBS_TOP | 
+                    TBS_NOTICKS | WS_TABSTOP,48,134,154,12
+    LTEXT           "Delay:",IDC_STATIC,7,114,33,11
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_SETTINGS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 202
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 183
+        HORZGUIDE, 19
+        HORZGUIDE, 31
+        HORZGUIDE, 43
+        HORZGUIDE, 54
+        HORZGUIDE, 66
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

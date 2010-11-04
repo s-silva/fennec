@@ -1,0 +1,71 @@
+<html>
+<head>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=Windows-1252">
+</head>
+<body>
+<pre>
+<table width=100% bgcolor=#CFCFE5><tr> <td> <font face=arial size=+3>
+Build Log
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>
+<h3>------- Build started: Project: codec amr, Configuration: Release|Win32 -------
+</h3>
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Command Lines
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Creating temporary file "e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\workspaces\visual studio.net\Release\RSP000001.rsp" with contents
+[
+/O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_USRDLL" /D "CODECSOUNDFILE_EXPORTS" /D "_WINDLL" /D "_UNICODE" /D "UNICODE" /FD /EHsc /MT /GS /Fo"Release/" /Fd"Release/vc70.pdb" /W3 /c /Wp64 /Zi /TC
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\amr\sp_enc.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\amr\sp_dec.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\amr\interf_enc.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\amr\interf_dec.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\include\system.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\general encoder.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\general decoder.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\audio encoder.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\audio decoder.c"
+]
+Creating command line "cl.exe @"e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\workspaces\visual studio.net\Release\RSP000001.rsp" /nologo"
+Creating temporary file "e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\workspaces\visual studio.net\Release\RSP000002.rsp" with contents
+[
+/OUT:"../../../../../../binaries/plugins/codec amr.dll" /INCREMENTAL:NO /NOLOGO /DLL /DEF:"plugin.def" /DEBUG /PDB:"Release/codec amr.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /IMPLIB:"Release/codec amr.lib" /MACHINE:X86  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
+".\Release\audio decoder.obj"
+".\Release\audio encoder.obj"
+".\Release\general decoder.obj"
+".\Release\general encoder.obj"
+".\Release\system.obj"
+".\Release\interf_dec.obj"
+".\Release\interf_enc.obj"
+".\Release\sp_dec.obj"
+".\Release\sp_enc.obj"
+]
+Creating command line "link.exe @"e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\workspaces\visual studio.net\Release\RSP000002.rsp""
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Output Window
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Compiling...
+sp_enc.c
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\amr\sp_enc.c(5756) : warning C4244: '=' : conversion from '__w64 int' to 'Word32', possible loss of data
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\amr\sp_enc.c(5757) : warning C4244: '=' : conversion from '__w64 int' to 'Word32', possible loss of data
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\amr\sp_enc.c(5833) : warning C4244: '=' : conversion from '__w64 int' to 'Word32', possible loss of data
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\amr\sp_enc.c(5834) : warning C4244: '=' : conversion from '__w64 int' to 'Word32', possible loss of data
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\amr\sp_enc.c(5924) : warning C4244: '=' : conversion from '__w64 int' to 'Word32', possible loss of data
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\amr\sp_enc.c(5925) : warning C4244: '=' : conversion from '__w64 int' to 'Word32', possible loss of data
+sp_dec.c
+interf_enc.c
+interf_dec.c
+system.c
+general encoder.c
+general decoder.c
+audio encoder.c
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\audio encoder.c(123) : warning C4267: 'function' : conversion from 'size_t' to 'unsigned long', possible loss of data
+audio decoder.c
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\audio decoder.c(226) : warning C4018: '<' : signed/unsigned mismatch
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\audio decoder.c(232) : warning C4018: '>' : signed/unsigned mismatch
+Generating Code...
+Linking...
+   Creating library Release/codec amr.lib and object Release/codec amr.exp
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Results
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>
+Build log was saved at "file://e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec amr\workspaces\visual studio.net\Release\BuildLog.htm"
+codec amr - 0 error(s), 9 warning(s)</pre></table><table   width=100% height=20 bgcolor=#CFCFE5><tr><td><font face=arial size=+2>
+</font></table></body></html>

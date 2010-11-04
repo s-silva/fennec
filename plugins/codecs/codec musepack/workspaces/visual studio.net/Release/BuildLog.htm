@@ -1,0 +1,79 @@
+<html>
+<head>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=Windows-1252">
+</head>
+<body>
+<pre>
+<table width=100% bgcolor=#CFCFE5><tr> <td> <font face=arial size=+3>
+Build Log
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>
+<h3>------- Build started: Project: codec musepack, Configuration: Release|Win32 -------
+</h3>
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Command Lines
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Creating temporary file "e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\workspaces\visual studio.net\Release\RSP000001.rsp" with contents
+[
+/O2 /I "..\..\mpcdec\include\\" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_USRDLL" /D "CODECSOUNDFILE_EXPORTS" /D "_WINDLL" /D "_UNICODE" /D "UNICODE" /FD /EHsc /MT /GS /Fo"Release/" /Fd"Release/vc70.pdb" /W3 /c /Wp64 /Zi /TC
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\mpcdec\src\synth_filter.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\mpcdec\src\streaminfo.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\mpcdec\src\requant.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\mpcdec\src\mpc_reader.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\mpcdec\src\mpc_decoder.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\mpcdec\src\idtag.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\mpcdec\src\huffsv7.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\mpcdec\src\huffsv46.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\include\system.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\general encoder.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\general decoder.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\audio encoder.c"
+"\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\audio decoder.c"
+]
+Creating command line "cl.exe @"e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\workspaces\visual studio.net\Release\RSP000001.rsp" /nologo"
+Creating temporary file "e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\workspaces\visual studio.net\Release\RSP000002.rsp" with contents
+[
+/OUT:"../../../../../../binaries/plugins/codec musepack.dll" /INCREMENTAL:NO /NOLOGO /DLL /DEF:"..\..\..\..\..\include\decoder.def" /DEBUG /PDB:"Release/codec musepack.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /IMPLIB:"Release/codec musepack.lib" /MACHINE:X86  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
+".\Release\audio decoder.obj"
+".\Release\audio encoder.obj"
+".\Release\general decoder.obj"
+".\Release\general encoder.obj"
+".\Release\system.obj"
+".\Release\huffsv46.obj"
+".\Release\huffsv7.obj"
+".\Release\idtag.obj"
+".\Release\mpc_decoder.obj"
+".\Release\mpc_reader.obj"
+".\Release\requant.obj"
+".\Release\streaminfo.obj"
+".\Release\synth_filter.obj"
+]
+Creating command line "link.exe @"e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\workspaces\visual studio.net\Release\RSP000002.rsp""
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Output Window
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>Compiling...
+synth_filter.c
+streaminfo.c
+requant.c
+mpc_reader.c
+mpc_decoder.c
+idtag.c
+huffsv7.c
+huffsv46.c
+system.c
+general encoder.c
+general decoder.c
+audio encoder.c
+audio decoder.c
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\audio decoder.c(42) : warning C4267: 'return' : conversion from 'size_t' to 'mpc_int32_t', possible loss of data
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\audio decoder.c(139) : warning C4018: '<' : signed/unsigned mismatch
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\audio decoder.c(150) : warning C4018: '>=' : signed/unsigned mismatch
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\audio decoder.c(164) : warning C4018: '<' : signed/unsigned mismatch
+\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\audio decoder.c(171) : warning C4018: '>=' : signed/unsigned mismatch
+Generating Code...
+Linking...
+   Creating library Release/codec musepack.lib and object Release/codec musepack.exp
+</pre></table><table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Results
+</font></table><table width=* cellspacing=0 cellpadding=0><tr><td width=0 bgcolor=#EDEDF5>&nbsp;</td><td width=0 bgcolor=#FFFFFF>&nbsp;</td><td width=*><pre>
+Build log was saved at "file://e:\Hacking\Workspace\Fennec\Fennec Player\Current Version\source\plugins\codecs\codec musepack\workspaces\visual studio.net\Release\BuildLog.htm"
+codec musepack - 0 error(s), 5 warning(s)</pre></table><table   width=100% height=20 bgcolor=#CFCFE5><tr><td><font face=arial size=+2>
+</font></table></body></html>

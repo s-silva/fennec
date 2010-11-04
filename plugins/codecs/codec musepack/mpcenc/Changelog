@@ -1,0 +1,24 @@
+1.16:
+	* Add fast seeking flag in reserved header data. Enable bit-perfect fast seeking. Patch by Andrew Cupper & Nicolas Botti
+	* Add optional beeping at the end of encoding (--beep)
+	* Remove tag guessing from filename on unix
+	* Add unicode input support for tags (--unicode). Patch by Valery Bruniaux
+	* Frontend patches from Xmixahlx & Shy
+	* Code clean-up
+	* Port build system to cmake for unix & msvc2005 for win32
+
+1.15v
+	* Workaround for denormal number issues. Synthetic samples with passages of digital silence are handled correctly regardless of the compiler used
+	* Translation of German source code comments to English. Patch by Citay
+
+1.15u
+	* Changes in the way the encoded signal is padded to MPC frame boundaries. Beginning and end of track encoding is handled differently, resulting in significantly improved gapless coding. Thanks to Xiph's Monty for the initial advice
+
+1.15t
+	* Aggressive compiler settings could cause a glitch in rare synthetic samples
+
+1.15s
+	* In some rare cases, the output file would have an incorrect duration (4 missing samples) when encoding some very long tracks
+	* There was a glitch at the end of the track when encoding from a 24-bit source through pipe
+	* --xlevel is used by default. Use --noxlevel to override
+	* Removed "Unstable/Experimental" flag writing

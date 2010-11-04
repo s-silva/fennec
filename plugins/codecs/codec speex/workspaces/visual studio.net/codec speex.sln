@@ -1,0 +1,40 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "codec speex", "codec speex.vcproj", "{D737C427-F43A-4D68-9CE2-B6BE79A6E8FE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C900A12F-2F6B-40B8-8CE6-F813FB9337C7} = {C900A12F-2F6B-40B8-8CE6-F813FB9337C7}
+		{64951C65-C821-468D-B838-953955C99290} = {64951C65-C821-468D-B838-953955C99290}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libspeex", "..\..\speex\win32\libspeex\libspeex.vcproj", "{C900A12F-2F6B-40B8-8CE6-F813FB9337C7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{64951C65-C821-468D-B838-953955C99290} = {64951C65-C821-468D-B838-953955C99290}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ogg_static", "..\..\ogg\win32\ogg_static.vcproj", "{64951C65-C821-468D-B838-953955C99290}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{D737C427-F43A-4D68-9CE2-B6BE79A6E8FE}.Debug.ActiveCfg = Debug|Win32
+		{D737C427-F43A-4D68-9CE2-B6BE79A6E8FE}.Debug.Build.0 = Debug|Win32
+		{D737C427-F43A-4D68-9CE2-B6BE79A6E8FE}.Release.ActiveCfg = Release|Win32
+		{D737C427-F43A-4D68-9CE2-B6BE79A6E8FE}.Release.Build.0 = Release|Win32
+		{C900A12F-2F6B-40B8-8CE6-F813FB9337C7}.Debug.ActiveCfg = Debug|Win32
+		{C900A12F-2F6B-40B8-8CE6-F813FB9337C7}.Debug.Build.0 = Debug|Win32
+		{C900A12F-2F6B-40B8-8CE6-F813FB9337C7}.Release.ActiveCfg = Release|Win32
+		{C900A12F-2F6B-40B8-8CE6-F813FB9337C7}.Release.Build.0 = Release|Win32
+		{64951C65-C821-468D-B838-953955C99290}.Debug.ActiveCfg = Debug|Win32
+		{64951C65-C821-468D-B838-953955C99290}.Debug.Build.0 = Debug|Win32
+		{64951C65-C821-468D-B838-953955C99290}.Release.ActiveCfg = Release|Win32
+		{64951C65-C821-468D-B838-953955C99290}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

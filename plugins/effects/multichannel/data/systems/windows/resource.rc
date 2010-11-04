@@ -1,0 +1,311 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+dialog_general DIALOGEX 0, 0, 378, 213
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+EXSTYLE WS_EX_TRANSPARENT | WS_EX_NOINHERITLAYOUT
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Front Left:",IDC_STATIC,11,32,56,12,SS_CENTERIMAGE
+    LTEXT           "Front Right:",IDC_STATIC,11,48,35,12,SS_CENTERIMAGE
+    LTEXT           "Center:",IDC_STATIC,11,64,56,12,SS_CENTERIMAGE
+    LTEXT           "Mono: Front Left only.\nStereo: Front Left, Right.",
+                    IDC_STATIC,11,183,169,19,SS_SUNKEN
+    LTEXT           "LFE:",IDC_STATIC,11,80,56,12,SS_CENTERIMAGE
+    GROUPBOX        "Common 7.1 Setup",IDC_STATIC,7,7,180,199
+    CONTROL         "",sld_vol1,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | 
+                    WS_TABSTOP,140,34,40,9
+    CONTROL         "",sld_vol2,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | 
+                    WS_TABSTOP,140,51,40,9
+    CONTROL         "",sld_vol3,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | 
+                    WS_TABSTOP,140,66,40,9
+    LTEXT           "Volume",IDC_STATIC,147,18,24,8
+    CONTROL         "",sld_vol4,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | 
+                    WS_TABSTOP,140,82,40,9
+    CONTROL         "",sld_vol5,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | 
+                    WS_TABSTOP,140,98,40,9
+    CONTROL         "",sld_vol6,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | 
+                    WS_TABSTOP,140,114,40,9
+    CONTROL         "",sld_vol7,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | 
+                    WS_TABSTOP,140,130,40,9
+    CONTROL         "",sld_vol8,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | 
+                    WS_TABSTOP,140,147,40,9
+    LTEXT           "Rear Left:",IDC_STATIC,11,96,56,12
+    LTEXT           "Rear Right:",IDC_STATIC,11,112,56,12
+    LTEXT           "Side Left:",IDC_STATIC,11,128,56,12
+    LTEXT           "Side Right:",IDC_STATIC,11,144,56,12
+    COMBOBOX        combo_sc1,67,32,68,30,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        combo_sc2,67,48,68,30,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        combo_sc3,67,64,68,30,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        combo_sc4,67,80,68,30,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        combo_sc5,67,96,68,30,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        combo_sc6,67,112,68,30,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        combo_sc7,67,128,68,30,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        combo_sc8,67,144,68,30,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Source",IDC_STATIC,89,18,23,8
+    LTEXT           "Preset:",IDC_STATIC,11,164,56,12
+    COMBOBOX        combo_preset,67,164,113,30,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "Output",IDC_STATIC,191,7,179,100
+    COMBOBOX        combo_outmodes,263,24,101,30,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Channels:",IDC_STATIC,201,25,33,8
+    CONTROL         "Use lowpass for subwoofer.",check_lowpass_sub,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,196,41,166,10
+    CONTROL         "Use lowshelf for subwoofer.",check_bass_boost_sub,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,196,67,106,10
+    GROUPBOX        "Measurements and Delay",IDC_STATIC,189,110,181,96
+    CONTROL         "Enable.",check_dealynm_enb,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,196,125,40,10
+    LTEXT           "Room Size (Dealy):",IDC_STATIC,201,145,62,8
+    LTEXT           "Rear Presence:",IDC_STATIC,201,166,50,8
+    CONTROL         "",slider_delay,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,276,145,87,10
+    LTEXT           "Side Presence:",IDC_STATIC,201,187,48,8
+    CONTROL         "",slider_rear,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,276,166,87,10
+    CONTROL         "",slider_right,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,276,187,87,10
+    CONTROL         "",slider_ls_feq,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,276,81,86,9
+    LTEXT           "Highest frequency:",IDC_STATIC,202,80,65,9
+    LTEXT           "Boost:",IDC_STATIC,202,90,22,8
+    CONTROL         "",slider_ls_boost,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,276,91,86,9
+    CONTROL         "",slider_lp_freq,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,276,54,86,9
+    LTEXT           "Cutoff frequency:",IDC_STATIC,202,54,65,9
+END
+
+IDD_MAIN DIALOGEX 0, 0, 398, 268
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | 
+    WS_THICKFRAME
+CAPTION "Settings: Multichannel Effect."
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,341,247,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,288,247,50,14
+    CONTROL         "",IDC_TMAIN,"SysTabControl32",0x0,7,7,384,229,
+                    WS_EX_ACCEPTFILES
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,8,242,383,1
+END
+
+dialog_emulation DIALOGEX 0, 0, 378, 213
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+EXSTYLE WS_EX_TRANSPARENT | WS_EX_NOINHERITLAYOUT
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    GROUPBOX        "Mono Emulation",IDC_STATIC,7,7,363,45
+    CONTROL         "Solid front (Sources: Front Left/Right/Center)",
+                    IDC_RADIO1,"Button",BS_AUTORADIOBUTTON,15,23,189,10
+    CONTROL         "Center mix (Source: Front Center)",IDC_RADIO2,"Button",
+                    BS_AUTORADIOBUTTON,15,33,189,10
+    GROUPBOX        "Stereo Emulation",IDC_STATIC,7,56,363,93
+    CONTROL         "Widen",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    24,82,36,10
+    GROUPBOX        "Rear",IDC_STATIC,15,69,147,72
+    CONTROL         "",IDC_SLIDER1,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,34,94,115,10
+    GROUPBOX        "Side",IDC_STATIC,168,69,147,72
+    CONTROL         "Widen",IDC_CHECK5,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    174,83,36,10
+    CONTROL         "",IDC_SLIDER7,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,184,95,115,10
+    CONTROL         "Delay",IDC_CHECK6,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    174,108,34,10
+    CONTROL         "",IDC_SLIDER8,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,184,121,115,10
+    GROUPBOX        "Final Processing",IDC_STATIC,7,152,363,54
+    CONTROL         "Swap front with rear.",IDC_CHECK2,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,15,168,264,10
+    CONTROL         "Swap left with right.",IDC_CHECK3,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,15,179,264,10
+END
+
+dialog_reverb DIALOGEX 0, 0, 378, 213
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+EXSTYLE WS_EX_TRANSPARENT | WS_EX_NOINHERITLAYOUT
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    GROUPBOX        "Room",IDC_STATIC,7,7,363,70
+    LTEXT           "Diffusion:",IDC_STATIC,22,23,32,8
+    CONTROL         "",IDC_SLIDER1,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,85,23,225,11
+    CONTROL         "",IDC_SLIDER2,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,85,40,225,11
+    LTEXT           "Damping:",IDC_STATIC,20,41,56,8
+    CONTROL         "",IDC_SLIDER3,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,85,57,225,11
+    LTEXT           "Room size:",IDC_STATIC,19,57,36,8
+    GROUPBOX        "Reverb",IDC_STATIC,7,80,363,91
+    LTEXT           "Color:",IDC_STATIC,17,98,20,8
+    CONTROL         "",IDC_SLIDER4,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,85,94,225,11
+    LTEXT           "Dry",IDC_STATIC,85,108,12,8
+    LTEXT           "Wet",IDC_STATIC,296,105,14,8
+    LTEXT           "Resonance:",IDC_STATIC,16,119,39,8
+    CONTROL         "",IDC_SLIDER5,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,85,118,225,11
+    LTEXT           "No Resonance",IDC_STATIC,85,134,47,8
+    LTEXT           "Heavy",IDC_STATIC,288,132,22,8
+    LTEXT           "Fundamential Note:",IDC_STATIC,16,145,64,8
+    LTEXT           "10Hz",IDC_STATIC,85,156,17,8
+    CONTROL         "",IDC_SLIDER6,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,85,143,225,11
+    LTEXT           "800Hz",IDC_STATIC,289,156,21,8
+END
+
+dialog_effects DIALOGEX 0, 0, 378, 213
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+EXSTYLE WS_EX_TRANSPARENT | WS_EX_NOINHERITLAYOUT
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "In a car",IDC_RADIO1,"Button",BS_AUTORADIOBUTTON,32,31,
+                    223,10
+    CONTROL         "Enable",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,17,17,37,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    dialog_general, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 370
+        VERTGUIDE, 11
+        VERTGUIDE, 67
+        VERTGUIDE, 135
+        VERTGUIDE, 140
+        VERTGUIDE, 180
+        VERTGUIDE, 196
+        VERTGUIDE, 276
+        VERTGUIDE, 362
+        VERTGUIDE, 377
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 206
+    END
+
+    IDD_MAIN, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 391
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 261
+    END
+
+    dialog_emulation, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 370
+        VERTGUIDE, 15
+        VERTGUIDE, 24
+        VERTGUIDE, 377
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 206
+        HORZGUIDE, 69
+        HORZGUIDE, 141
+    END
+
+    dialog_reverb, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 370
+        VERTGUIDE, 85
+        VERTGUIDE, 310
+        VERTGUIDE, 377
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 206
+    END
+
+    dialog_effects, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 370
+        VERTGUIDE, 377
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 206
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

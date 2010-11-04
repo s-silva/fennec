@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "decoder wma", "decoder wma.vcproj", "{D5176C85-3FD7-4B22-AAC1-764EDEEDAE7E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{D5176C85-3FD7-4B22-AAC1-764EDEEDAE7E}.Debug.ActiveCfg = Debug|Win32
+		{D5176C85-3FD7-4B22-AAC1-764EDEEDAE7E}.Debug.Build.0 = Debug|Win32
+		{D5176C85-3FD7-4B22-AAC1-764EDEEDAE7E}.Release.ActiveCfg = Release|Win32
+		{D5176C85-3FD7-4B22-AAC1-764EDEEDAE7E}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

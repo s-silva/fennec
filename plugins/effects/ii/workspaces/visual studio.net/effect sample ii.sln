@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "effect sample ii", "effect sample ii.vcproj", "{A14847C1-0506-4E61-B797-229F2BECCE85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{A14847C1-0506-4E61-B797-229F2BECCE85}.Debug.ActiveCfg = Debug|Win32
+		{A14847C1-0506-4E61-B797-229F2BECCE85}.Debug.Build.0 = Debug|Win32
+		{A14847C1-0506-4E61-B797-229F2BECCE85}.Release.ActiveCfg = Release|Win32
+		{A14847C1-0506-4E61-B797-229F2BECCE85}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
