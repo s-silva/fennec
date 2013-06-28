@@ -97,7 +97,8 @@ int call_function(int id, int data, void *a, void *b)
 		break;
 
 	case call_visualizations_select_next:
-		
+		if(settings.visualizations.selected[0])
+			visualizations_initialize(settings.visualizations.selected);
 		break;
 
 	case call_visualizations_select_prev:

@@ -57,7 +57,12 @@ int videoout_initialize(const string fname)
 	letter                     plgname[v_sys_maxpath];
 	letter                     plgtitle[v_sys_maxpath];
 
-	if(videoout_initialized)videoout_uninitialize();
+	if(videoout_initialized)
+	{
+		if(current_videoout_data.initialize)
+			current_videoout_data.initialize();
+		return 0;// videoout_uninitialize();
+	}
 
 	fennec_get_plugings_path(plgname);
 	str_cat(plgname, fname);
@@ -259,6 +264,7 @@ unsigned long callc videoout_getdata(int id, int cid, void *mdata, void *sdata)
 	case get_window_video_dc:
 	case get_window_video_rect:
 	case get_window_video_state:
+	case set_video_window:
 		return skins_function_getdata(id, mdata, sizeof(void*));
 
 	case get_color:

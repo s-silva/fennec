@@ -56,7 +56,7 @@ int visualizations_initialize(const string fname)
 	letter                     plgname[v_sys_maxpath];
 	letter                     plgtitle[v_sys_maxpath];
 
-	if(vis_initialized)visualizations_uninitialize();
+	if(vis_initialized) return 0;//visualizations_uninitialize();
 
 	fennec_get_abs_path(plgname, fname);
 

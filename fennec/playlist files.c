@@ -323,6 +323,8 @@ int playlist_t_load_current_ex(const string fname, int startpos, int uselimit)
 							{
 								str_cpy(last_playlist_fname, fname);
 								sys_thread_call((t_sys_thread_function)thread_playlist_extra);
+								sys_mem_free(tmem);
+								sys_file_close(fhandle);
 								return 0;
 							}
 						}

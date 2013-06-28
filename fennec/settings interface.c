@@ -1088,6 +1088,22 @@ int settings_proc_skins(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 			SetWindowPos(window_main, 0, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
 			break;
 
+		case button_switch:
+			
+			{
+				letter fname[v_sys_maxpath];
+				int    csel;
+
+				csel = (int) SendDlgItemMessage(hwnd, list_subs, LB_GETCURSEL, 0, 0);
+				
+				if(csel >= 0)
+				{
+					SendDlgItemMessage(hwnd, list_subs, LB_GETTEXT, (WPARAM)csel, (LPARAM)fname);
+					skins_function_subskins_select(fname);
+				}
+			}
+			break;
+
 		case IDC_SK_BASE:
 			
 offset_apply_base_skin:
@@ -3116,6 +3132,10 @@ int settings_proc_themes(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 				if(x != -1)
 					skins_settheme(x);
+
+				SendDlgItemMessage(hwnd, slider_hue,   TBM_SETPOS, 1, skins_setcolor(-1 /* get */, 0, 0));
+				SendDlgItemMessage(hwnd, slider_sat,   TBM_SETPOS, 1, skins_setcolor(-1 /* get */, 1, 0));
+				SendDlgItemMessage(hwnd, slider_light, TBM_SETPOS, 1, skins_setcolor(-1 /* get */, 2, 0));
 			}
 			break;
 

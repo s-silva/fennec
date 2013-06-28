@@ -72,6 +72,10 @@ void fennec_initialize(HWND hwnd)
 	window_main    = hwnd;
 	window_main_dc = GetDC(hwnd);
 
+	/* check updates */
+
+	//fennec_check_updates();
+
 	/* general settings storage system for plug-ins */
 
 	fennec_get_plugings_path(tmpbuf);
@@ -450,17 +454,22 @@ void main_refresh(void)
 		
 void refresh_others(void)
 {
-	letter                  dbuf[32];
-	
+	static letter        dbuf[32], tbuf[32];
+	static int last_duration = -11;
+	static int sss = 0;
+	int p;
+sss++;
+	p = (int)(audio_getduration_ms() / 1000);
+
+	if(last_duration != p)
 	{
-		int p;
+		int x;
 
-		p = (int)(audio_getduration_ms() / 1000);
-
+		last_duration = p;
 
 		memset(dbuf, 0, sizeof(dbuf));
 		
-		if(p / 60 <= 60)
+		if(p / 60 < 60)
 		{
 			_itow(p / 60, dbuf, 10);
 			dbuf[str_len(dbuf)] = uni(':');
@@ -474,8 +483,36 @@ void refresh_others(void)
 			}
 
 		}else{
-			_itow(p / 3600, dbuf, 10);
-			str_cat(dbuf, uni("h"));
+			x = p / 3600;
+			_itow(x, dbuf, 10);
+			str_cat(dbuf, uni(":"));
+
+			x = (p - (x * 3600)) / 60;
+
+
+			if(x < 10)
+			{
+				_itow(x, tbuf, 10);
+				str_cat(dbuf, uni("0"));
+				str_cat(dbuf, tbuf);
+				str_cat(dbuf, uni(":"));
+			}else{
+				_itow(x, tbuf, 10);
+				str_cat(dbuf, tbuf);
+				str_cat(dbuf, uni(":"));
+			}
+
+			x = p % 60;
+
+			if(x < 10)
+			{
+				_itow(x, tbuf, 10);
+				str_cat(dbuf, uni("0"));
+				str_cat(dbuf, tbuf);
+			}else{
+				_itow(x, tbuf, 10);
+				str_cat(dbuf, tbuf);
+			}
 		}
 	}
 
@@ -882,10 +919,30 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 				}
 				break;
 
-			case 2: /* add files */
-				audio_playlist_add((const string)cd->lpData, 0, 0);
-				fennec_refresh(fennec_v_refresh_force_high);
+			case 16: /* add files (careful) */
+				{
+					letter buff[1024];
+					memset(buff, 0, sizeof(buff));
+					str_ncpy(buff, (const string)cd->lpData, cd->cbData / 2);
+					audio_playlist_add(buff, 0, 0);
+					
+					if(audio_playlist_getcount() == 1)
+					{
+						audio_playlist_switch(0);
+						audio_play();
+					}
+
+					fennec_refresh(fennec_v_refresh_force_high);
+				}
 				return 1;
+
+			case 2: /* add files */
+				{
+					audio_playlist_add((const string)cd->lpData, 0, 0);
+					fennec_refresh(fennec_v_refresh_force_high);
+				}
+				return 1;
+
 
 			case 3: /* clear playlist */
 				audio_playlist_clear();

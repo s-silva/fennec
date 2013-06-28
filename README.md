@@ -4,7 +4,7 @@ Fennec-Media-Project
 Complete multimedia suite with an audio/video player, converter, CD ripper, tag editor, DSP effect host and a visualization host. Supports playing/converting almost all media formats.
 Project Page: http://fennec.sourceforge.net
 
-![Screenshot](/Misc/sc.png)
+![Screenshot](/misc/sc.png)
 
 ##Features
 

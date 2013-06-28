@@ -1825,6 +1825,28 @@ int inform_other_programs(string str)
 }
 
 
+void fennec_check_updates(void)
+{
+#define updatesfile uni("http://fennec.sourceforge.net/updates.php");
+
+	/* check if 7 days elapsed */
+
+	letter   rvalue[128];
+	DWORD    rsize = sizeof(rvalue), rtype = 0;
+	HKEY     rkey;
+
+	rvalue[0] = '\0';
+	RegOpenKey(HKEY_LOCAL_MACHINE, uni("software\\fennec\\player"), &rkey);
+	RegQueryValueEx(rkey, uni("lastupdate"), 0, &rtype, (LPBYTE)rvalue, &rsize);
+	RegCloseKey(rkey);
+
+	
+
+
+
+}
+
+
 /*-----------------------------------------------------------------------------
  eof.
 -----------------------------------------------------------------------------*/

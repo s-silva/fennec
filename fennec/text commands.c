@@ -62,19 +62,23 @@ int text_command_base(const string tcommand)
 	if(!tcommand)        return 0; /* r u kiddin'? */
 	if(!str_len(tcommand))return 0; /* what? don't!.. ok. */
 
+
+	
+	sys_library_getfilename(0, mname, sizeof(mname));
+	i = (unsigned int)str_len(mname) + 2 /* for two quotes */;
+
+
 	/* multiple files? */
 
 	if(last_commandline_time + 200 > sys_timer_getms())
 	{
 		last_commandline_time = sys_timer_getms();
 	}else{
+		
 		last_commandline_time = sys_timer_getms();
 		audio_playlist_clear();		
 	}
 
-
-	sys_library_getfilename(0, mname, sizeof(mname));
-	i = (unsigned int)str_len(mname) + 2 /* for two quotes */;
 
 	/* recognize commands by spaces */
 
@@ -101,7 +105,7 @@ int text_command_base(const string tcommand)
 			lp = i;
 		}
 
-		if((tcommand[i] == uni('-')))
+		if((tcommand[i] == uni('-')) && !iq)
 		{
 			tc_local_action(tcommand + i, (unsigned int)str_len(tcommand) - i);
 			fadds++;
@@ -146,6 +150,7 @@ int tc_local_action(const string tcommand, unsigned int tlen)
 
 		switch(tcommand[1])
 		{
+
 		case uni('0'): /* zero volume */
 			audio_setvolume(0.0f, 0.0f);
 			break;
