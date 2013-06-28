@@ -536,7 +536,7 @@ int audio_playlist_ismarked(unsigned long idx)
 
 	sys_thread_share_request(&pl_cs);
 
-	im = (playlist_array[idx].imarked == 1);
+	im = (playlist_array[idx].imarked >= 1);
 
 	sys_thread_share_release(&pl_cs);
 	return im;
@@ -760,6 +760,7 @@ int audio_playlist_switch_list(unsigned long idx)
 
 	if(idx == -1)
 	{
+		playlist_array[playlist_currentindex].imarked = 2;
 		return audio_loadfile_soft(&playlist_changed, audio_playlist_getsource(playlist_currentindex));
 	}else{	
 		if(settings.player.playlist_shuffle)
@@ -785,6 +786,8 @@ int audio_playlist_switch_list(unsigned long idx)
 
 			playlist_currentindex = 0;
 		}
+
+		playlist_array[idx].imarked = 2;
 
 
 		return audio_loadfile_soft(&playlist_changed, audio_playlist_getsource(idx));

@@ -181,18 +181,18 @@ extern struct           skin_data fennec_skin_data;
 
 #define icon_library                 uni("icons.dll")
 
-#define fennec_version_int           701002 /* 7.1.1 - (7 x 100,000) (1 x 1,000) + (0.1 x 10) */
-#define fennec_version_string        "7.1.2"
-#define fennec_version_text          "fennec player 7.1.2"
-#define fennec_version_text_full     "Fennec Player 1.2 (Fennec 7.1.2) \"Deep Dimension\" (Beta 2, 0210040200)"
-#define fennec_version_information   "Beta Release 2"
-#define fennec_player_version_text   "Fennec Player 1.2"
+#define fennec_version_int           701003 /* 7.1.1 - (7 x 100,000) (1 x 1,000) + (0.1 x 10) */
+#define fennec_version_string        "7.1.3"
+#define fennec_version_text          "fennec player 7.1.3"
+#define fennec_version_text_full     "Fennec Player 1.3 (Fennec 7.1.3) \"Rainwater Lake\" (Beta 1, 0210040200)"
+#define fennec_version_information   "Beta Release 1"
+#define fennec_player_version_text   "Fennec Player 1.3"
 
-#define fennec_u_version_string        uni("7.1.2")
-#define fennec_u_version_text          uni("fennec player 7.1.2")
-#define fennec_u_version_text_full     uni("Fennec Player 1.2 (Fennec 7.1.2) \"Deep Dimension\" (Beta 2, 0210040200)")
-#define fennec_u_version_information   uni("Beta Release 2")
-#define fennec_u_player_version_text   uni("Fennec Player 1.2")
+#define fennec_u_version_string        uni("7.1.3")
+#define fennec_u_version_text          uni("fennec player 7.1.3")
+#define fennec_u_version_text_full     uni("Fennec Player 1.3 (Fennec 7.1.3) \"Rainwater Lake\" (Beta 2, 0210040200)")
+#define fennec_u_version_information   uni("Beta Release 1")
+#define fennec_u_player_version_text   uni("Fennec Player 1.3")
 
 #define get_playlist   0x1  /* get playlist window, 0 - not available; main window - same */
 #define get_visual     0x2  /* get visualizations window, 0 - not available; main window - same */

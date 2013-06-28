@@ -93,7 +93,44 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				cd.lpData = GetCommandLine();
 
 				if(cd.cbData)
-					SendMessage(owindow, WM_COPYDATA, 1, (LPARAM)&cd);
+				{
+					int          j;
+					letter       mname[v_sys_maxpath];
+					string       cbd = (string)cd.lpData;
+
+
+					sys_library_getfilename(0, mname, sizeof(mname));
+					j = (unsigned int)str_len(mname) + 2 /* for two quotes */;
+
+					if(cd.cbData > j + 5 && cd.cbData < 1024)
+					{
+						if(cbd[j] == uni(' ') && cbd[j + 1] == uni('-') && cbd[j + 2] == uni('a'))
+						{
+							int    i;
+							string sc = cbd + j + 4;
+							static letter buff[1024];
+
+							memset(buff, 0, sizeof(buff));
+							
+							if(*sc == uni('\"'))
+								str_ncpy(buff, sc + 1, str_len(sc + 1) - 1);
+							else
+								str_ncpy(buff, sc, str_len(sc) - 1);
+										
+							cd.cbData = (unsigned long)str_size(buff);
+							cd.lpData = buff;
+
+						
+							SendMessage(owindow, WM_COPYDATA, 16, (LPARAM)&cd);
+						}else{
+							SendMessage(owindow, WM_COPYDATA, 1, (LPARAM)&cd);
+						}
+
+
+					}else{
+						SendMessage(owindow, WM_COPYDATA, 1, (LPARAM)&cd);
+					}
+				}
 			}
 
 			report("termination after sending data", rt_stepping);

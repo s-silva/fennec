@@ -57,13 +57,13 @@ int video_refresh(HWND hwnd, HDC dc, RECT *crect)
 	int                  w, h;
 	static int           delay = 0;
 	struct video_dec    *vdec;
-	void                *buffer = 0;
+	static void         *buffer = 0;
 	double               audiosec = 0, aspect = 0;
 	unsigned long        timems;
 	static unsigned long lasttimems = 0;
 	string               sec_sub;
 
-	if(audio_getplayerstate() != v_audio_playerstate_playing) return 1;
+	if(audio_getplayerstate() != v_audio_playerstate_playing) return -1;
 
 	audio_get_current_ids(&pid, &fid);
 	internal_input_plugin_getvideo(pid, fid, &vdec);
@@ -88,19 +88,19 @@ int video_refresh(HWND hwnd, HDC dc, RECT *crect)
 	delay = vdec->video_decoder_getframe_sync(fid, &buffer, audiosec);
 
 
-	if(!delay) return 0;
+	//if(!delay) return 0;
 
 	videoout_setinfo(w, h, 0, 24);
 	videoout_setinfo_ex(1, &aspect, 0);
 	videoout_pushtext(0, 0, vdec->video_decoder_getsubtitle(fid, -1.0f), 0, 0, 0, 0);
 	sec_sub = vdec->video_decoder_getsubtitle(fid, 1.0f);
-	if(sec_sub)
-		videoout_pushtext(1, 0, sec_sub, 0, 0, 0, 0);
+
+	videoout_pushtext(1, 0, sec_sub, 0, 0, 0, 0);
 
 	videoout_display(buffer, 0, 0);
 
 	lasttimems = timeGetTime() - timems;
-	return 1;
+	return delay;
 }
 
 

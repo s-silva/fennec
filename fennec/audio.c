@@ -215,6 +215,40 @@ int audio_play(void)
 		fennec_refresh(fennec_v_refresh_force_not);
 	}
 	
+	/* if video is available, request to show video window */
+
+	{
+		unsigned long pid, fid;
+		struct video_dec  *vid;
+		double  aspect = 0;
+		int     w, h;
+
+		audio_get_current_ids(&pid, &fid);
+		internal_input_plugin_getvideo(pid, fid, &vid);
+
+		if(vid)
+		{
+			if(vid->video_decoder_getsize)
+			{
+
+				vid->video_decoder_getsize(fid, (int*)&aspect, 0);
+				vid->video_decoder_getsize(fid, &w, &h);
+
+				if(aspect > 0.0)
+					h = (int)((double)h / aspect);
+
+
+				skins_function_getdata(set_video_window, 0, (int)(((double)w / (double)h) * 1000000.0));
+			}else{
+				skins_function_getdata(set_video_window, 0, 0);
+			}
+
+		}else{
+			skins_function_getdata(set_video_window, 0, 0);
+		}
+	
+	}
+
 	return ret;
 }
 
