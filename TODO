@@ -1,0 +1,9 @@
+There are a lot of things that need to be done in porting, platform
+independance etc. but first of all, need to focus on minimizing the
+building process by:
+
+1. Transfer the complete project into MinGW64 for both 64bit and 32bit
+   compiling.
+
+2. Introduce a central build/rebuild for all the plugins and other
+   stuff.
