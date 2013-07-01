@@ -43,9 +43,8 @@ Project Page: http://fennec.sourceforge.net
 
 ##Compiling
 
-Since the GitHub repository is rarely updated, it's recommended to download a full source code archive from
-(http://prdownloads.sourceforge.net/fennec/fennec_source_july_16th_2010.7z?download) and compiling each Microsoft Visual Studio project
-located in 'workspaces' directory.
+Older source code archives can be downloaded from SourceForge project page, the git repository is created with
+an updated version of 2010 source archive (http://prdownloads.sourceforge.net/fennec/fennec_source_july_16th_2010.7z?download).
 
 If you're changing the platform of a single project to x64, make sure to compile all the other projects into the same
 platform (the precompiled packages are compliled for 32bit architecture, at the moment).
