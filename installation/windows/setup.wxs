@@ -1,0 +1,15 @@
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+   <Product Id="*" UpgradeCode="12345678-1234-1234-1234-111111111111" 
+            Name="Fennec Media Suite" Version="0.0.1" Manufacturer="Fennec Media Project" Language="1033">
+      <Package InstallerVersion="200" Compressed="yes" Comments="Windows Installer Package"/>
+      <Media Id="1" Cabinet="product.cab" EmbedCab="yes"/>
+ 
+      <Directory Id="TARGETDIR" Name="SourceDir">
+         <Component Id="ApplicationFiles" Guid="12345678-1234-1234-1234-222222222222"/>
+      </Directory>
+ 
+      <Feature Id="DefaultFeature" Level="1">
+         <ComponentRef Id="ApplicationFiles"/>
+      </Feature>
+   </Product>
+</Wix>
