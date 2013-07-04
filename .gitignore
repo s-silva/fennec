@@ -7,9 +7,11 @@
 .metadata
 bin/
 tmp/
+*.msi
 *.tmp
 *.bak
 *.swp
+*.wixpdb
 *~.nib
 local.properties
 .classpath

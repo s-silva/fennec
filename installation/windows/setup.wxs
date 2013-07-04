@@ -1,0 +1,202 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+  <Product Name='Fennec Media Suite' Id='e965c89c-5bc0-4f65-b7ab-41de82efb225' UpgradeCode='f17b6ac8-ccd6-4314-8b08-2520f1256e76'
+    Language='1033' Codepage='1252' Version='1.4.0' Manufacturer='Fennec Media Project'>
+
+    <Package Id='*' Keywords='Installer'
+      Description="Fennec Media Suite Installer"
+      Comments='http://fennec.sf.net' Manufacturer='Fennec Media Project'
+      InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
+
+    <Media Id='1' Cabinet='Sample.cab' EmbedCab='yes' DiskPrompt="CD-ROM #1" />
+    <Property Id='DiskPrompt' Value="Fennec Media Suite Installation [1]" />
+
+    <Directory Id='TARGETDIR' Name='SourceDir'>
+      <Directory Id='ProgramFilesFolder' Name='PFiles'>
+        <Directory Id='Fennec_Media' Name='Fennec Media'>
+          <Directory Id='INSTALLDIR' Name='Fennec Media Suite'>
+
+            <Component Id='MainExecutable' Guid='ac5e0a3d-c9ed-4a61-8e4d-7f00d25897d3'>
+              <File Id='FennecEXE' Name='fennec.exe' DiskId='1' Source="../../bin/win32/fennec.exe" KeyPath='yes'>
+                <Shortcut Id="startmenuFoobar10" Directory="ProgramMenuDir" Name="Fennec Media Suite 1.4" WorkingDirectory='INSTALLDIR' Icon="fennec_player_icon.exe" IconIndex="0" Advertise="yes" />
+                <Shortcut Id="desktopFoobar10" Directory="DesktopFolder" Name="Fennec Media Suite 1.4" WorkingDirectory='INSTALLDIR' Icon="fennec_player_icon.exe" IconIndex="0" Advertise="yes" />
+              </File>
+            </Component>
+
+            <Component Id='HelperLibrary' Guid='78394e96-bd3c-436a-b58f-15d7be549d0f'>
+
+              <File Id='fennec_shell_dll' Name='fennec shell.dll' DiskId='1' Source='../../bin/win32/fennec shell.dll' KeyPath='yes' />
+              <File Id='icons_dll'        Name='icons.dll'        DiskId='1' Source='../../bin/win32/icons.dll'/>
+              <File Id='msvcr90d_dll'     Name='msvcr90d.dll'     DiskId='1' Source='../../bin/win32/msvcr90d.dll'/>
+              <File Id='SDL_dll'          Name='SDL.dll'          DiskId='1' Source='../../bin/win32/SDL.dll'/>
+              <File Id='swscale_0_dll'    Name='swscale-0.dll'    DiskId='1' Source='../../bin/win32/swscale-0.dll'/>
+ 
+              <File Id='settings_fsd'     Name='settings.fsd'     DiskId='1' Source='../../bin/win32/settings.fsd'/>
+ 
+              <File Id='avcodec_52_dll'   Name='avcodec-52.dll'   DiskId='1' Source='../../bin/win32/avcodec-52.dll'/>
+              <File Id='avdevice_52_dll'  Name='avdevice-52.dll'  DiskId='1' Source='../../bin/win32/avdevice-52.dll'/>
+              <File Id='avfilter_1_dll'   Name='avfilter-1.dll'   DiskId='1' Source='../../bin/win32/avfilter-1.dll'/>
+              <File Id='avformat_52_dll'  Name='avformat-52.dll'  DiskId='1' Source='../../bin/win32/avformat-52.dll'/>
+              <File Id='avutil_49_dll'    Name='avutil-49.dll'    DiskId='1' Source='../../bin/win32/avutil-49.dll'/>
+              <File Id='avutil_50_dll'    Name='avutil-50.dll'    DiskId='1' Source='../../bin/win32/avutil-50.dll'/>
+
+            </Component>
+
+            <Component Id='Manual' Guid='7393badb-889d-427b-b065-195dcae0ffe0'>
+              <File Id='Manual' Name='Manual.pdf' DiskId='1' Source='../../Manual.pdf' KeyPath='yes'>
+                <Shortcut Id="startmenuManual" Directory="ProgramMenuDir" Name="Instruction Manual" Advertise="yes" />
+              </File>
+            </Component>
+
+
+            <Directory Id='fdir_accessories' Name='accessories'>
+              <Component Id='C_accessories' Guid='7393badb-889d-427b-b065-195dcae0ffe1'>
+                <File DiskId='1' Id='default_feq' Name='default.feq' Source='../../bin/win32/accessories/default.feq'/>
+                <File DiskId='1' Id='files_txt' Name='files.txt' Source='../../bin/win32/accessories/files.txt'/>
+                <File DiskId='1' Id='license_txt' Name='license.txt' Source='../../bin/win32/accessories/license.txt'/>
+                <File DiskId='1' Id='settings_txt' Name='settings.txt' Source='../../bin/win32/accessories/settings.txt'/>
+                <File DiskId='1' Id='whatsnew' Name="what's new.txt" Source="../../bin/win32/accessories/what's new.txt"/>
+              </Component>
+            </Directory>
+
+            <Directory Id='fdir_packs' Name='packs'>
+              <Component Id='C_packs' Guid='7393badb-889d-427b-b065-195dcae0ffe2'>
+                <File DiskId='1' Id='english_uppercase_txt' Name='english uppercase.txt' Source='../../bin/win32/packs/english uppercase.txt'/>
+                <File DiskId='1' Id='english_txt' Name='english.txt' Source='../../bin/win32/packs/english.txt'/>
+                <File DiskId='1' Id='template_txt' Name='template.txt' Source='../../bin/win32/packs/template.txt'/>
+              </Component>
+            </Directory>
+
+            <Directory Id='fdir_plugins' Name='plugins'>
+              <Component Id='C_plugins' Guid='7393badb-889d-427b-b065-195dcae0ffe3'>
+                <File DiskId='1' Id='codec_aac.dll'   Name='codec aac.dll' Source='../../bin/win32/plugins/codec aac.dll'/>
+                <File DiskId='1' Id='codec_amr.dll'   Name='codec amr.dll' Source='../../bin/win32/plugins/codec amr.dll'/>
+                <File DiskId='1' Id='codec_ffmpeg.dll'  Name='codec ffmpeg.dll' Source='../../bin/win32/plugins/codec ffmpeg.dll'/>
+                <File DiskId='1' Id='codec_flac.dll'  Name='codec flac.dll' Source='../../bin/win32/plugins/codec flac.dll'/>
+                <File DiskId='1' Id='codec_monkey.dll'  Name='codec monkey.dll' Source='../../bin/win32/plugins/codec monkey.dll'/>
+                <File DiskId='1' Id='codec_musepack.dll'  Name='codec musepack.dll' Source='../../bin/win32/plugins/codec musepack.dll'/>
+                <File DiskId='1' Id='codec_raw.dll'   Name='codec raw.dll' Source='../../bin/win32/plugins/codec raw.dll'/>
+                <File DiskId='1' Id='codec_sound_file.dll'  Name='codec sound file.dll' Source='../../bin/win32/plugins/codec sound file.dll'/>
+                <File DiskId='1' Id='codec_vorbis.dll'  Name='codec vorbis.dll' Source='../../bin/win32/plugins/codec vorbis.dll'/>
+                <File DiskId='1' Id='codec_wavpack.dll'   Name='codec wavpack.dll' Source='../../bin/win32/plugins/codec wavpack.dll'/>
+                <File DiskId='1' Id='decoder_ac3.dll'   Name='decoder ac3.dll' Source='../../bin/win32/plugins/decoder ac3.dll'/>
+                <File DiskId='1' Id='decoder_mod.dll'   Name='decoder mod.dll' Source='../../bin/win32/plugins/decoder mod.dll'/>
+                <File DiskId='1' Id='decoder_mpeg_audio.dll'  Name='decoder mpeg audio.dll' Source='../../bin/win32/plugins/decoder mpeg audio.dll'/>
+                <File DiskId='1' Id='decoder_redbook.dll'   Name='decoder redbook.dll' Source='../../bin/win32/plugins/decoder redbook.dll'/>
+                <File DiskId='1' Id='decoder_wma.dll'   Name='decoder wma.dll' Source='../../bin/win32/plugins/decoder wma.dll'/>
+                <File DiskId='1' Id='directx_audio.dll'   Name='directx audio.dll' Source='../../bin/win32/plugins/directx audio.dll'/>
+                <File DiskId='1' Id='effect_extra_bass.dll'   Name='effect extra bass.dll' Source='../../bin/win32/plugins/effect extra bass.dll'/>
+                <File DiskId='1' Id='effect_multichannel.dll'  Name='effect multichannel.dll' Source='../../bin/win32/plugins/effect multichannel.dll'/>
+                <File DiskId='1' Id='effect_multipass.dll'  Name='effect multipass.dll' Source='../../bin/win32/plugins/effect multipass.dll'/>
+                <File DiskId='1' Id='effect_reverb.dll'   Name='effect reverb.dll' Source='../../bin/win32/plugins/effect reverb.dll'/>
+                <File DiskId='1' Id='effect_stereo_enhancer.dll'  Name='effect stereo enhancer.dll' Source='../../bin/win32/plugins/effect stereo enhancer.dll'/>
+                <File DiskId='1' Id='encoder_lame.dll'  Name='encoder lame.dll' Source='../../bin/win32/plugins/encoder lame.dll'/>
+                <File DiskId='1' Id='settings.txt'  Name='settings.txt' Source='../../bin/win32/plugins/settings.txt'/>
+                <File DiskId='1' Id='video_out_directx.dll'   Name='video out directx.dll' Source='../../bin/win32/plugins/video out directx.dll'/>
+                <File DiskId='1' Id='video_out_opengl.dll'  Name='video out opengl.dll' Source='../../bin/win32/plugins/video out opengl.dll'/>
+              </Component>
+
+              <Directory Id='fdir_plugins_data' Name='data'>
+                <Directory Id='fdir_plugins_data_vis' Name='vis'>
+                  <Component Id='C_plugins_data_vis' Guid='7393badb-889d-427b-b065-195dcae0ffe4'>
+                    <File DiskId='1' Id='cube.1.bmp' Name='cube.1.bmp' Source='../../bin/win32/plugins/data/vis/cube.1.bmp'/>
+                    <File DiskId='1' Id='cube.2.bmp' Name='cube.2.bmp' Source='../../bin/win32/plugins/data/vis/cube.2.bmp'/>
+                    <File DiskId='1' Id='cube.3.bmp' Name='cube.3.bmp' Source='../../bin/win32/plugins/data/vis/cube.3.bmp'/>
+                    <File DiskId='1' Id='cube.4.bmp' Name='cube.4.bmp' Source='../../bin/win32/plugins/data/vis/cube.4.bmp'/>
+                  </Component>
+                </Directory>
+              </Directory>
+            </Directory>
+
+
+            <Directory Id='fdir_skins' Name='skins'>
+              <Component Id='C_skins' Guid='7393badb-889d-427b-b065-195dcae0ffe5'>
+                <File DiskId='1' Id='neo_dll' Name='neo.dll' Source='../../bin/win32/skins/neo.dll'/>
+                <File DiskId='1' Id='settings_skin_neo.fsd' Name='settings - skin neo.fsd' Source='../../bin/win32/skins/settings - skin neo.fsd'/>
+                <File DiskId='1' Id='skin_player.dll' Name='skin player.dll' Source='../../bin/win32/skins/skin player.dll'/>
+              </Component>
+
+              <Directory Id='fdir_skins_neo' Name='neo'>
+                <Component Id='C_skins_neo' Guid='7393badb-889d-427b-b065-195dcae0ffe6'>
+                  <File DiskId='1' Id='basicicons.png' Name='basicicons.png' Source='../../bin/win32/skins/neo/basicicons.png'/>
+                  <File DiskId='1' Id='fullviewsheet.png' Name='fullviewsheet.png' Source='../../bin/win32/skins/neo/fullviewsheet.png'/>
+                  <File DiskId='1' Id='introgrid.png' Name='introgrid.png' Source='../../bin/win32/skins/neo/introgrid.png'/>
+                  <File DiskId='1' Id='main.png' Name='main.png' Source='../../bin/win32/skins/neo/main.png'/>
+                  <File DiskId='1' Id='mainicons.png' Name='mainicons.png' Source='../../bin/win32/skins/neo/mainicons.png'/>
+                  <File DiskId='1' Id='mainpanel.png' Name='mainpanel.png' Source='../../bin/win32/skins/neo/mainpanel.png'/>
+                  <File DiskId='1' Id='main_vis.png' Name='main_vis.png' Source='../../bin/win32/skins/neo/main_vis.png'/>
+                  <File DiskId='1' Id='mask.png' Name='mask.png' Source='../../bin/win32/skins/neo/mask.png'/>
+                  <File DiskId='1' Id='mediasheet.png' Name='mediasheet.png' Source='../../bin/win32/skins/neo/mediasheet.png'/>
+                  <File DiskId='1' Id='menuicons.png' Name='menuicons.png' Source='../../bin/win32/skins/neo/menuicons.png'/>
+                  <File DiskId='1' Id='play.png' Name='play.png' Source='../../bin/win32/skins/neo/play.png'/>
+                  <File DiskId='1' Id='play_h.png' Name='play_h.png' Source='../../bin/win32/skins/neo/play_h.png'/>
+                  <File DiskId='1' Id='position_wheel.png' Name='position_wheel.png' Source='../../bin/win32/skins/neo/position_wheel.png'/>
+                  <File DiskId='1' Id='sparkles.png' Name='sparkles.png' Source='../../bin/win32/skins/neo/sparkles.png'/>
+                  <File DiskId='1' Id='volume_wheel.png' Name='volume_wheel.png' Source='../../bin/win32/skins/neo/volume_wheel.png'/>
+                  <File DiskId='1' Id='wallpaper.jpg' Name='wallpaper.jpg' Source='../../bin/win32/skins/neo/wallpaper.jpg'/>
+                  <File DiskId='1' Id='windowsheets.png' Name='windowsheets.png' Source='../../bin/win32/skins/neo/windowsheets.png'/>
+                </Component>
+              </Directory>
+
+              <Directory Id='fdir_skins_skinplayer' Name='skin player data'>
+                <Component Id='C_skins_skinplayer' Guid='7393badb-889d-427b-b065-195dcae0ffe7'>
+                  <File DiskId='1' Id='skin_1.bmp' Name='skin 1.bmp' Source='../../bin/win32/skins/skin player data/skin 1.bmp'/>
+                  <File DiskId='1' Id='skin_1.inf' Name='skin 1.inf' Source='../../bin/win32/skins/skin player data/skin 1.inf'/>
+                </Component>
+              </Directory>
+            </Directory>
+
+            <Directory Id='fdir_visualizations' Name='visualizations'>
+              <Component Id='C_visualizations' Guid='7393badb-889d-427b-b065-195dcae0ffe8'>
+                <File DiskId='1' Id='audio_analyzer.dll' Name='audio analyzer.dll' Source='../../bin/win32/visualizations/audio analyzer.dll'/>
+                <File DiskId='1' Id='cube.dll' Name='cube.dll' Source='../../bin/win32/visualizations/cube.dll'/>
+                <File DiskId='1' Id='goom.dll' Name='goom.dll' Source='../../bin/win32/visualizations/goom.dll'/>
+                <File DiskId='1' Id='spectrum.dll' Name='spectrum.dll' Source='../../bin/win32/visualizations/spectrum.dll'/>
+                <File DiskId='1' Id='wave_display.dll' Name='wave display.dll' Source='../../bin/win32/visualizations/wave display.dll'/>
+              </Component>
+            </Directory>
+
+          </Directory>
+        </Directory>
+      </Directory>
+
+      <Directory Id="ProgramMenuFolder" Name="Programs">
+        <Directory Id="ProgramMenuDir" Name="Fennec Media Suite 1.4">
+          <Component Id="ProgramMenuDir" Guid="3aeb5d7e-2c91-4f04-9608-6de4ec5d5a31">
+            <RemoveFolder Id='ProgramMenuDir' On='uninstall' />
+            <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
+          </Component>
+        </Directory>
+      </Directory>
+
+      <Directory Id="DesktopFolder" Name="Desktop" />
+    </Directory>
+
+    <Feature Id='Complete' Title='Fennec Media Suite 1.4' Description='The complete package.'
+      Display='expand' Level='1' ConfigurableDirectory='INSTALLDIR'>
+      <Feature Id='MainProgram' Title='Program' Description='The main executable.' Level='1'>
+        <ComponentRef Id='MainExecutable' />
+        <ComponentRef Id='HelperLibrary' />
+        <ComponentRef Id='C_accessories' />
+        <ComponentRef Id='C_packs' />
+        <ComponentRef Id='C_plugins' />
+        <ComponentRef Id='C_plugins_data_vis' />
+        <ComponentRef Id='C_skins' />
+        <ComponentRef Id='C_skins_neo' />
+        <ComponentRef Id='C_skins_skinplayer' />
+        <ComponentRef Id='C_visualizations' />
+      <ComponentRef Id='ProgramMenuDir' />
+      </Feature>
+
+      <Feature Id='Documentation' Title='Description' Description='The instruction manual.' Level='1000'>
+        <ComponentRef Id='Manual' />
+      </Feature>
+    </Feature>
+
+    <UIRef Id="WixUI_Mondo" />
+    <UIRef Id="WixUI_ErrorProgressText" />
+
+    <Icon Id="fennec_player_icon.exe" SourceFile="../../bin/win32/fennec.exe" />
+
+  </Product>
+</Wix>
