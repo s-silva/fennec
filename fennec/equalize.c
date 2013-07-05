@@ -21,8 +21,8 @@
 ----------------------------------------------------------------------------**/
 
 #include <math.h>
-#include "fennec main.h"
-#include "fennec audio.h"
+#include "fennec_main.h"
+#include "fennec_audio.h"
 
 
 #define equalizer_max_bands 32
@@ -262,11 +262,12 @@ int equalize_buffer(fennec_sample *inout, const fennec_sample *in, int channels,
  * bands[channels][bands]
  * preamps[channels]
  */
-void* equalize_buffer_variable_init(equalizer_preset *eqp, int channels, int frequency)
+void* equalize_buffer_variable_init(void *eqp, int channels, int frequency)
 {
 	int                     cfs[] = {31, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000};
 	unsigned int            i, j;
 	struct equalizer_state *eqs;
+	equalizer_preset       *eqpp = (equalizer_preset*) eqp;
 
 	eqs = (struct equalizer_state *) sys_mem_alloc(sizeof(struct equalizer_state));
 
@@ -278,7 +279,7 @@ void* equalize_buffer_variable_init(equalizer_preset *eqp, int channels, int fre
 	eqs->nbands    = 10;
 	
 	for(i=0; i<(unsigned int)channels; i++)
-		eqs->preamp[i] = (double)eqp->preamp[i];
+		eqs->preamp[i] = (double)eqpp->preamp[i];
 
 	for(i=0; i<eqs->nbands; i++)
 	{
@@ -290,7 +291,7 @@ void* equalize_buffer_variable_init(equalizer_preset *eqp, int channels, int fre
 	for(i=0; i<(unsigned int)channels; i++)
 		for(j=0; j<eqs->nbands; j++)
 		{
-			eqs->b[j].c[i].boost = (double)eqp->boost[i][j];
+			eqs->b[j].c[i].boost = (double)eqpp->boost[i][j];
 			equalizer_calculate(j, i, 1, eqs);
 		}
 

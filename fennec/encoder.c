@@ -20,8 +20,8 @@
 
 ----------------------------------------------------------------------------**/
 
-#include "fennec main.h"
-#include "fennec audio.h"
+#include "fennec_main.h"
+#include "fennec_audio.h"
 #include "plugins.h"
 
 

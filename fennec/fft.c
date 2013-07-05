@@ -99,7 +99,7 @@
 -----------------------------------------------------------------------------*/
 
 #include <math.h>
-#include "fennec audio.h" /* just holds the declaration of fft */
+#include "fennec_audio.h" /* just holds the declaration of fft */
 
 #define  DDC_PI  (3.14159265358979323846)
 

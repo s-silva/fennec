@@ -1,4 +1,4 @@
-#include "fennec main.h"
+#include "fennec_main.h"
 #include "../libraries/libpng/png.h"
 
 #ifndef png_jmpbuf

@@ -20,7 +20,7 @@
 
 ----------------------------------------------------------------------------**/
 
-#include "Fennec Main.h"
+#include "fennec_main.h"
 
 #define CMWINDOWCLASS uni("fennec 7.1 player 1.10000 main")
 
@@ -29,7 +29,7 @@ HINSTANCE hInst;
 
 HWND window_active_dialog = 0;
 
-int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nShowCmd)
+int WINAPI wWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPWSTR lpCmdLine,int nShowCmd)
 {
 	MSG      msg;
 	BOOL     mret;
@@ -241,6 +241,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 	return 0;
 }
+
 
 /*-----------------------------------------------------------------------------
  fennec, may 2007.
