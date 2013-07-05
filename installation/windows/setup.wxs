@@ -43,9 +43,7 @@
             </Component>
 
             <Component Id='Manual' Guid='7393badb-889d-427b-b065-195dcae0ffe0'>
-              <File Id='Manual' Name='Manual.pdf' DiskId='1' Source='../../Manual.pdf' KeyPath='yes'>
-                <Shortcut Id="startmenuManual" Directory="ProgramMenuDir" Name="Instruction Manual" Advertise="yes" />
-              </File>
+              <File Id='Manual' Name='Manual.pdf' DiskId='1' Source='../../Manual.pdf' KeyPath='yes'/>
             </Component>
 
 

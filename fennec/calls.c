@@ -20,9 +20,9 @@
 
 ----------------------------------------------------------------------------**/
 
-#include "fennec main.h"
-#include "fennec audio.h"
-#include "..\..\source\include\ids.h"
+#include "fennec_main.h"
+#include "fennec_audio.h"
+#include "..\include\ids.h"
 
 
 int call_function(int id, int data, void *a, void *b)

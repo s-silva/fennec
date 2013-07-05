@@ -18,52 +18,14 @@
 
 -------------------------------------------------------------------------------
 
- this file holds the functions which are called by external or internal
- (by other interfaces i.e. audio) interfaces to global fennec (G)UI.
-
- ----------------------------------------------------------------------------**/
+----------------------------------------------------------------------------**/
 
 #include "fennec_main.h"
-#include "fennec_audio.h"
 
-
-/* code ---------------------------------------------------------------------*/
-
-
-/*
- * refresh (G)UI.
- * flevel - force level.
- */
-int fennec_refresh(int flevel)
-{
-	switch(flevel)
-	{
-	case fennec_v_refresh_force_full:
-	case fennec_v_refresh_force_high:
-	case fennec_v_refresh_force_less:
-		if(!settings.skins.selected[0])
-		{
-			/* no base skin */
-		}else{
-			skins_refresh(flevel);
-		}
-
-	case fennec_v_refresh_force_not:
-		if(!settings.skins.selected[0])
-		{
-			/* no base skin */
-		}else{
-			skins_refresh(flevel);
-		}
-		
-		visualizations_refresh(flevel);
-		main_refresh();
-		break;
-	}
-	return 1;
-}
-
+HINSTANCE        instance_fennec  = 0;
+HWND             window_main    = 0;
+HDC              window_main_dc = 0;
 
 /*-----------------------------------------------------------------------------
- eof.
+ fennec, may 2007.
 -----------------------------------------------------------------------------*/

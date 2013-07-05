@@ -19,9 +19,9 @@
 -------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------**/
-#include "fennec main.h"
+#include "fennec_main.h"
 #include "keyboard.h"
-#include "fennec audio.h"
+#include "fennec_audio.h"
 #include <shlobj.h>
 
 unsigned long kb_getpurpose(unsigned short fkey, struct setting_key *kcol, int kcount)

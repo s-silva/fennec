@@ -18,52 +18,72 @@
 
 -------------------------------------------------------------------------------
 
- this file holds the functions which are called by external or internal
- (by other interfaces i.e. audio) interfaces to global fennec (G)UI.
-
- ----------------------------------------------------------------------------**/
+----------------------------------------------------------------------------**/
 
 #include "fennec_main.h"
 #include "fennec_audio.h"
 
-
-/* code ---------------------------------------------------------------------*/
-
-
-/*
- * refresh (G)UI.
- * flevel - force level.
- */
-int fennec_refresh(int flevel)
+int GlobalFunction(unsigned long fid, ...)
 {
-	switch(flevel)
-	{
-	case fennec_v_refresh_force_full:
-	case fennec_v_refresh_force_high:
-	case fennec_v_refresh_force_less:
-		if(!settings.skins.selected[0])
-		{
-			/* no base skin */
-		}else{
-			skins_refresh(flevel);
-		}
+	int      rvi = 0;
 
-	case fennec_v_refresh_force_not:
-		if(!settings.skins.selected[0])
+	va_list  amk;
+	va_start(amk, fid);
+
+#	define Arg(x)(va_arg(amk, x))
+
+	switch(fid)
+	{
+	case Function_OpenFileDialog: /* void */
+		fennec_show_file_dialog(file_dialog_openfiles, 0, 0, 0);
+		break;
+
+	case Function_AddFileDialog:
+		fennec_show_file_dialog(file_dialog_addfiles, 0, 0, 0);
+		break;
+
+	case Function_Play:
+		rvi = audio_play();
+		break;
+
+	case Function_Pause:
+		rvi = audio_pause();
+		break;
+
+	case Function_Stop:
+		rvi = audio_stop();
+		break;
+
+	case Function_Previous:
+		rvi = audio_playlist_previous();
+		break;
+
+	case Function_Next:
+		rvi = audio_playlist_next();
+		break;
+
+	case Function_Rewind:
 		{
-			/* no base skin */
-		}else{
-			skins_refresh(flevel);
+			double tpos;
+			audio_getposition(&tpos);
+			rvi = audio_setposition(tpos - 0.01f);
 		}
-		
-		visualizations_refresh(flevel);
-		main_refresh();
+		break;
+
+	case Function_Forward:
+		{
+			double tpos;
+			audio_getposition(&tpos);
+			rvi = audio_setposition(tpos + 0.01f);
+		}
 		break;
 	}
-	return 1;
+
+	va_end(amk);
+	return  rvi;
 }
 
 
 /*-----------------------------------------------------------------------------
- eof.
+ fennec, may 2007.
 -----------------------------------------------------------------------------*/

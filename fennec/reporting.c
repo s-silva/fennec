@@ -20,7 +20,7 @@
 
 ----------------------------------------------------------------------------**/
 
-#include "fennec main.h"
+#include "fennec_main.h"
 
 
 
@@ -68,6 +68,7 @@ int reporting_end(void)
 	return 0;
 }
 
+#ifdef _MSC_VER
 
 void report(char *msg, int etype, ...)
 {
@@ -152,7 +153,24 @@ void reportx(char *msg, int etype, ...)
 	va_end(vlist);
 }
 
+#else
 
+void report(char *msg, int etype, ...)
+{
+
+}
+
+void reportu(string msg, int etype, ...)
+{
+
+}
+
+void reportx(char *msg, int etype, ...)
+{
+
+}
+
+#endif
 
 
 /*-----------------------------------------------------------------------------
