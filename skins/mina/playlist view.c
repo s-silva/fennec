@@ -1,6 +1,6 @@
 #include "skin.h"
 #include "media.h"
-#include "skin settings.h"
+#include "skin_settings.h"
 
 extern HDC   hdc_fview;
 extern int   media_init;

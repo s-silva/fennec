@@ -22,7 +22,7 @@
 
 #include "skin.h"
 #include "jpeg/jpegdec.h"
-#include "skin settings.h"
+#include "skin_settings.h"
 #include <shlobj.h>
 
 void reselect_wallpaper(void);

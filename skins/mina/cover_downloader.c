@@ -1,5 +1,5 @@
 #include "skin.h"
-#include "skin settings.h"
+#include "skin_settings.h"
 #include <shlobj.h>
 #include <userenv.h>
 #include "wininet.h"

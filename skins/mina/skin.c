@@ -23,7 +23,7 @@
 #include "skin.h"
 #include "ids.h"
 #include <math.h>
-#include "skin settings.h"
+#include "skin_settings.h"
 #include <shlobj.h>
 #include <userenv.h>
 
