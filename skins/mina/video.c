@@ -1,5 +1,5 @@
 #include "skin.h"
-#include "skin settings.h"
+#include "skin_settings.h"
 
 #define vid_window_class uni("fennec.skin.3.video")
 #define user_msg_start_keep_cursor 0x1

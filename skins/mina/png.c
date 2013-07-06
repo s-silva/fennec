@@ -1,6 +1,6 @@
 #include <png.h>
 #include "skin.h"
-#include "skin settings.h"
+#include "skin_settings.h"
 
 #define wrap_color(x)      ( (x) < 0 ? 0 : ( (x) > 255 ? 255 : (x) ) )
 int set_color_32(unsigned char *buf);
