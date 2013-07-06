@@ -5,5 +5,13 @@ building process by:
 1. Transfer the complete project into MinGW64 for both 64bit and 32bit
    compiling.
 
+   * Main Program (done)
+   * Skins
+   * Plugins
+
 2. Introduce a central build/rebuild for all the plugins and other
    stuff.
+
+3. Need to get rid of spaces in file names.
+
+4. Add an automated build/link/rebuild and relink for every sub-project.
