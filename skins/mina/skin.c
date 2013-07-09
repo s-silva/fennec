@@ -22,10 +22,11 @@
 
 #include "skin.h"
 #include "ids.h"
-#include <math.h>
-#include "skin_settings.h"
-#include <shlobj.h>
-#include <userenv.h>
+
+#define data_sheet 0
+
+
+
 
 /* prototypes ---------------------------------------------------------------*/
 
@@ -42,8 +43,6 @@ int  skin_set_color(int hue, unsigned long combsl);
 int  skin_get_themes(int id, string name, int osize);
 int  skin_set_theme(int id);
 int  skin_getdata(int id, void *rdata, int dsize);
-int  skin_create_images(void);
-
 
 
 
@@ -51,128 +50,85 @@ int  skin_create_images(void);
 
 /* defines ------------------------------------------------------------------*/
 
+#define skin_main_button_play       0x1
+#define skin_main_button_stop       0x2
+#define skin_main_button_previous   0x3
+#define skin_main_button_next       0x4
+#define skin_main_button_open       0x5
+#define skin_main_button_playlist   0x6
+#define skin_main_button_equalizer  0x7
+#define skin_main_button_minimize   0x8
+#define skin_main_button_exit       0x9
+#define skin_main_button_seek       0xa
+#define skin_main_button_volume     0xb
+#define skin_main_button_settings   0xc
+#define skin_main_button_convert    0xd
+#define skin_main_button_rip        0xe
+#define skin_main_button_join       0xf
+#define skin_main_button_visual     0x10
+#define skin_main_button_video      0x11
+#define skin_main_endl              0x11
+#define skin_main_endr              0x12
+#define skin_main_endt              0x13
+#define skin_main_endb              0x14
+#define skin_main_button_dsp        0x15
+#define skin_main_button_lock       0x16
 
-#define  mask_id_play      1
-#define  mask_id_display   2
-#define  mask_id_close     3
-#define  mask_id_eject     4
-#define  mask_id_maximize  5
-#define  mask_id_position  10
-#define  mask_id_volume    15
+
+#define state_normal 0
+#define state_hover  1
+#define state_down   2
+
+
 
 
 
 /* data ---------------------------------------------------------------------*/
 
-extern HWND  window_media;
-extern HWND  window_search;
-
 struct skin_data        skin;
 HDC                     hdc;
-HDC                     mdc;
 HWND                    wnd, hdlg;
 HINSTANCE               instance_skin;
+int                     seekin = 0;
+int                     last_dx = 0, last_dy = 0;
 
-HDC                     background_dc;
-HDC                     play_hover_dc;
-HDC                     main_vis_dc;
-HDC                     wheel_pos_dc;
-HDC                     wheel_vol_dc;
-HDC                     mask_dc;
-HDC                     basic_icons_dc;
-HDC                     main_icons_dc;
-HDC                     main_panel_dc;
-HDC                     sparkles_dc;
-HDC                     menuicons_dc;
-HDC                     windowsheet_dc;
+HDC                     mdc_sheet = 0;
+HBITMAP                 bmp_sheet = 0;
+HBITMAP                 oldbmp_sheet;
 
-int                     main_w, main_h;
-HDC                     ndc;
-HBITMAP                 mbmp;
+HDC     				ldcmem = 0;
+HBITMAP 				lbmp;
 
-int                     mouse_down_controller = 0;
-int                     mouse_over_controller = 0;
-int                     mouse_hover_val = 0;
+HFONT                   displayfont = 0;
+HRGN                    cliprgn = 0;
+HRGN                    wndmainrgn = 0;
 
 letter                  artist[512];
 letter                  title[512];
 letter                  album[512];
-letter                  year[512];
-letter                  album_year[512];
-letter                  position[512];
 
+int                     seekmode = 0;
 
-letter                  next_artist[512];
-letter                  next_title[512];
-letter                  next_album[512];
-letter                  next_year[512];
-letter                  next_album_year[512];
-letter                  next_position[512];
-
-
-int                     dpoffset_artist = 0, dpoffset_max_artist = 0, dpoffset_rollback_artist = 0;
-int                     dpoffset_title = 0, dpoffset_max_title = 0, dpoffset_rollback_title = 0;
-int                     dpoffset_album_year = 0, dpoffset_max_album_year = 0, dpoffset_rollback_album_year = 0;
-int						dpoffset_update = 0;
-
-int                     display_content_x = 0, display_content_y = 0;
-unsigned int            timer_id_seek = 0;
-
-HRGN					display_clip;
-
-int                     png_play_w, png_play_h;
-int                     png_playh_w, png_playh_h;
-int                     png_vis_w, png_vis_h;
-int                     png_wheel_pos_w, png_wheel_pos_h;
-int                     png_wheel_vol_w, png_wheel_vol_h;
-int                     basic_icons_w, basic_icons_h;
-int                     main_icons_w, main_icons_h;
-int                     main_panel_w, main_panel_h;
-int                     sparkles_w, sparkles_h;
-int                     menuicons_w, menuicons_h;
-
-int                     play_button_position_set = 0;
-int                     delay_counter = 0;
-int                     main_panel_active = 0;
-int                     main_panel_display_time = 0;
-int                     skin_panel_display_time = 0;
-int                     main_panel_slide = 0;
-
-float                   beat_level = 0.0f;
-
-COLORREF                text_color[2];
-
-int                     skin_color_part = 1; /* 1 base, 2 control, 3 text */
-
-int                     sleep_timeout = 0;
-int                     sleep_alpha   = 0;
-
-int						tag_available_albumandyear = 0;
-int						tag_available_artist       = 0;
-
-int                     enable_transparency = 0;
-int                     window_transparency_amount = 50;
-
-int                     skin_mode = mode_display;
-int                     eq_channel = -1; /* universal */
-int                     eq_wait = 0;
-int                     eq_current_bar = 0; /* -1 = preamp */
-int                     down_button = 0;
-int                     menu_selected_item = -1;
-int                     menu_position = 0, menu_button_shift = 0;
+local_skin_settings     skin_settings;
+FILE                   *file_skin_settings;
+ 
+COLORREF                display_normal  = RGB(204, 204, 255);
+COLORREF                display_paused  = RGB(224, 194, 245);
+COLORREF                display_stopped = RGB(154, 154, 205);
 
 fn_vis_message          vis_message = 0;
-int                     vis_used = 0, vis_active = 0;
 
-int                     button_video_transparency = 0;
-int						button_video_transparency_add = 5;
+struct fennec_audiotag  ctag; /* current tag */
 
-void vis_update();
-void make_initial_dirs(void);
+unsigned int            timer_id_seek = 0, timer_id_display = 0;
 
-int                     is_video_playing = 0;
-int                     last_video_dsize = 0;
-int                     skin_closing = 0;
+WNDPROC                 wndproc_vis;
+
+letter                  skin_sheet_bmp[v_sys_maxpath];
+letter                  skin_sheet_table[v_sys_maxpath];
+		extern HDC hdc_vid;
+
+graphic_context         gr_main;
 
 /* code ---------------------------------------------------------------------*/
 
@@ -181,8 +137,6 @@ int                     skin_closing = 0;
  */
 int __stdcall fennec_skin_initialize(struct skin_data *indata, struct skin_data_return *outdata)
 {
-	HRGN      wndmainrgn;
-	
 	memcpy(&skin, indata, sizeof(struct skin_data));
 
 	outdata->setcolor     = skin_set_color;
@@ -193,213 +147,205 @@ int __stdcall fennec_skin_initialize(struct skin_data *indata, struct skin_data_
 	outdata->refresh      = skin_refresh;
 	outdata->uninitialize = skin_uninitialize;
 	outdata->callback     = WindowProc;
-	outdata->woptions     = WS_POPUP | WS_SYSMENU | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_MINIMIZEBOX;
+	outdata->woptions     = WS_OVERLAPPEDWINDOW;//WS_POPUP | WS_SYSMENU | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_MINIMIZEBOX;
 	outdata->subs_get     = skin_subskins_get;
 	outdata->subs_select  = skin_subskins_select;
+
+	str_cpy(skin_sheet_bmp,   uni(""));
+	str_cpy(skin_sheet_table, uni(""));
+
 
 	wnd = indata->wnd;
 	hdc = GetDC(wnd);
 
+	gr_init(&gr_main);
+	gr_main.dc = hdc;
+	//fill_skin_coords();
+
 	/* load settings */
 
-	sset_load();
-	enable_transparency        = settings_data.main.enable_transparency;
-	window_transparency_amount = settings_data.main.transparency_amount;
-
-	/* create main stuff */
-
-	skin_create_images();
-	typo_create_fonts();
-
-
-	/* create needed dirs */
-
-	make_initial_dirs();
-
-	/* region */
-
-	SetWindowRgn(wnd, 0, 0);
-	wndmainrgn = CreateRoundRectRgn(0, 0, main_w, main_h, 4, 4);
-	SetWindowRgn(wnd, wndmainrgn, 1);
-
-	/* set position/size */
-
-	SetWindowPos(wnd, 0, settings_data.main.x, settings_data.main.y, main_w, main_h, SWP_NOZORDER);
-
-
-	display_clip = CreateRectRgn(115, 7, 415, 7 + 106);
-
-	timer_id_seek = (unsigned int)SetTimer(0, 0, 35,  (TIMERPROC) display_timer);
-
-	if(enable_transparency) SetWindowLong(wnd, GWL_EXSTYLE, GetWindowLong(wnd, GWL_EXSTYLE) | WS_EX_LAYERED);
-	SetClassLong(wnd, GCL_STYLE, GetClassLong(wnd, GCL_STYLE) | CS_DROPSHADOW);
-
-	if(settings_data.vis.show_vis)
 	{
-		vid_create(wnd, 16.0 / 9.0);
-		vis_used = 1;
-		vis_active = 1;
+		int     i, er = 0;
+		letter  tmp_buf[1024];
+
+		GetModuleFileName(instance_skin, tmp_buf, sizeof(tmp_buf));
+
+		i = (int)str_len(tmp_buf);
+
+		while(i)
+		{
+			if(tmp_buf[i] == '/' || tmp_buf[i] == '\\')
+			{
+				tmp_buf[i + 1] = 0;
+				break;
+			}
+			i--;
+		}
+
+		str_cat(tmp_buf, uni("settings - mina.fsd"));
+
+		file_skin_settings = _wfopen(tmp_buf, uni("rb+"));
+
+		if(file_skin_settings)
+		{
+			if(fread(&skin_settings, sizeof(local_skin_settings), 1, file_skin_settings) != 1)
+				er = 1;
+		}else{
+			file_skin_settings = _wfopen(tmp_buf, uni("wb+"));
+
+			if(!file_skin_settings) /* try read only */
+			{
+				file_skin_settings = _wfopen(tmp_buf, uni("rb"));
+				
+				if(file_skin_settings)
+				{
+					if(!fread(&skin_settings, sizeof(local_skin_settings), 1, file_skin_settings))
+						er = 1;
+					fclose(file_skin_settings);
+					file_skin_settings = 0;
+				}
+			}else{
+				er = 1;
+			}
+		}
+
+		if(er)
+		{
+			int px = 0, py = 200;
+
+			coords.zoom              = 1.0;
+			skin_settings.zoom       = 1.0;
+
+			skin_settings.main_x     = px;
+			skin_settings.main_y     = py;
+			
+			skin_settings.eq_x       = px;
+			skin_settings.eq_y       = py + cr(coords.window_main.height);
+			skin_settings.eq_d       = 1;
+			skin_settings.eq_show    = 1;
+
+			skin_settings.ml_show    = 1;
+			skin_settings.ml_d       = 1;
+			skin_settings.ml_x       = px;
+			skin_settings.ml_y       = py - 200;
+			skin_settings.ml_w       = cr(coords.window_main.width);
+			skin_settings.ml_h       = 200;
+
+			skin_settings.vis_show   = 0;
+			skin_settings.vis_d      = 1;
+			skin_settings.vis_x      = px;
+			skin_settings.vis_y      = py + coords.window_eq.height + cr(coords.window_main.height);
+			skin_settings.vis_w      = cr(coords.window_main.width);
+			skin_settings.vis_h      = 200;
+
+			skin_settings.vid_show   = 1;
+			skin_settings.vid_d      = 1;
+			skin_settings.vid_x      = px + cr(coords.window_main.width);
+			skin_settings.vid_y      = py - 200;
+			skin_settings.vid_w      = cr(coords.window_main.width);
+			skin_settings.vid_h      = 200;
+
+			skin_settings.use_color  = 1;
+			skin_settings.hue        = 41;
+			skin_settings.sat        = 23;
+			skin_settings.light      = 68;
+
+			skin_settings.sel_theme  = 0;
+			skin_settings.theme_mode = 0;
+			skin_settings.ml_font_size = 8;
+
+			skin_settings.ml_sorted_column = -1;
+			skin_settings.ml_sorted_mode = 0;
+
+			skin_settings.ml_current_dir    = 0;
+			skin_settings.ml_in_dir         = 0;
+			skin_settings.ml_dir_sort_mode  = 0;
+
+			skin_settings.mode_ml           = 0;
+			skin_settings.skin_lock         = 1;
+
+			str_cpy(skin_settings.font_display, uni("Tahoma"));
+			str_cpy(skin_settings.skin_file_name, uni("<default>"));
+
+
+			
+			
+			for(i=0; i<sizeof(skin_settings.ml_pl_xoff)/sizeof(int); i++)
+					skin_settings.ml_pl_xoff[i] = -1;
+
+			skin_settings.ml_pl_xoff[header_tag_artist] = 5;
+			skin_settings.ml_pl_xoff[header_tag_title]  = 100;
+		}
+
 	}
 
+	coords.zoom = skin_settings.zoom;
+
+	skin_file_load(skin_settings.skin_file_name);
+	
 	ShowWindow(wnd, SW_SHOW);
 
-	if(settings_data.playlist.visible) media_create(wnd);
-	return 1;
-}
-
-void make_initial_dirs(void)
-{
-	letter     tmp[1024];
-
-	memset(tmp, 0, sizeof(tmp));
-	SHGetSpecialFolderPath(0, tmp, CSIDL_PERSONAL, FALSE);
-	str_cat(tmp, uni("\\Fennec"));
-	CreateDirectory(tmp, 0);
-
-	SetFileAttributes(tmp, FILE_ATTRIBUTE_HIDDEN);
-
-	memset(tmp, 0, sizeof(tmp));
-	SHGetSpecialFolderPath(0, tmp, CSIDL_PERSONAL, FALSE);
-	str_cat(tmp, uni("\\Fennec\\Thumbnails"));
-	CreateDirectory(tmp, 0);
-
-	memset(tmp, 0, sizeof(tmp));
-	SHGetSpecialFolderPath(0, tmp, CSIDL_PERSONAL, FALSE);
-	str_cat(tmp, uni("\\Fennec\\Thumbnails\\Albums"));
-
-	CreateDirectory(tmp, 0);
-
-	memset(tmp, 0, sizeof(tmp));
-	SHGetSpecialFolderPath(0, tmp, CSIDL_PERSONAL, FALSE);
-	str_cat(tmp, uni("\\Fennec\\Thumbnails\\Artists"));
-
-	CreateDirectory(tmp, 0);
-}
-
-int skin_create_images(void)
-{
-	letter    skin_path[512], skin_ap[512];
-
-	int       color_set1 = 0, color_set2 = 0;
-
-
-	if(settings_data.theme.use_theme == 0)
-	{
-		text_color[0] = RGB(230, 217, 207);
-		text_color[1] = RGB(222, 204, 191);
-	}else{
-		skin_color_hue   = settings_data.theme.text.h;
-		skin_color_sat   = settings_data.theme.text.s;
-		skin_color_light = settings_data.theme.text.l;
-
-		text_color[0] = RGB(240, 179, 117);
-		text_color[1] = RGB(237, 159, 82);
-
-		set_color_32((unsigned char *) &text_color[0]);
-		set_color_32((unsigned char *) &text_color[1]);
-	}
-
-	if(settings_data.theme.use_theme)
-	{
-		color_set1 = 1, color_set2 = 2;
-	}
-
-	skin.shared->general.getskinspath(skin_path, sizeof(skin_path));
-	str_cat(skin_path, uni("/neo/"));
-
-	str_cpy(skin_ap, skin_path); str_cat(skin_ap, uni("main.png"));
-	background_dc = png_get_hdc(skin_ap, color_set1);
-	main_w = png_w;
-	main_h = png_h;
-
-	mdc = CreateCompatibleDC(hdc);
-	mbmp = CreateCompatibleBitmap(hdc, main_w, main_h);
-	SelectObject(mdc, mbmp);
-
-
-	str_cpy(skin_ap, skin_path); str_cat(skin_ap, uni("play.png"));
-	ndc = png_get_hdc(skin_ap, color_set2);
-	png_play_w = png_w;
-	png_play_h = png_h;
-
-	str_cpy(skin_ap, skin_path); str_cat(skin_ap, uni("play_h.png"));
-	play_hover_dc = png_get_hdc(skin_ap, color_set2);
-	png_playh_w = png_w;
-	png_playh_h = png_h;
-
-	str_cpy(skin_ap, skin_path); str_cat(skin_ap, uni("main_vis.png"));
-	main_vis_dc = png_get_hdc(skin_ap, color_set1);
-	png_vis_w = png_w;
-	png_vis_h = png_h;
-
-	str_cpy(skin_ap, skin_path); str_cat(skin_ap, uni("position_wheel.png"));
-	wheel_pos_dc = png_get_hdc(skin_ap, color_set2);
-	png_wheel_pos_w = png_w;
-	png_wheel_pos_h = png_h;
-
-	str_cpy(skin_ap, skin_path); str_cat(skin_ap, uni("volume_wheel.png"));
-	wheel_vol_dc = png_get_hdc(skin_ap, color_set2);
-	png_wheel_vol_w = png_w;
-	png_wheel_vol_h = png_h;
-
-	str_cpy(skin_ap, skin_path); str_cat(skin_ap, uni("basicicons.png"));
-	basic_icons_dc = png_get_hdc(skin_ap, color_set2);
-	basic_icons_w = png_w;
-	basic_icons_h = png_h;
-
-	str_cpy(skin_ap, skin_path); str_cat(skin_ap, uni("mainicons.png"));
-	main_icons_dc = png_get_hdc(skin_ap, color_set1);
-	main_icons_w = png_w;
-	main_icons_h = png_h;
-
-	str_cpy(skin_ap, skin_path); str_cat(skin_ap, uni("mainpanel.png"));
-	main_panel_dc = png_get_hdc(skin_ap, color_set1);
-	main_panel_w = png_w;
-	main_panel_h = png_h;
-
-	str_cpy(skin_ap, skin_path); str_cat(skin_ap, uni("sparkles.png"));
-	sparkles_dc = png_get_hdc(skin_ap, color_set1);
-	sparkles_w = png_w;
-	sparkles_h = png_h;
-
-	str_cpy(skin_ap, skin_path); str_cat(skin_ap, uni("menuicons.png"));
-	menuicons_dc = png_get_hdc(skin_ap, color_set1);
-	menuicons_w = png_w;
-	menuicons_h = png_h;
-
-	str_cpy(skin_ap, skin_path); str_cat(skin_ap, uni("windowsheets.png"));
-	windowsheet_dc = png_get_hdc(skin_ap, color_set1);
-
-	str_cpy(skin_ap, skin_path); str_cat(skin_ap, uni("mask.png"));
-	mask_dc = png_get_hdc(skin_ap, 0);
-
-	return 1;
-}
-
-int skin_delete_images(void)
-{
-	DeleteDC(background_dc);
-	DeleteDC(mdc);
-	DeleteObject(mbmp);
-
-	DeleteDC(ndc);
-	DeleteDC(play_hover_dc);
-	DeleteDC(main_vis_dc);
-	DeleteDC(wheel_pos_dc);
-	DeleteDC(wheel_vol_dc);
-	DeleteDC(basic_icons_dc);
-	DeleteDC(main_icons_dc);
-	DeleteDC(main_panel_dc);
-	DeleteDC(sparkles_dc);
-	DeleteDC(mask_dc);
-
+	/*ml_create(skin.wnd);
+	eq_create(skin.wnd);
+	vis_create(skin.wnd);
+	vid_create(skin.wnd);*/
 	return 1;
 }
 
 void skin_recreate(void)
 {
-	skin_delete_images();
-	skin_create_images();
+	return;
+	//if(wndmainrgn) DeleteObject(wndmainrgn);
+	if(cliprgn) DeleteObject(cliprgn);
+	if(bmp_sheet)
+	{
+		SelectObject(mdc_sheet, oldbmp_sheet);
+		DeleteObject(bmp_sheet);
+	}
+	if(mdc_sheet) DeleteDC(mdc_sheet);
+	
+	if(timer_id_seek)   KillTimer(0, timer_id_seek);
+	if(timer_id_display)KillTimer(0, timer_id_display);
+
+	if(displayfont) DeleteObject(displayfont);
+
+
+	//SetWindowRgn(wnd, 0, 0);
+	//wndmainrgn = CreateRoundRectRgn(0, 0, cr(coords.window_main.width), cr(coords.window_main.height), cr(coords.window_main.window_edge), cr(coords.window_main.window_edge));
+	//SetWindowRgn(wnd, wndmainrgn, 1);
+
+	setwinpos_clip(wnd, 0, skin_settings.main_x, skin_settings.main_y,
+		cr(coords.window_main.width), cr(coords.window_main.height), SWP_NOZORDER);
+
+	sys_pass();
+
+
+	set_theme_colors();
+
+	mdc_sheet = CreateCompatibleDC(hdc);
+	bmp_sheet = load_skin_sheet_bitmap();
+
+	if(skin_settings.use_color)adjust_colors(bmp_sheet, skin_settings.hue, skin_settings.sat, skin_settings.light);
+
+	oldbmp_sheet = SelectObject(mdc_sheet, bmp_sheet);
+
+	timer_id_seek    = (unsigned int) SetTimer(0, 0, 35,  (TIMERPROC) display_timer);
+	timer_id_display = (unsigned int) SetTimer(0, 0, 100, (TIMERPROC) seek_timer);
+
+	displayfont = CreateFont(-MulDiv(cr(8), GetDeviceCaps(hdc, LOGPIXELSY), 72),
+                                0, 0, 0, FW_BOLD, 0, 0, 0, DEFAULT_CHARSET,
+                                OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, 5,
+                                DEFAULT_PITCH, skin_settings.font_display);
+
+	cliprgn = CreateRectRgn(cr(coords.window_main.display_region.x), cr(coords.window_main.display_region.y), cr(coords.window_main.display_region.w), cr(coords.window_main.display_region.h));
+
+
+	/*setwinpos_clip(wnd, 0, skin_settings.main_x, skin_settings.main_y,
+		cr(coords.window_main.width), cr(coords.window_main.height), SWP_NOZORDER);*/
+
+	eq_skinchange();
+
+	display_timer((HWND)-1, WM_USER + 221, 0, 0);
 }
 
 
@@ -408,28 +354,23 @@ void skin_recreate(void)
  */
 int skin_uninitialize(int inum, void *idata)
 {
-	skin_closing = 1;
+	ml_close();
+	eq_close();
+	vis_close();
 
-	if(window_vid)vid_close();
-	if(window_media) media_close();
-	if(window_search) search_close();
-
-	settings_data.main.enable_transparency = enable_transparency;
-	settings_data.main.transparency_amount = window_transparency_amount;
-
-	if(enable_transparency) SetWindowLong(wnd, GWL_EXSTYLE, GetWindowLong(wnd, GWL_EXSTYLE) & ~WS_EX_LAYERED);
-	
-	SetClassLong(wnd, GCL_STYLE, GetClassLong(wnd, GCL_STYLE) & ~CS_DROPSHADOW);
-
-	sset_save();
-
-	ReleaseDC(wnd, mdc);
-
-	skin_delete_images();
+	ReleaseDC(wnd, hdc);
 
 	KillTimer(0, timer_id_seek);
+	KillTimer(0, timer_id_display);
 
-	skin_closing = 0;
+	gr_delete(&gr_main);
+
+	if(file_skin_settings)
+	{
+		fseek(file_skin_settings, 0, SEEK_SET);
+		fwrite(&skin_settings, sizeof(local_skin_settings), 1, file_skin_settings);
+		fclose(file_skin_settings);
+	}
 	return 1;
 }
 
@@ -439,7 +380,6 @@ int skin_uninitialize(int inum, void *idata)
  */
 int skin_refresh(int inum, void *idata)
 {
-	struct fennec_audiotag  ctag;
 	letter        fname[v_sys_maxpath];
 	string        fpath;
 	unsigned long id;
@@ -447,13 +387,6 @@ int skin_refresh(int inum, void *idata)
 	artist[0] = 0;
 	title[0]  = 0;
 	album[0]  = 0;
-
-	dpoffset_update = 1;
-	dpoffset_artist = dpoffset_max_artist = dpoffset_rollback_artist = 0;
-	dpoffset_title = dpoffset_max_title = dpoffset_rollback_title = 0;
-	dpoffset_album_year = dpoffset_max_album_year = dpoffset_rollback_album_year = 0;
-
-
 
 	if(!skin.shared->audio.output.playlist.getcount())return 0;
 
@@ -465,8 +398,6 @@ int skin_refresh(int inum, void *idata)
 
 	if(ctag.tag_artist.tsize)
 		str_ncpy(artist, ctag.tag_artist.tdata, sizeof(artist) / sizeof(letter));
-	else
-		str_cpy(artist, uni("Unknown"));
 
 	if(ctag.tag_album.tsize)
 		str_ncpy(album, ctag.tag_album.tdata, sizeof(album) / sizeof(letter));
@@ -474,43 +405,29 @@ int skin_refresh(int inum, void *idata)
 	if(ctag.tag_title.tsize)
 		str_ncpy(title, ctag.tag_title.tdata, sizeof(title) / sizeof(letter));
 
-	if(ctag.tag_year.tsize)
-		str_ncpy(year, ctag.tag_year.tdata, sizeof(year) / sizeof(letter));
-
 	if(!ctag.tag_title.tsize)
 	{
 		_wsplitpath(fpath, 0, 0, fname, 0);
 		str_ncpy(title, fname, sizeof(title) / sizeof(letter));
 	}
-
-	tag_available_albumandyear = 1;
-
-	if(album[0])
-	{
-		str_cpy(album_year, album);
-		str_cat(album_year, uni(" - "));
-		str_cat(album_year, year);
-	}else{
-		if(year[0])
-		{
-			str_cpy(album_year, year);
-		}else{
-			str_cpy(album_year, uni("Unknown"));
-			tag_available_albumandyear = 0;
-		}
-	}
 	
 
 	skin.shared->audio.input.tagread_known(id, 0, &ctag);
 
-	delay_counter = 100;
+	display_timer(0, WM_USER + 222, 0, 0);
 
+	ml_refresh(inum);
+	eq_refresh(inum);
 
-	if(media_init)
-	{
-		fullview_refresh(inum);
-	}
+	vis_lyrics_refresh(inum);
 	return 1;
+}
+
+HBITMAP load_skin_sheet_bitmap(void)
+{
+	letter  fpath[v_sys_maxpath];
+
+	return 0;
 }
 
 void show_tip(int dtid, string tiptext)
@@ -536,25 +453,58 @@ void show_tipex(int dtid, int dtaid, int tid, string conj)
 
 
 /*
- * sub skins.
- */
-
-int skin_subskins_get(subskins_callback callfunc)
-{
-	return 0;
-}
-
-int skin_subskins_select(const string fname)
-{
-	return 0;
-}
-
-/*
  * apply theme colors.
  */
 void set_theme_colors(void)
 {
+	if(!skin_settings.use_color)
+	{
+		display_normal  = RGB(204, 204, 255);
+		display_paused  = RGB(224, 194, 245);
+		display_stopped = RGB(154, 154, 205);
 
+	}else{
+		unsigned char r, g, b;
+		int           rv, gv, bv;
+		int           lv;
+
+		if(skin_settings.theme_mode == 1) /* light */
+		{
+			lv = skin_settings.light;
+			color_hsv_2_rgb_fullint((int)(skin_settings.hue * 3.5), (int)(skin_settings.sat * 2.5), (int)(lv * 2.5), &r, &g, &b);
+			rv = r; gv = g; bv = b;
+			display_normal   = RGBx(rv + 140, gv + 140, bv + 140);
+
+			lv = skin_settings.light;
+			color_hsv_2_rgb_fullint((int)(skin_settings.hue * 3.5), (int)(skin_settings.sat * 2.5), (int)(lv * 2.5), &r, &g, &b);
+			rv = r; gv = g; bv = b;
+			display_paused   = RGBx(rv + 120, gv + 120, bv + 120);
+
+			lv = skin_settings.light;
+			color_hsv_2_rgb_fullint((int)(skin_settings.hue * 3.5) + 40, (int)(skin_settings.sat * 2.5), (int)(lv * 2.5), &r, &g, &b);
+			rv = r; gv = g; bv = b;
+			display_stopped   = RGBx(rv + 100, gv + 100, bv + 100);
+
+
+		}else{ /* middle/dark */
+
+
+			lv = skin_settings.light;
+			color_hsv_2_rgb_fullint((int)(skin_settings.hue * 3.5), (int)(skin_settings.sat * 2.5), (int)(lv * 2.5), &r, &g, &b);
+			rv = r; gv = g; bv = b;
+			display_normal   = RGBx(rv + 100, gv + 100, bv + 100);
+
+			lv = skin_settings.light;
+			color_hsv_2_rgb_fullint((int)(skin_settings.hue * 3.5), (int)(skin_settings.sat * 2.5), (int)(lv * 2.5), &r, &g, &b);
+			rv = r; gv = g; bv = b;
+			display_paused   = RGBx(rv + 40, gv + 40, bv + 40);
+
+			lv = skin_settings.light;
+			color_hsv_2_rgb_fullint((int)(skin_settings.hue * 3.5) + 40, (int)(skin_settings.sat * 2.5), (int)(lv * 2.5), &r, &g, &b);
+			rv = r; gv = g; bv = b;
+			display_stopped   = RGBx(rv + 40, gv + 40, bv + 40);
+		}
+	}
 }
 
 
@@ -563,139 +513,43 @@ void set_theme_colors(void)
  */
 int skin_set_color(int hue, unsigned long combsl)
 {
-	skin_color_hue   = hue;
-	skin_color_sat   = (int)LOWORD(combsl);
-	skin_color_light = (int)HIWORD(combsl);
-
 	if(hue == -1) /* get */
 	{
-		switch(skin_color_part)
+		switch(combsl)
 		{
-		case 1:
-			switch(combsl)
-			{
-			case 0: return settings_data.theme.base.h;
-			case 1: return settings_data.theme.base.s;
-			case 2: return settings_data.theme.base.l;
-			}
-			break;
-
-		case 2:
-			switch(combsl)
-			{
-			case 0: return settings_data.theme.control.h;
-			case 1: return settings_data.theme.control.s;
-			case 2: return settings_data.theme.control.l;
-			}
-			break;
-
-		case 3:
-			switch(combsl)
-			{
-			case 0: return settings_data.theme.text.h;
-			case 1: return settings_data.theme.text.s;
-			case 2: return settings_data.theme.text.l;
-			}
-			break;
+		case 0: return skin_settings.hue;
+		case 1: return skin_settings.sat;
+		case 2: return skin_settings.light;
 		}
-	}
 
-
-	switch(skin_color_part)
-	{
-	case 1:
-		settings_data.theme.base.h = skin_color_hue  ;
-		settings_data.theme.base.s = skin_color_sat  ;
-		settings_data.theme.base.l = skin_color_light;
-		break;
-	case 2:
-		settings_data.theme.control.h = skin_color_hue  ;
-		settings_data.theme.control.s = skin_color_sat  ;
-		settings_data.theme.control.l = skin_color_light;
-		break;
-	case 3:
-		settings_data.theme.text.h = skin_color_hue  ;
-		settings_data.theme.text.s = skin_color_sat  ;
-		settings_data.theme.text.l = skin_color_light;
-		break;
-
-
-	default:
-		settings_data.theme.base.h = skin_color_hue  ;
-		settings_data.theme.base.s = skin_color_sat  ;
-		settings_data.theme.base.l = skin_color_light;
-		break;
-	}
-
-	if(skin_color_part == 3) /* text color */
-	{
-		text_color[0] = RGB(240, 179, 117);
-		text_color[1] = RGB(237, 159, 82);
-
-		set_color_32((unsigned char *) &text_color[0]);
-		set_color_32((unsigned char *) &text_color[1]);
-
-		settings_data.theme.text.h = skin_color_hue  ;
-		settings_data.theme.text.s = skin_color_sat  ;
-		settings_data.theme.text.l = skin_color_light;
-		
 	}else{
+		SelectObject(mdc_sheet, oldbmp_sheet);
+		DeleteObject(bmp_sheet);
 
-		skin_recreate();
+		bmp_sheet = load_skin_sheet_bitmap();
+
+		oldbmp_sheet = SelectObject(mdc_sheet, bmp_sheet);
+
+		if(hue == -2) /* reset */
+		{
+			skin_settings.use_color = 0;
+		}else{
+			skin_settings.use_color = 1;
+
+			skin_settings.hue   = hue;
+			skin_settings.sat   = (int)LOWORD(combsl);
+			skin_settings.light = (int)HIWORD(combsl);
+
+			adjust_colors(bmp_sheet, hue, skin_settings.sat, skin_settings.light);
+		}
+
+		set_theme_colors();
+
+		display_timer(0, WM_USER + 221, 0, 0);
+		ml_refresh(v_fennec_refresh_force_full);
+		eq_refresh(v_fennec_refresh_force_full);
+		vis_refresh();
 	}
-	return 1;
-}
-
-
-int skin_set_full_color(int bh, int bs, int bl, int ch, int cs, int cl, int th, int ts, int tl)
-{
-	settings_data.theme.base.h = bh;
-	settings_data.theme.base.s = bs;
-	settings_data.theme.base.l = bl;
-
-	settings_data.theme.control.h = ch;
-	settings_data.theme.control.s = cs;
-	settings_data.theme.control.l = cl;
-
-	settings_data.theme.text.h = th;
-	settings_data.theme.text.s = ts;
-	settings_data.theme.text.l = tl;
-	skin_recreate();
-	return 1;
-}
-
-int skin_copy_full_color()
-{
-	int bh, bs, bl, ch, cs, cl, th, ts, tl;
-	HANDLE  mem;
-	char *txt;
-
-	OpenClipboard(wnd);
-	EmptyClipboard();
-
-	mem = GlobalAlloc(GMEM_DDESHARE, 128);
-
-	bh = settings_data.theme.base.h   ;
-	bs = settings_data.theme.base.s   ;
-	bl = settings_data.theme.base.l   ;
-	  	
-	ch = settings_data.theme.control.h;
-	cs = settings_data.theme.control.s;
-	cl = settings_data.theme.control.l;
-	  	
-	th = settings_data.theme.text.h   ;
-	ts = settings_data.theme.text.s   ;
-	tl = settings_data.theme.text.l   ;
-
-	txt = GlobalLock(mem);
-	sprintf(txt, "%d, %d, %d,  %d, %d, %d,  %d, %d, %d", bh, bs, bl, ch, cs, cl, th, ts, tl);
-
-	GlobalUnlock(mem);
-
-	SetClipboardData(CF_TEXT, mem);
-
-	CloseClipboard();
-
 	return 1;
 }
 
@@ -709,24 +563,24 @@ int skin_get_themes(int id, string name, int osize)
 	switch(id)
 	{
 	case 0:  str_cpy(name, uni("Default")); break;
-	case 1:  str_cpy(name, uni("")); break;
-	case 2:  str_cpy(name, uni("Adjust Colors For - Base")); break;
-	case 3:  str_cpy(name, uni("Adjust Colors For - Control Dock")); break;
-	case 4:  str_cpy(name, uni("Adjust Colors For - Display")); break;
+	case 1:  str_cpy(name, uni("Theme Mode: Bright")); break;
+	case 2:  str_cpy(name, uni("Theme Mode: Middle")); break;
+	case 3:  str_cpy(name, uni("Theme Mode: Dark")); break;
+	case 4:  str_cpy(name, uni("Theme Mode: Average")); break;
 	case 5:  str_cpy(name, uni("")); break;
-	case 6:  str_cpy(name, uni("--- Copy Values ---")); break;
-	case 7:  str_cpy(name, uni("")); break;
-	case 8:  str_cpy(name, uni("Green Fairy")); break;
-	case 9:  str_cpy(name, uni("Emerald")); break;
-	case 10: str_cpy(name, uni("Happy Hipster")); break;
-	case 11: str_cpy(name, uni("Hospital")); break;
-	case 12: str_cpy(name, uni("Silver")); break;
-	case 13: str_cpy(name, uni("Oak")); break;
-	case 14: str_cpy(name, uni("Custom Preset 9")); break;
-	case 15: str_cpy(name, uni("Custom Preset 10")); break;
-	case 16: str_cpy(name, uni("Custom Preset 11")); break;
-	case 17: str_cpy(name, uni("Custom Preset 12")); break;
-	case 18: str_cpy(name, uni("Custom Preset 13")); break;
+	case 6:  str_cpy(name, uni("Mission")); break;
+	case 7:  str_cpy(name, uni("Shiny Ice")); break;
+	case 8:  str_cpy(name, uni("Platinum")); break;
+	case 9:  str_cpy(name, uni("Valentine")); break;
+	case 10: str_cpy(name, uni("Copper")); break;
+	case 11: str_cpy(name, uni("Metal")); break;
+	case 12: str_cpy(name, uni("")); break;
+	case 13: str_cpy(name, uni("Electronic")); break;
+	case 14: str_cpy(name, uni("Vine")); break;
+	case 15: str_cpy(name, uni("Classic Wood")); break;
+	case 16: str_cpy(name, uni("Artificial")); break;
+	case 17: str_cpy(name, uni("Soft & Bright")); break;
+	case 18: str_cpy(name, uni("Mono")); break;
 	default:
 		return 0;
 	}
@@ -739,43 +593,65 @@ int skin_get_themes(int id, string name, int osize)
  */
 int skin_set_theme(int id)
 {
-
-	if(id == 0) settings_data.theme.use_theme = 0;
-	else        settings_data.theme.use_theme = 1;
-
 	switch(id)
 	{
 	case 0: /* default */
-		skin_recreate();
+		skin_set_color(-2, 0); /* reset */
+		break;
+	case 1: /* blue */
+		skin_settings.theme_mode = 1;
+		skin_set_color(skin_settings.hue, MAKELONG(skin_settings.sat, skin_settings.light));
 		break;
 
-	/* sep */
-
-	case 2: /* base color */
-		skin_color_part = 1;
+	case 2: /* green */
+		skin_settings.theme_mode = 2;
+		skin_set_color(skin_settings.hue, MAKELONG(skin_settings.sat, skin_settings.light));
 		break;
 
-	case 3: /* control color */
-		skin_color_part = 2;
+	case 3: /* red */
+		skin_settings.theme_mode = 3;
+		skin_set_color(skin_settings.hue, MAKELONG(skin_settings.sat, skin_settings.light));
 		break;
 
-	case 4: /* text color */
-		skin_color_part = 3;
+	case 4: /* average */
+		skin_settings.theme_mode = 4;
+		skin_set_color(skin_settings.hue, MAKELONG(skin_settings.sat, skin_settings.light));
+		break;
+		
+	case 5: /* none */
 		break;
 
-	/* sep */
+	case 6: 
+		skin_set_color(19, MAKELONG(41, 30)); break;
+	case 7:
+		skin_set_color(65, MAKELONG(16, 47)); break;
+	case 8:
+		skin_set_color(0, MAKELONG(0, 26)); break;
+	case 9: 
+		skin_set_color(0, MAKELONG(83, 39)); break;
+	case 10: 
+		skin_set_color(12, MAKELONG(97, 34)); break;
+	case 11:
+		skin_set_color(12, MAKELONG(13, 41)); break;
 
-	case 6: /* text color */
-		skin_copy_full_color();
+
+	case 12:
+		/* none */
 		break;
 
-	case 8:  skin_set_full_color(63, 5, 15,  32, 65, 57,  31, 19, 50); break;
-	case 9:  skin_set_full_color(70, 11, 31,  32, 65, 57,  0, 0, 72); break;
-	case 10: skin_set_full_color(72, 31, 79,  55, 65, 63,  13, 13, 72); break;
-	case 11: skin_set_full_color(1, 53, 88,  21, 0, 88,  66, 25, 100); break;
-	case 12: skin_set_full_color(31, 0, 100,  66, 74, 64,  0, 0, 0); break;
-	case 13: skin_set_full_color(33, 45, 77,  46, 31, 80,  32, 22, 83); break;
-	
+	case 13:
+		skin_set_color(41, MAKELONG(23, 66)); break;
+	case 14:
+		skin_set_color(81, MAKELONG(14, 66)); break;
+	case 15:
+		skin_set_color(8, MAKELONG(50, 76)); break;
+	case 16:
+		skin_set_color(15, MAKELONG(18, 96)); break;
+	case 17:
+		skin_set_color(61, MAKELONG(13, 99)); break;
+	case 18:
+		skin_set_color(0, MAKELONG(0, 62)); break;
+
 	default:
 		return 0;
 	}
@@ -788,100 +664,96 @@ int skin_set_theme(int id)
  */
 int skin_getdata(int id, void *rdata, int dsize)
 {
+	RECT  rct;
+
 	switch(id)
 	{
 	case get_visual:
-		if(window_vid && vis_used)
-		{
-			*((HWND*)rdata) = window_vid;
-			return 1;
-		}else{
-			*((HWND*)rdata) = 0;
-			return 0;
-		}
-
+		*((HWND*)rdata) = (vis_init ? window_vis : 0);
+		return vis_init;
 
 	case get_visual_dc:
-		if(hdc_vid && vis_used)
+		*((HDC*)rdata) = (vis_init ? hdc_vis : 0);
+		return vis_init;
+
+	case get_visual_x:
+		if(vis_init)
 		{
-			*((HDC*)rdata) = hdc_vid;
-			return 1;
+			vis_get_position(&rct);
+			return rct.left;
 		}else{
-			*((HDC*)rdata) = 0;
 			return 0;
 		}
 
-
-	case get_visual_x:
-		if(window_vid && vis_used)
-		{
-			RECT rd;
-			vid_get_position(&rd);
-			return rd.left;
-		}
-		return 0;
-
 	case get_visual_y:
-		if(window_vid && vis_used)
+		if(vis_init)
 		{
-			RECT rd;
-			vid_get_position(&rd);
-			return rd.top;
+			vis_get_position(&rct);
+			return rct.top;
+		}else{
+			return 0;
 		}
-		return 0;
 
 	case get_visual_w:
-		if(window_vid && vis_used)
+		if(vis_init)
 		{
-			RECT rd;
-			vid_get_position(&rd);
-			return rd.right - rd.left;
+			vis_get_position(&rct);
+			return rct.right;
+		}else{
+			return 0;
 		}
-		return 0;
 
 	case get_visual_h:
-		if(window_vid && vis_used)
+		if(vis_init)
 		{
-			RECT rd;
-			vid_get_position(&rd);
-			return rd.bottom - rd.top;
+			vis_get_position(&rct);
+			return rct.bottom;
+		}else{
+			return 0;
 		}
-		return 0;
 
 	case get_visual_winproc:
-		if(window_vid && vis_used)
+		if(vis_init)
 		{
-			*((WNDPROC*)rdata) = callback_vid_window;
+			wndproc_vis = callback_vis_window;
+			*((WNDPROC*)rdata) = wndproc_vis;
 		}
-		return 0;
+		return vis_init;
 
 	case set_msg_proc:
-		if(window_vid && vis_used)
+		if(vis_init)
 		{
 			vis_message = (fn_vis_message)rdata;
-			return 1;
+			return vis_init;
 		}else{
 			return 0;
 		}
 
 	case get_color:
+		switch(dsize) /* index */
+		{
+		case color_light:
+		case color_normal:  return display_normal;
+		case color_dark:    return display_paused;
+		case color_shifted: return display_stopped;
+		}
 		return 0;
 
 	case get_window_playlist:
-		return 0;
+		*((HWND*)rdata) = window_ml;
+		return 1;
 
 	case get_window_vis:
-		if(window_vid && vis_used)
-		{
-			*((HWND*)rdata) = window_vid;
-			return 1;
-		}else{
-			*((HWND*)rdata) = 0;
-			return 0;
-		}
+		*((HWND*)rdata) = window_vis;
+		return 1;
+
+	case get_window_eq:
+		*((HWND*)rdata) = window_eq;
+		return 1;
 
 	case get_window_ml:
-		return 0;
+		*((HWND*)rdata) = window_ml;
+		return 1;
 
 	case get_window_misc:
 		return 0;
@@ -890,7 +762,7 @@ int skin_getdata(int id, void *rdata, int dsize)
 		return 0;
 	
 	case get_window_video:
-		if(window_vid && !vis_used)
+		if(window_vid)
 		{
 			*((HWND*)rdata) = window_vid;
 			return 1;
@@ -899,10 +771,9 @@ int skin_getdata(int id, void *rdata, int dsize)
 			return 0;
 		}
 
-
 	case get_window_video_dc:
 
-		if(hdc_vid && !vis_used)
+		if(hdc_vid)
 		{
 			*((HDC*)rdata) = hdc_vid;
 			return 1;
@@ -919,57 +790,25 @@ int skin_getdata(int id, void *rdata, int dsize)
 		return 0;
 
 	case set_video_window:
-
-		last_video_dsize = dsize;
-		
-		if(!settings_data.vis.show_vis)
 		{
 			int prevst = 0;
 
-			if(settings_data.video.force_hide)
+			if(rdata)
 			{
-				if(dsize)
-					is_video_playing = 1;
-				else
-					is_video_playing = 0;
+				prevst = skin_settings.vid_show;
 
-				return prevst;
-			}
-
-			vis_used = 0;
-
-			if(dsize)
-			{
-				prevst = vid_init;
-				vid_create(skin.wnd, (double)dsize / 1000000);
-				is_video_playing = 1;
-				skin.shared->call_function(call_videoout_initialize, 0, 0, 0);
+				skin_settings.vid_show = 1;
+				vid_create(skin.wnd);
 
 			}else{
-				prevst = vid_init;
-				is_video_playing = 0;
-				//skin.shared->call_function(call_videoout_uninitialize, 0, 0, 0);
+
+				prevst = skin_settings.vid_show;
+
+				skin_settings.vis_show = 0;
 				vid_close();
 			}
 			return prevst;
-		}else{
-			if(dsize)
-			{
-				vis_used = 0;
-				vid_create(skin.wnd, (double)dsize / 1000000);
-				skin.shared->call_function(call_videoout_initialize, 0, 0, 0);
-				is_video_playing = 1;
-				skin.shared->call_function(call_visualizations_select_none, 0, 0, 0);
-			}else{
-				vis_used = 1;
-				//skin.shared->call_function(call_videoout_uninitialize, 0, 0, 0);
-				is_video_playing = 0;
-				str_cpy(skin.shared->settings.general->visualizations.selected, settings_data.vis.current_vis);
-				skin.shared->call_function(call_visualizations_select_next, 0, 0, 0);
-			}
-			return 0;
 		}
-
 
 	}
 
@@ -980,798 +819,565 @@ int skin_getdata(int id, void *rdata, int dsize)
 
 /* skin interface  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-void display_control_button(BLENDFUNCTION *bf, int mode)
+
+
+
+/*
+ * get button index.
+ */
+int skin_get_button_index(int x, int y)
 {
-	if(mode == 0)
-	{
-		switch(skin.shared->audio.output.getplayerstate())
-		{
-		case v_audio_playerstate_playingandbuffering:
-		case v_audio_playerstate_playing:
-			AlphaBlend(mdc, 40, 36, png_play_w, png_play_h, ndc, 0, 0, png_play_w, png_play_h, *bf);
-			break;
 
-		case v_audio_playerstate_paused:
-			AlphaBlend(mdc, 37, 36, 40, 46, basic_icons_dc, 0, 92, 40, 46, *bf);
-			break;
+	if(incoordx(x, y, &coords.window_main.button_play    ))     return skin_main_button_play;
+	if(incoordx(x, y, &coords.window_main.button_stop    ))     return skin_main_button_stop;
+	if(incoordx(x, y, &coords.window_main.button_previous))     return skin_main_button_previous;
+	if(incoordx(x, y, &coords.window_main.button_next    ))     return skin_main_button_next;
+	if(incoordx(x, y, &coords.window_main.button_open    ))     return skin_main_button_open;
+	if(incoordx(x, y, &coords.window_main.button_playlist))     return skin_main_button_playlist;
+	if(incoordx(x, y, &coords.window_main.button_eq      ))     return skin_main_button_equalizer;
+	if(incoordx(x, y, &coords.window_main.button_minimize))     return skin_main_button_minimize;
+	if(incoordx(x, y, &coords.window_main.button_exit    ))     return skin_main_button_exit;
 
-		case v_audio_playerstate_stopped:
-		case v_audio_playerstate_init:
-		case v_audio_playerstate_loaded:
+	if(incoordx(x, y, &coords.window_main.bar_seek       ))     return skin_main_button_seek;
+	if(incoordx(x, y, &coords.window_main.bar_volume     ))     return skin_main_button_volume;
 
-			AlphaBlend(mdc, 37, 36, 40, 46, basic_icons_dc, 0, 46, 40, 46, *bf);
-			break;
+	if(incoordx(x, y, &coords.window_main.button_settings))     return skin_main_button_settings;
+	if(incoordx(x, y, &coords.window_main.button_convert ))     return skin_main_button_convert;
+	if(incoordx(x, y, &coords.window_main.button_rip     ))     return skin_main_button_rip;
+	if(incoordx(x, y, &coords.window_main.button_join    ))     return skin_main_button_join;
+	if(incoordx(x, y, &coords.window_main.button_vis     ))     return skin_main_button_visual;
+	if(incoordx(x, y, &coords.window_main.button_video   ))     return skin_main_button_video;
 
-		case v_audio_playerstate_buffering:
-			AlphaBlend(mdc, 40, 36, png_play_w, png_play_h, ndc, 0, 0, png_play_w, png_play_h, *bf);
-			break;
+	if(incoordx(x, y, &coords.window_main.button_dsp     ))     return skin_main_button_dsp;
+	if(incoordx(x, y, &coords.window_main.button_lock    ))     return skin_main_button_lock;
 
-		case v_audio_playerstate_notinit:
-			AlphaBlend(mdc, 37, 36, 40, 46, basic_icons_dc, 0, 46, 40, 46, *bf);
-			break;
-		}
-	}else{
-		switch(skin.shared->audio.output.getplayerstate())
-		{
-		case v_audio_playerstate_playingandbuffering:
-		case v_audio_playerstate_playing:
-			AlphaBlend(mdc, 40-2, 36-2, png_playh_w, png_playh_h, play_hover_dc, 0, 0, png_playh_w, png_playh_h, *bf);
-			break;
-
-		case v_audio_playerstate_paused:
-			AlphaBlend(mdc, 37, 36, 40, 46, basic_icons_dc, 40, 92, 40, 46, *bf);
-			break;
-
-		case v_audio_playerstate_stopped:
-		case v_audio_playerstate_init:
-		case v_audio_playerstate_loaded:
-
-			AlphaBlend(mdc, 37, 36, 40, 46, basic_icons_dc, 40, 46, 40, 46, *bf);
-			break;
-
-		case v_audio_playerstate_buffering:
-			AlphaBlend(mdc, 40-2, 36-2, png_playh_w, png_playh_h, play_hover_dc, 0, 0, png_playh_w, png_playh_h, *bf);
-			break;
-
-		case v_audio_playerstate_notinit:
-			AlphaBlend(mdc, 37, 36, 40, 46, basic_icons_dc, 40, 46, 40, 46, *bf);
-			break;
-		}
-	}
+	return 0;
 }
 
 
-int  media_get_item(int relation)
+/*
+ * erase button actions (back to normal).
+ */
+int skin_draw_button_normal(int id, HDC dc)
 {
-	struct fennec_audiotag  ctag;
-	letter        fname[v_sys_maxpath];
-	string        fpath;
-	unsigned long id, cid;
 
-	next_artist[0] = 0;
-	next_title[0]  = 0;
-	next_album[0]  = 0;
-
-	cid = skin.shared->audio.output.playlist.getcurrentindex();
-
-	if(cid + relation > skin.shared->audio.output.playlist.getcount()) return 0;
-	if(cid + relation < 0) return 0;
-
-
-
-	fpath = skin.shared->audio.output.playlist.getsource(skin.shared->audio.output.playlist.getrealindex(skin.shared->audio.output.playlist.getlistindex(cid) + relation));
+#	define blt(x, y, w, h, sx, sy) (StretchBlt(dc, (x), (y), ((w) * 2), ((h) * 2), mdc_sheet, (sx), (sy), (w), (h), SRCCOPY))
 	
-	if(!fpath)return 0;
-
-	id = skin.shared->audio.input.tagread(fpath, &ctag);
-
-	if(ctag.tag_artist.tsize)
-		str_ncpy(next_artist, ctag.tag_artist.tdata, sizeof(next_artist) / sizeof(letter));
-
-	if(ctag.tag_album.tsize)
-		str_ncpy(next_album, ctag.tag_album.tdata, sizeof(next_album) / sizeof(letter));
-
-	if(ctag.tag_title.tsize)
-		str_ncpy(next_title, ctag.tag_title.tdata, sizeof(next_title) / sizeof(letter));
-
-	if(ctag.tag_year.tsize)
-		str_ncpy(next_year, ctag.tag_year.tdata, sizeof(next_year) / sizeof(letter));
-
-	if(!ctag.tag_title.tsize)
+	switch(id)
 	{
-		_wsplitpath(fpath, 0, 0, fname, 0);
-		str_ncpy(next_title, fname, sizeof(next_title) / sizeof(letter));
+	case skin_main_button_play:      blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_play);     break;
+	case skin_main_button_stop:      blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_stop);     break;
+	case skin_main_button_previous:  blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_previous); break;
+	case skin_main_button_next:      blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_next);     break;
+	case skin_main_button_open:      blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_open);     break;
+	case skin_main_button_playlist:  blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_playlist); break;
+	case skin_main_button_equalizer: blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_eq);       break;
+	case skin_main_button_minimize:  blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_minimize); break;
+	case skin_main_button_exit:      blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_exit);     break;
+
+	case skin_main_button_settings:  blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_settings); break; 
+	case skin_main_button_convert:   blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_convert);  break;
+	case skin_main_button_rip:       blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_rip);      break;
+	case skin_main_button_join:      blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_join);     break;
+	case skin_main_button_visual:    blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_vis);      break;
+	case skin_main_button_video:     blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_video);    break;
+	case skin_main_button_dsp:       blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_dsp);      break;
+	
+	case skin_main_button_lock:
+		if(skin_settings.skin_lock)
+			blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_lock);
+		else
+			blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_unlock);
+		break;
 	}
 
-	str_cpy(next_album_year, next_album);
-	str_cat(next_album_year, uni(" - "));
-	str_cat(next_album_year, next_year);
-	
-
-	skin.shared->audio.input.tagread_known(id, 0, &ctag);
 	return 1;
 }
 
 
-void neo_display_update()
+/*
+ * draw bright button.
+ */
+int skin_draw_button_hover(int id, HDC dc)
 {
-	HRGN trgn;
-	SIZE  txtsz;
-	letter dur_str[32], pos_str[64];
+	static int lid = -1;
 
-
-	
-	misc_time_to_string((int)(skin.shared->audio.output.getduration_ms() / 1000), dur_str);
-	misc_time_to_string((int)(skin.shared->audio.output.getposition_ms() / 1000), pos_str);
-
-	str_cat(pos_str, uni(" / "));
-	str_cat(pos_str, dur_str);
-
-
-	if(display_content_x < -10)
+	switch(id)
 	{
-		trgn = CreateRectRgn(105, 7, 105 + 270 + display_content_x, 7 + 106);
-		SelectClipRgn(mdc, trgn);
+	case skin_main_button_play:      blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_play);     show_tip(oooo_skins_play_pause,          0); break;
+	case skin_main_button_stop:      blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_stop);     show_tip(oooo_skins_stop,                0); break;
+	case skin_main_button_previous:  blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_previous); show_tipex(oooo_skins_previous, oooo_skins_rewind,        0, uni("\nRight: ")); break;
+	case skin_main_button_next:      blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_next);     show_tipex(oooo_skins_next,     oooo_skins_fast_forward,  1, uni("\nRight: ")); break;
+	case skin_main_button_open:      blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_open);     show_tipex(oooo_skins_open,     oooo_skins_add_files,     2, uni("\nRight: ")); break;
+	case skin_main_button_playlist:  blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_playlist); show_tip(oooo_skins_show_playlist,       0); break;
+	case skin_main_button_equalizer: blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_eq);       show_tip(oooo_skins_show_equalizer,      0); break;
+	case skin_main_button_minimize:  blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_minimize); show_tip(oooo_skins_minimize,            0); break;
+	case skin_main_button_exit:      blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_exit);     show_tip(oooo_skins_close,               0); break;
+																									   
+	case skin_main_button_settings:  blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_settings); show_tip(oooo_skins_show_preferences,    0); break;
+	case skin_main_button_convert:   blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_convert);  show_tip(oooo_skins_show_conversion,     0); break;
+	case skin_main_button_rip:       blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_rip);      show_tip(oooo_skins_show_ripping,        0); break;
+	case skin_main_button_join:      blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_join);     show_tip(oooo_skins_show_joining,        0); break;
+	case skin_main_button_visual:    blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_vis);      show_tip(oooo_skins_Show_visualizations, 0); break;
+	case skin_main_button_video:     blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_video);    show_tip(0, uni("Show/Hide video window")); break;
+	case skin_main_button_dsp:       blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_dsp);      show_tip(0, uni("DSP/Effects")); break;
+	
+	case skin_main_button_lock:
+		if(skin_settings.skin_lock)
+		{
+			blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_lock); show_tip(0, uni("Turn off window lock")); break;
+		}else{
+			blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_unlock); show_tip(0, uni("Turn on window lock")); break;
+		}
+		break;
+	}
+
+	if(id == 0 || id != lid)
+		skin_draw_button_normal(lid, dc);
+
+	lid = id;
+	return 0;
+}
+
+
+/*
+ * draw pressed button.
+ */
+int skin_draw_button_down(int id, HDC dc)
+{
+	static int lid = -1;
+
+#	define blt(x, y, w, h, sx, sy) (StretchBlt(dc, (x), (y), ((w) * 2), ((h) * 2), mdc_sheet, (sx), (sy), (w), (h), SRCCOPY))
+	
+	switch(id)
+	{
+	case skin_main_button_play:      blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_play);     break;
+	case skin_main_button_stop:      blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_stop);     break;
+	case skin_main_button_previous:  blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_previous); break;
+	case skin_main_button_next:      blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_next);     break;
+	case skin_main_button_open:      blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_open);     break;
+	case skin_main_button_playlist:  blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_playlist); break;
+	case skin_main_button_equalizer: blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_eq);       break;
+	case skin_main_button_minimize:  blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_minimize); break;
+	case skin_main_button_exit:      blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_exit);     break;
+
+	case skin_main_button_settings:  blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_settings); break; 
+	case skin_main_button_convert:   blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_convert);  break;
+	case skin_main_button_rip:       blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_rip);      break;
+	case skin_main_button_join:      blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_join);     break;
+	case skin_main_button_visual:    blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_vis);      break;
+	case skin_main_button_video:     blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_video);    break;
+	case skin_main_button_dsp:       blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_dsp);      break;
+	
+	case skin_main_button_lock:
+		if(skin_settings.skin_lock)
+			blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_lock);
+		else
+			blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_unlock);
+		break;
+	}
+
+	if(id == 0 || id != lid)
+		skin_draw_button_normal(lid, dc);
+
+	lid = id;
+	return 0;
+}
+
+/*
+ * move main window without requesting hwnd
+ */
+
+int skin_move_main_window(int dx, int dy)
+{
+	return skin_move_window(0, dx, dy);
+}
+
+/*
+ * move main window.
+ */
+int skin_move_window(HWND hwnd, int dx, int dy)
+{
+	POINT        pt;
+	static int   lpx, lpy;
+	int          x, y;
+	RECT         cposrct;
+	RECT         rct;
+	RECT         wrct;
+
+	GetCursorPos(&pt);
+
+	if(pt.x == lpx && pt.y == lpy)
+	{
+		return 0;
 	}else{
-		SelectClipRgn(mdc, display_clip);
+		lpx = pt.x;
+		lpy = pt.y;
 	}
 
-	if(mouse_down_controller == 1)
-	{
-		dpoffset_title = dpoffset_artist = dpoffset_album_year = 0;
-	}
-
-	typo_print_shadow(mdc, title,  116 + display_content_x - dpoffset_title, 10 + display_content_y, text_color[0], typo_song_title);
-	
-	if(dpoffset_update){
-		GetTextExtentPoint32(mdc, title, (int)str_len(title), &txtsz);
-		dpoffset_max_title = txtsz.cx - 270;
-	}
-
-	typo_print_shadow(mdc, artist, 116 + display_content_x - dpoffset_artist, 40 + display_content_y, text_color[0], typo_song_artist);
-	
-	if(dpoffset_update){
-		GetTextExtentPoint32(mdc, artist, (int)str_len(artist), &txtsz);
-		dpoffset_max_artist = txtsz.cx - 270;
-	}
-
-	typo_print_shadow(mdc, album_year,  116 + display_content_x - dpoffset_album_year, 62 + display_content_y, text_color[1], typo_song_album);
-	
-	if(dpoffset_update){
-		GetTextExtentPoint32(mdc, album_year, (int)str_len(album_year), &txtsz);
-		dpoffset_max_album_year = txtsz.cx - 270;
-	}
-
-	typo_print_shadow(mdc, pos_str, 116 + display_content_x, 83 + display_content_y, text_color[1], typo_song_position);
-
-	dpoffset_update = 0;
-
-
-	if(dpoffset_max_title > 0 + 50)
-	{
-		if(!dpoffset_rollback_title)
-		{
-			dpoffset_title+=2;
-			if(dpoffset_title > dpoffset_max_title)
-				dpoffset_rollback_title = 1;
-		}else{
-			dpoffset_title *= 6;
-			dpoffset_title /= 7;
-			if(dpoffset_title <= 0)
-			{
-				dpoffset_rollback_title = 0;
-				dpoffset_title = 0;
-			}
-		}
-	}
-
-	if(dpoffset_max_artist > 0 + 50)
-	{
-		if(!dpoffset_rollback_artist)
-		{
-			dpoffset_artist+=2;
-			if(dpoffset_artist > dpoffset_max_artist)
-				dpoffset_rollback_artist = 1;
-		}else{
-			dpoffset_artist *= 6;
-			dpoffset_artist /= 7;
-			if(dpoffset_artist <= 0)
-			{
-				dpoffset_rollback_artist = 0;
-				dpoffset_artist = 0;
-			}
-		}
-
-	}
-
-	if(dpoffset_max_album_year > + 50)
-	{
-		if(!dpoffset_rollback_album_year)
-		{
-			dpoffset_album_year+=2;
-			if(dpoffset_album_year > dpoffset_max_album_year)
-				dpoffset_rollback_album_year = 1;
-		}else{
-			dpoffset_album_year *= 6;
-			dpoffset_album_year /= 7;
-			if(dpoffset_album_year <= 0)
-			{
-				dpoffset_rollback_album_year = 0;
-				dpoffset_album_year = 0;
-			}
-		}
-
-	}
-
-
-
-
-
-	SelectClipRgn(mdc, 0);
-
-	{
-		
-
-		if(display_content_x > 10)
-		{
-			trgn = CreateRectRgn(105, 7, 105 + display_content_x, 7 + 106);
-			SelectClipRgn(mdc, trgn);
-		}else{
-			SelectClipRgn(mdc, display_clip);
-		}
-
-		
-
-
-		if(display_content_x > 10)
-		{
-			if(media_get_item(+1))
-			{
-				typo_print_shadow(mdc, next_title,  116 + display_content_x - 270, 10 + display_content_y, text_color[0], typo_song_title);
-				typo_print_shadow(mdc, next_artist, 116 + display_content_x - 270, 40 + display_content_y, text_color[0], typo_song_artist);
-				typo_print_shadow(mdc, next_album_year,  116 + display_content_x - 270, 62 + display_content_y, text_color[1], typo_song_album);
-				typo_print_shadow(mdc, uni("00:00 / 00:00"), 116 + display_content_x - 270, 83 + display_content_y, text_color[1], typo_song_position);
-			}
-		}
-
-		if(display_content_x < -10)
-		{
-			if(media_get_item(-1))
-			{
-				typo_print_shadow(mdc, next_title,  116 + display_content_x + 270, 10 + display_content_y, text_color[0], typo_song_title);
-				typo_print_shadow(mdc, next_artist, 116 + display_content_x + 270, 40 + display_content_y, text_color[0], typo_song_artist);
-				typo_print_shadow(mdc, next_album_year,  116 + display_content_x + 270, 62 + display_content_y, text_color[1], typo_song_album);
-				typo_print_shadow(mdc, uni("00:00 / 00:00"), 116 + display_content_x + 270, 83 + display_content_y, text_color[1], typo_song_position);
-			}
-		}
-
-		SelectClipRgn(mdc, 0);
-	}
-	
-	
-	
-
-
-}
-
-void neo_view_small_icons()
-{
-	if(is_video_playing && settings_data.video.force_hide)
-	{
-		BLENDFUNCTION bf;
-
-		if(button_video_transparency > 100)button_video_transparency = 100;
-		else if(button_video_transparency < 0)button_video_transparency = 0;
-
-		bf.BlendOp = AC_SRC_OVER;
-		bf.BlendFlags = 0;
-		bf.AlphaFormat = AC_SRC_ALPHA;
-		bf.SourceConstantAlpha = (BYTE)(((button_video_transparency * 150) / 100) + 20);
-
-		AlphaBlend(mdc, 249, 70, 30, 30, main_icons_dc, 0, 190, 30, 30, bf);
-	}
-}
-
-
-void vis_update()
-{
-	int i, x = 0, n;
-	static int y[32]; /* 97 max */
-	static float ss[512];
-
-	skin.shared->audio.output.getfloatbuffer((float*)&ss, 512, (dword)-1);
-
-	beat_level = 0.0f;
-
-	for(i=0; i<22; i++)
-	{
-		n = (int)(ss[511 / 22 * i] * 97.0f);
-		beat_level += (float)fabs(((float)n) / 97.0f);
-		//n *= 97;
-
-		y[i] -= 4;
-		if(y[i] < 0)y[i] = 0;
-		if(n > y[i]) y[i] = n;
-
-		BitBlt(mdc, 109 + x, 108 - y[i], 12, main_h, main_vis_dc, 109 + x, 108 - y[i], SRCCOPY);
-		x += 14;
-	}
-
-	if(beat_level > 20.0f) beat_level = 20.0f;
-	else if(beat_level < 0.0f) beat_level = 0.0f;
-
-}
-
-void menu_display()
-{
-	BLENDFUNCTION bf;
-
-	bf.BlendOp = AC_SRC_OVER;
-	bf.BlendFlags = 0;
-	bf.AlphaFormat = AC_SRC_ALPHA;
-	bf.SourceConstantAlpha = 0xff;
-
-	if(mouse_down_controller == 0)
-	{
-		if(menu_position > 0)
-		{
-			menu_position /= 2;
-			menu_button_shift = 0;
-
-		}else if(-menu_position % 66 > 0){
-
-			menu_position += (-menu_position % 66) / 2;
-
-			menu_button_shift = (-menu_position) / 66;
-		}
-	}
-
-	SelectClipRgn(mdc, display_clip);
-
-	if(menu_position > -50)
-		AlphaBlend(mdc, 120 + menu_position, 33, 66, 51, menuicons_dc, 0, (menu_selected_item == 0 ? 53 : 0), 66, 51, bf);
-	
-	AlphaBlend(mdc, 120 + menu_position + 66 * 1 + ((66 - 48) / 2), 33, 48, 51, menuicons_dc, 66, (menu_selected_item == 1 ? 53 : 0), 48, 51, bf);
-	AlphaBlend(mdc, 120 + menu_position + 66 * 2 + ((66 - 50) / 2), 33, 50, 51, menuicons_dc, 114, (menu_selected_item == 2 ? 53 : 0), 50, 51, bf);
-	AlphaBlend(mdc, 120 + menu_position + 66 * 3 + ((66 - 50) / 2), 33, 50, 51, menuicons_dc, 164, (menu_selected_item == 3 ? 53 : 0), 50, 51, bf);
-	
-	if(menu_position < -50)
-		AlphaBlend(mdc, 120 + menu_position + 66 * 4 + ((66 - 52) / 2), 33, 52, 51, menuicons_dc, 214, (menu_selected_item == 4 ? 53 : 0), 52, 51, bf);
-
-	SelectClipRgn(mdc, 0);
-}
-
-
-void eq_update()
-{
-	int i;
-	float preampv; /* preamp value */
-	float eb[10];  /* bands */
-	letter barvalue[16];
-	static string bandhertz[] = {uni("31Hz"), uni("63Hz"), uni("125Hz"), uni("250Hz"), uni("500Hz"), uni("1kHz"), uni("2kHz"), uni("4kHz"), uni("8kHz"), uni("16kHz")};
-
-	preampv = skin.shared->audio.equalizer.get_preamp(eq_channel == -1 ? 0 : eq_channel);
-	skin.shared->audio.equalizer.get_bands(eq_channel == -1 ? 0 : eq_channel, 10, eb);
-
-	memset(barvalue, 0, sizeof(barvalue));
-
-	if(eq_current_bar >= 0)
-		swprintf(barvalue, 16, uni("%.2fdB"), eb[eq_current_bar]);
+	if(hwnd)
+		GetWindowRect(hwnd, &cposrct);
 	else
-		swprintf(barvalue, 16, uni("%.2fdB"), preampv);
+		GetWindowRect(wnd, &cposrct);
+
+	x = pt.x - dx;
+	y = pt.y - dy;
+
+	if(x < 10 && x > -10)x = 0;
+	if(y < 10 && y > -10)y = 0;
+
+	SystemParametersInfo(SPI_GETWORKAREA, 0, &wrct, 0);
+
+	if((x + cr(coords.window_main.width) < wrct.right + 10)  && (x + cr(coords.window_main.width) > wrct.right - 10))
+		x = wrct.right - cr(coords.window_main.width);
+
+	if((y + cr(coords.window_main.height) < wrct.bottom + 10) && (y + cr(coords.window_main.height) > wrct.bottom - 10))
+		y = wrct.bottom - cr(coords.window_main.height);
+
+
+	if(hwnd)
+		SetWindowPos(hwnd, 0, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+	else
+		SetWindowPos(wnd, 0, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+
+	skin_settings.main_x = x;
+	skin_settings.main_y = y;
+
+	sys_pass();
+
 	
-	preampv /= 12.0f;
-	preampv *= 97.0f / 2.0f;
-	preampv += 97.0f / 2.0f;
-	BitBlt(mdc, 109, (int)(108.0f - preampv), 12, main_h, main_vis_dc, 109, (int)(108.0f - preampv), SRCCOPY);
-	BitBlt(mdc, 109, (int)(108.0f - preampv - 2), 12, 4, main_vis_dc, 109, 10, SRCCOPY);
+	SendMessage(hwnd, WM_PAINT, 0, 0);
+	/*
+	if(skin_settings.eq_show)
+		SendMessage(window_eq, WM_PAINT, 0, 0);
+	if(skin_settings.ml_show)
+		SendMessage(window_ml, WM_PAINT, 0, 0);
+	if(skin_settings.vis_show)
+		SendMessage(window_vis, WM_PAINT, 0, 0);
+	if(skin_settings.vid_show)
+		SendMessage(window_vid, WM_PAINT, 0, 0);
+	*/
+	sys_pass();
+
+	return 1;
+}
+
+void CALLBACK seek_timer(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
+{
+	if(seekmode == 1)
+	{
+		double ps = 0.0;
+
+		skin.shared->audio.output.getposition(&ps);
+		ps += 0.01;
+		if(ps > 1.0)ps = 1.0;
+		skin.shared->audio.output.setposition(ps);
+
+	}else if(seekmode == 2){
+
+		double ps = 0.0;
+
+		skin.shared->audio.output.getposition(&ps);
+		ps -= 0.01;
+		if(ps < 0.0)ps = 0.0;
+		skin.shared->audio.output.setposition(ps);
+	}
+}
+
+void CALLBACK display_timer(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
+{
+
+	int     v, p;
+	letter  pbuf[10];
+	double  d = 0.0, dl = 0.0, dr = 0.0;
+	int     ps;
+	int     i, c;
+	int     win_h, win_w;
+	RECT    rct;
+
+	GetClientRect(hwnd, &rct);
+
+	win_h = rct.bottom;
+	win_w = rct.right;
+
+
+	if(!gr_main.dc) return;
+
+	c = win_w / 9;
 
 	for(i=0; i<10; i++)
 	{
-		eb[i] /= 12.0f;
-		eb[i] *= (97.0f / 2.0f);
-		eb[i] += (97.0f / 2.0f);
-
-		BitBlt(mdc, 109 + ((i + 1) * 14) + 14, (int)(108.0f - eb[i]), 12, main_h, main_vis_dc, 109 + ((i + 1) * 14), (int)(108.0f - eb[i]), SRCCOPY);
-		BitBlt(mdc, 109 + ((i + 1) * 14) + 14, (int)(108.0f - eb[i] - 2), 12, 4, main_vis_dc, 109 + ((i + 1) * 14), 10, SRCCOPY);
-	}
-
-	if(eq_channel == -1)
-		typo_print_shadow(mdc, uni("Universal"),  116 + 170, 17 + 20, text_color[0], typo_song_album);
-	else{
-		letter chanstr[32];
-		str_cpy(chanstr, uni("Channel "));
-		_itow(eq_channel + 1, chanstr + 8, 10);
-		typo_print_shadow(mdc, chanstr,  116 + 170, 17 + 20, text_color[0], typo_song_album);
+		gr_rect(&gr_main, 0x000000, i * 9, 45, 8, win_h - 45 - 75);
 
 	}
 
-	typo_print_shadow(mdc, uni("Equalizer"),  116 + 170, 17, text_color[0], typo_song_artist);
+	return;
+
+
+	static string  current_title_buf = 0;
 	
-	typo_print_shadow(mdc, barvalue,  116 + 170, 17 + 40, text_color[0], typo_song_album);
+	static int title_rev_stay = 0;
+	static int title_rev = 0;
+	static int hp = 0;
+	static int cp = 0;
+	static int mp = 0;
+	static int left_pos = 0;
+	static int left_max = 0;
 
-	if(eq_current_bar >= 0)
-		typo_print_shadow(mdc, bandhertz[eq_current_bar],  116 + 170, 17 + 60, text_color[0], typo_song_album);
+	ml_pl_preview_display_timer();
+
+	if(uMsg == WM_USER + 222)
+	{
+		mp = cp = hp = 0;
+	}
+	
+	if(uMsg == WM_USER + 221 && (hwnd == (HWND)-1))
+	{
+		DeleteDC(ldcmem);
+		DeleteObject(lbmp);
+		ldcmem = 0;
+		lbmp = 0;
+	}
+
+
+	if(!ldcmem)
+	{
+		ldcmem = CreateCompatibleDC(hdc);
+		lbmp   = CreateCompatibleBitmap(hdc, cr(coords.window_main.width), cr(coords.window_main.height));
+
+		SelectObject(ldcmem, lbmp);
+		SelectObject(ldcmem, displayfont);
+	}
+
+	if(uMsg == (UINT)-1)
+	{
+		DeleteDC(ldcmem);
+		DeleteObject(lbmp);
+		ldcmem = 0;
+		return;
+	}
+
+				
+	SetStretchBltMode(ldcmem, HALFTONE);
+	SetBrushOrgEx(ldcmem, 0, 0, 0);
+
+
+	if(uMsg == WM_USER + 221)
+		StretchBlt(ldcmem, 0, 0, cr(coords.window_main.width), cr(coords.window_main.height), mdc_sheet, 0, 0, coords.window_main.width, coords.window_main.height, SRCCOPY);
 	else
-		typo_print_shadow(mdc, uni("Preamp"),  116 + 170, 17 + 60, text_color[0], typo_song_album);
-
-}
-
-
-void eq_menu()
-{
-	HMENU   hmen;
-	int     i, r;
-	letter  cname[255];
-	letter  ibuf[10];
-	POINT   pt;
-
-	GetCursorPos(&pt);
-	hmen = CreatePopupMenu();
-
-	AppendMenu(hmen, MF_STRING, 0, uni("Universal"));
-	if(eq_channel == -1)
-			CheckMenuItem(hmen, 0, MF_BYPOSITION | MF_CHECKED);
-
-	for(i=0; i<max_channels; i++)
 	{
-		memset(ibuf, 0, sizeof(ibuf));
-
-		str_cpy(cname, uni("Channel "));
-		str_itos(i + 1, ibuf, 10);
-		str_cat(cname, ibuf);
-		AppendMenu(hmen, MF_STRING, i + 1, cname);
-
-		if(eq_channel == i)
-			CheckMenuItem(hmen, i + 1, MF_BYPOSITION | MF_CHECKED);
-
+		blt_coord(ldcmem, mdc_sheet, 0, &coords.window_main.display_area);
 	}
+	if(!skin_settings.skin_lock)
+		blt_coord(ldcmem, mdc_sheet, 0, &coords.window_main.button_unlock);
 
-	r = (int)TrackPopupMenu(hmen, TPM_LEFTALIGN | TPM_RIGHTBUTTON | TPM_RETURNCMD, pt.x, pt.y, 0, wnd, 0);
 	
-	switch(r)
+	ps = skin.shared->audio.output.getplayerstate();
+	
+	SetTextColor(hdc, display_normal);
+	SetBkMode(ldcmem, TRANSPARENT);
+
+	blt_coord(ldcmem, mdc_sheet, 0, &coords.window_main.display_text_area);
+
+	p = (int)(skin.shared->audio.output.getduration_ms() / 1000);
+	
+	
+	memset(pbuf, 0, sizeof(pbuf));
+	
+	if(p / 60 <= 60)
 	{
-	case 0:
-		eq_channel = -1;
-		break;
+		_itow(p / 60, pbuf, 10);
+		pbuf[str_len(pbuf)] = uni(':');
 
-	default:
-		eq_channel = r - 1;
-		break;
-	}
+		if((p % 60) < 10)
+		{	
+			pbuf[str_len(pbuf)] = uni('0');
+			_itow(p % 60, pbuf + str_len(pbuf), 10);
+		}else{
+			_itow(p % 60, pbuf + str_len(pbuf), 10);
+		}
 
-	DestroyMenu(hmen);
-}
-
-
-void redraw_main_window()
-{
-	BLENDFUNCTION blend;
-	SIZE          size;
-	POINT         ptsrc;
-
-	if(enable_transparency)
-	{
-		ptsrc.x = 0;
-		ptsrc.y = 0;
-
-		size.cx = main_w;
-		size.cy = main_h;
-
-		blend.BlendOp = AC_SRC_OVER;
-		blend.BlendFlags = 0;
-		blend.AlphaFormat = 0;
-		blend.SourceConstantAlpha = (BYTE)((255 * (100 - sleep_alpha)) / 100);
-	 
-		UpdateLayeredWindow(wnd, NULL, NULL, &size, mdc, &ptsrc, 0, &blend, ULW_ALPHA);
 	}else{
-		BitBlt(hdc, 0, 0, main_w, main_h, mdc, 0, 0, SRCCOPY);
+		_itow(p / 3600, pbuf, 10);
+		str_cat(pbuf, uni("h"));
 	}
-}
 
+	TextOut(ldcmem, cr(coords.window_main.dur_text_x), cr(coords.window_main.dur_text_y), pbuf, (int)str_len(pbuf));
+
+	p = (int)(skin.shared->audio.output.getposition_ms() / 1000);
+
+	memset(pbuf, 0, sizeof(pbuf));
+	
+	if(p / 60 <= 60)
+	{
+		_itow(p / 60, pbuf, 10);
+		pbuf[str_len(pbuf)] = uni(':');
+		
+		if(p % 60 < 10)
+		{	
+			pbuf[str_len(pbuf)] = uni('0');
+			_itow(p % 60, pbuf + str_len(pbuf), 10);
+		}else{
+			_itow(p % 60, pbuf + str_len(pbuf), 10);
+		}
+
+	}else{
+		_itow(p / 3600, pbuf, 10);
+		str_cat(pbuf, uni("h"));
+	}
+
+
+	TextOut(ldcmem, cr(coords.window_main.pos_text_x), cr(coords.window_main.pos_text_y), pbuf, (int)str_len(pbuf));
+
+	SelectClipRgn(ldcmem, cliprgn);
+
+	
+	switch(ps)
+	{
+	case v_audio_playerstate_playingandbuffering:
+	case v_audio_playerstate_playing:
+		SetTextColor(ldcmem, display_normal);
+		break;
+
+	case v_audio_playerstate_paused:
+		SetTextColor(ldcmem, display_paused);
+		break;
+
+	case v_audio_playerstate_stopped:
+	case v_audio_playerstate_init:
+	case v_audio_playerstate_loaded:
+		SetTextColor(ldcmem, display_stopped);
+		break;
+
+	case v_audio_playerstate_buffering:
+		SetTextColor(ldcmem, RGB(0, 192, 0));
+		break;
+
+	case v_audio_playerstate_notinit:
+		SetTextColor(ldcmem, RGB(255, 0, 0));
+		break;
+	}
+
+	if(title[0] && (!artist[0] && !album[0]))
+	{
+		mp = 0;
+		cp = 0;
+		hp = 0;
+	}
+
+	switch(mp)
+	{
+	case 0: current_title_buf = title;  break;
+	case 1: current_title_buf = artist; break;
+	case 2: current_title_buf = album;  break;
+	}
+
+	if(!current_title_buf)mp++;
+	else if(!current_title_buf[0])mp++;
+
+	TextOut(ldcmem, cr(coords.window_main.infotext_x) - left_pos, cr(coords.window_main.infotext_y) - cp, current_title_buf, (int)str_len(current_title_buf)); 
+
+	SelectClipRgn(ldcmem, 0);
+
+
+	if(uMsg != WM_USER + 221)
+	{
+		hp++;
+
+		if(cp < 0)cp++;
+
+		if(hp > 50)
+		{
+			cp++;
+		}else if(cp == 0){
+			if(!left_max)
+			{
+				SIZE  extsz;
+
+					GetTextExtentPoint32(ldcmem, current_title_buf, (int)str_len(current_title_buf), &extsz);
+					if(extsz.cx >  cr(coords.window_main.display_region.w))
+						left_max = extsz.cx;
+			}
+
+			if(!title_rev)
+			{
+				if(left_max + 30> (left_pos + cr(coords.window_main.display_region.w)))
+				{
+					left_pos++;
+					hp = 0;
+				}else{
+					if(left_max)
+					{
+						title_rev = 1;
+						title_rev_stay = 20;
+					}
+				}
+			}else{
+				left_pos -= 5;
+				
+				if(left_pos <= 0)
+				{
+					left_pos = 0;
+					title_rev_stay--;
+
+					if(title_rev_stay <= 0)
+					{
+						left_max = 0;
+						hp = 51;
+						title_rev = 0;
+						title_rev_stay = 0;
+					}
+				}
+			}
+		}
+
+		if(cp > cr(coords.window_main.infotext_y + 2))
+		{
+			cp = -cr(coords.window_main.infotext_x + 2);
+			hp = 0;
+			mp++;
+			
+			if(mp >= ((artist[0] != 0) + (album[0] != 0) + (title[0] != 0)))
+				mp = 0;
+		}
+	}
+
+
+	skin.shared->audio.output.getposition(&d);
+	if     (d > 1) d = 1;
+	else if(d < 0) d = 0;
+
+
+	v = (int)(d * coords.window_main.bar_seek.w);
+
+	blt_coord(ldcmem, mdc_sheet, 0, &coords.window_main.bar_seek);
+	blt_coord_ew(ldcmem, mdc_sheet, 1, &coords.window_main.bar_seek, v);
+
+	skin.shared->audio.output.getvolume(&dl, &dr);
+
+	if     (dl > 1) dl = 1;
+	else if(dl < 0) dl = 0;
+
+	if     (dr > 1) dr = 1;
+	else if(dr < 0) dr = 0;
+
+	v = (int)(((dl + dr) / 2) * coords.window_main.bar_volume.w);
+
+	blt_coord(ldcmem, mdc_sheet, 0, &coords.window_main.bar_volume);
+	blt_coord_ew(ldcmem, mdc_sheet, 1, &coords.window_main.bar_volume, v);
+
+	if(uMsg == WM_USER + 221)
+		BitBlt(hdc, 0, 0, cr(coords.window_main.width), cr(coords.window_main.height), ldcmem, 0, 0, SRCCOPY);
+	else		
+		blt_coord_nozoom(hdc, ldcmem, 0, &coords.window_main.display_area);
+
+
+
+}
 
 
 /* Windows specific callbacks -----------------------------------------------*/
 
-void CALLBACK display_timer(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
-{
-	int delayset = 0;
-
-
-	if(IsIconic(wnd) || !IsWindowVisible(wnd)) return;
-	
-	BitBlt(mdc, 105, 0, main_w, main_h, background_dc, 105, 0, SRCCOPY);
-
-	
-	switch(skin_mode)
-	{
-	case mode_eq:
-		eq_update();
-		break;
-
-	case mode_display:
-		
-		vis_update();
-		neo_display_update();
-
-		neo_view_small_icons();
-		break;
-
-
-	case mode_menu:
-
-		menu_display();
-		break;
-	}
-
-
-	if(mouse_down_controller != 1)
-	{
-		if(display_content_x > 0 || display_content_x < 0)
-			display_content_x /= 2;
-	}
-
-
-	if(delay_counter > 10 || play_button_position_set)
-	{
-		if(mouse_over_controller != 1 && mouse_hover_val <= 0)
-		{
-			
-			BLENDFUNCTION bf;
-			double p, vl, vr;
-
-			BitBlt(mdc, 0, 0, 105, main_h, background_dc, 0, 0, SRCCOPY);
-
-			bf.BlendOp = AC_SRC_OVER;
-			bf.BlendFlags = 0;
-			bf.AlphaFormat = AC_SRC_ALPHA;
-			bf.SourceConstantAlpha = 0xff;
-
-			skin.shared->audio.output.getposition(&p);
-			AlphaBlend(mdc, 4, 9, 100, 100, wheel_pos_dc, 0, (int)(p * 34.0) * 100, 100, 100, bf);
-
-			bf.SourceConstantAlpha = 0xaf;
-			skin.shared->audio.output.getvolume(&vl, &vr);
-			AlphaBlend(mdc, 12, 17, 85, 85, wheel_vol_dc, 0, (int)(vl * 34.0) * 85, 85, 85, bf);
-			bf.SourceConstantAlpha = 0xff;
-
-			display_control_button(&bf, 0);
-			//AlphaBlend(mdc, 40, 36, png_play_w, png_play_h, ndc, 0, 0, png_play_w, png_play_h, bf);
-		
-			delayset = 1;
-		}
-
-		delay_counter = 0;
-	}else{
-		delay_counter++;
-	}
-
-	
-	if(mouse_over_controller == 1)
-	{
-		BLENDFUNCTION bf;
-		double p, vl, vr;
-
-		if(!delayset)
-			BitBlt(mdc, 0, 0, 105, main_h, background_dc, 0, 0, SRCCOPY);
-		
-		bf.BlendOp = AC_SRC_OVER;
-		bf.BlendFlags = 0;
-		bf.AlphaFormat = AC_SRC_ALPHA;
-		bf.SourceConstantAlpha = 0xff;
-
-		
-		skin.shared->audio.output.getposition(&p);
-		AlphaBlend(mdc, 4, 9, 100, 100, wheel_pos_dc, 0, (int)(p * 34.0) * 100, 100, 100, bf);
-
-		bf.SourceConstantAlpha = 0xaf;
-		skin.shared->audio.output.getvolume(&vl, &vr);
-		AlphaBlend(mdc, 12, 17, 85, 85, wheel_vol_dc, 0, (int)(vl * 34.0) * 85, 85, 85, bf);
-		bf.SourceConstantAlpha = 0xff;
-
-
-		display_control_button(&bf, 0);
-		//AlphaBlend(mdc, 40, 36, png_play_w, png_play_h, ndc, 0, 0, png_play_w, png_play_h, bf);
-
-
-		bf.BlendOp = AC_SRC_OVER;
-		bf.BlendFlags = 0;
-		bf.AlphaFormat = AC_SRC_ALPHA;
-		bf.SourceConstantAlpha = (BYTE)mouse_hover_val;
-
-		mouse_hover_val+=20;
-		if(mouse_hover_val > 255) mouse_hover_val = 255;
-
-		display_control_button(&bf, 1);
-		//AlphaBlend(mdc, 40-2, 36-2, png_playh_w, png_playh_h, play_hover_dc, 0, 0, png_playh_w, png_playh_h, bf);
-	}else if(mouse_hover_val > 0){
-		BLENDFUNCTION bf;
-		double p, vl, vr;
-
-		if(!delayset)
-			BitBlt(mdc, 0, 0, 105, main_h, background_dc, 0, 0, SRCCOPY);
-
-		bf.BlendOp = AC_SRC_OVER;
-		bf.BlendFlags = 0;
-		bf.AlphaFormat = AC_SRC_ALPHA;
-		bf.SourceConstantAlpha = 0xff;
-
-		skin.shared->audio.output.getposition(&p);
-		AlphaBlend(mdc, 4, 9, 100, 100, wheel_pos_dc, 0, (int)(p * 34.0) * 100, 100, 100, bf);
-
-		bf.SourceConstantAlpha = 0xaf;
-		skin.shared->audio.output.getvolume(&vl, &vr);
-		AlphaBlend(mdc, 12, 17, 85, 85, wheel_vol_dc, 0, (int)(vl * 34.0) * 85, 85, 85, bf);
-		bf.SourceConstantAlpha = 0xff;
-
-		display_control_button(&bf, 0);
-		//AlphaBlend(mdc, 40, 36, png_play_w, png_play_h, ndc, 0, 0, png_play_w, png_play_h, bf);
-
-		
-		if(mouse_hover_val > 0)
-			mouse_hover_val -= 20;
-		if(mouse_hover_val <= 0) mouse_hover_val = 0;
-
-	
-		bf.BlendOp = AC_SRC_OVER;
-		bf.BlendFlags = 0;
-		bf.AlphaFormat = AC_SRC_ALPHA;
-		bf.SourceConstantAlpha = (BYTE)mouse_hover_val;
-
-		display_control_button(&bf, 1);
-		//AlphaBlend(mdc, 40-2, 36-2, png_playh_w, png_playh_h, play_hover_dc, 0, 0, png_playh_w, png_playh_h, bf);
-
-	}
-	
-
-
-	if(main_panel_active == 1)
-	{
-		int offset = 0;
-		BLENDFUNCTION bf; 
-
-		bf.BlendOp = AC_SRC_OVER;
-		bf.BlendFlags = 0;
-		bf.AlphaFormat = AC_SRC_ALPHA;
-		bf.SourceConstantAlpha = 0xff;
-
-		AlphaBlend(mdc, offset + 335, 0, main_panel_w, main_panel_h, main_panel_dc, 0, 0, main_panel_w, main_panel_h, bf);
-
-		//AlphaBlend(mdc, offset + 335+43, 12, main_icons_w/2, main_icons_h, main_icons_dc, 0, 0, main_icons_w/2, main_icons_h, bf);
-		
-		switch(skin_mode)
-		{
-		case mode_display:
-		case mode_menu:
-
-			if(mouse_over_controller == 2)
-				AlphaBlend(mdc, offset + 335+43, 12, 29, 30, main_icons_dc, 29, 0, 29, 30, bf);
-			else
-				AlphaBlend(mdc, offset + 335+43, 12, 29, 30, main_icons_dc, 0, 0, 29, 30, bf);
-		
-			if(mouse_over_controller == 3)
-				AlphaBlend(mdc, offset + 335+43, 41, 29, 32, main_icons_dc, 29, 29, 29, 32, bf);
-			else
-				AlphaBlend(mdc, offset + 335+43, 41, 29, 32, main_icons_dc, 0, 29, 29, 32, bf);
-
-			if(mouse_over_controller == 4)
-				AlphaBlend(mdc, offset + 335+43, 75, 29, 30, main_icons_dc, 29, 63, 29, 30, bf);
-			else
-				AlphaBlend(mdc, offset + 335+43, 75, 29, 30, main_icons_dc, 0, 63, 29, 30, bf);
-
-			break;
-
-		case mode_eq:
-
-			if(mouse_over_controller == 2)
-				AlphaBlend(mdc, offset + 335+43, 12, 29, 30, main_icons_dc, 29, 0 + 95, 29, 30, bf);
-			else
-				AlphaBlend(mdc, offset + 335+43+1, 12, 29, 30, main_icons_dc, 0, 0 + 95, 29, 30, bf);
-		
-			if(mouse_over_controller == 3)
-				AlphaBlend(mdc, offset + 335+43, 41, 29, 32, main_icons_dc, 29, 29 + 95, 29, 32, bf);
-			else
-				AlphaBlend(mdc, offset + 335+43+1, 41, 29, 32, main_icons_dc, 0, 29 + 95, 29, 32, bf);
-
-			if(skin.shared->settings.general->player.equalizer_enable)
-			{
-				if(mouse_over_controller == 4)
-					AlphaBlend(mdc, offset + 335+43, 75, 29, 30, main_icons_dc, 29, 63 + 95, 29, 30, bf);
-				else
-					AlphaBlend(mdc, offset + 335+43+1, 75, 29, 30, main_icons_dc, 0, 63 + 95, 29, 30, bf);
-
-			}else{
-				if(mouse_over_controller == 4)
-					AlphaBlend(mdc, offset + 335+43, 75, 29, 32, main_icons_dc, 29, 29 + 95, 29, 32, bf);
-				else
-					AlphaBlend(mdc, offset + 335+43+1, 75, 29, 32, main_icons_dc, 0, 29 + 95, 29, 32, bf);
-			}
-
-			break;
-		}
-
-
-
-		main_panel_display_time--;
-		if(main_panel_display_time <= 0) main_panel_active = 0;
-	}
-
-	
-	
-	if(beat_level > 9.0f)
-	{
-		BLENDFUNCTION  bf; 
-		static int     rnd = 0;
-		static int     side = 30;
-		int            sw, sh, x, y;
-		static float   pi = 3.1415926535897932384626433832795f;
-
-		bf.BlendOp = AC_SRC_OVER;
-		bf.BlendFlags = 0;
-		bf.AlphaFormat = AC_SRC_ALPHA;
-		bf.SourceConstantAlpha = (BYTE)((beat_level / 20.0f) * 255.0f);
-
-		if(beat_level > 11.0f)
-		{
-			rnd = rand() % 360;
-			
-
-			if(side > 0) side = -30;
-			else side = 30;
-		}else
-			rnd += side;
-
-		sw = rand() % 200;
-		if(sw < 40) sw = 40;
-
-		sh = (int)(((float)sparkles_h / sparkles_w) * sw);
-
-		x = (int)(54.0 + sin((float)rnd / 180.0f * pi) * 46.0);
-		y = (int)(57.0 + cos((float)rnd / 180.0f * pi) * 46.0);
-
-		AlphaBlend(mdc, x-(sw / 2), y-(sh / 2), sw, sh, sparkles_dc, 0, 0, sparkles_w, sparkles_h, bf);
-
- 		delay_counter = 11;
-	}
-
-
-
-	//BitBlt(hdc, 0, 0, main_w, main_h, mdc, 0, 0, SRCCOPY);
-
-
-	button_video_transparency += button_video_transparency_add;
-
-	if(button_video_transparency >= 100)
-		button_video_transparency_add = -button_video_transparency_add;
-	else if(button_video_transparency <= 0)
-		button_video_transparency_add = -button_video_transparency_add;
-	
-
-	if(!vid_init && sleep_timeout > 10 && sleep_alpha < window_transparency_amount)
-	{
-		sleep_alpha++;
-		//SetLayeredWindowAttributes(wnd, 0, (255 * (100 - sleep_alpha)) / 100, LWA_ALPHA);
-	}else{
-		sleep_timeout+=1;
-	}
-
-	if(vid_init)
-	{
-		sleep_timeout = sleep_alpha = 0;
-	}
-
-	if(!eq_wait)
-		skin_panel_display_time++;
-
-	if(skin_panel_display_time >= 100)
-	{
-		skin_mode = mode_display;
-		skin_panel_display_time = 0;
-	}
-
-
-	redraw_main_window();
-}
 
 /*
  * startup.
@@ -1788,26 +1394,6 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
     return 1;
 }
 
-int get_mask_id(int x, int y)
-{
-	if(x > main_w) return 0;
-	if(y > main_h) return 0;
-	if(x < 0) return 0;
-	if(y < 0) return 0;
-
-	return GetGValue(GetPixel(mask_dc, x, y));
-}
-
-int get_mask_value(int x, int y)
-{
-	if(x > main_w) return 0;
-	if(y > main_h) return 0;
-	if(x < 0) return 0;
-	if(y < 0) return 0;
-
-	return GetRValue(GetPixel(mask_dc, x, y));
-}
-
 /*
  * fennec main window.
  */
@@ -1815,815 +1401,367 @@ int get_mask_value(int x, int y)
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	static int downid = -1, dx = 0, dy = 0;
-	static int downx, downy;
-	static double start_p = 0.0;
-	static double start_v = 0.0;
-	static int  vid_diff_x = 0, vid_diff_y = 0;
-	static unsigned long lbuttondown_time = 0;
 
 	switch(msg)
 	{
 	case WM_MOUSEMOVE:
-		dx = LOWORD(lParam), dy = HIWORD(lParam);
-
-		sleep_timeout = sleep_alpha = 0;
-		skin_panel_display_time = 0;
-
-
-		if(skin_mode == mode_menu)
 		{
-			menu_selected_item = -1;
-			if(dy > 33 && dy < 33 + 51)
+			int x = (int)(short)LOWORD(lParam), y = (int)(short)HIWORD(lParam);
+
+			if((x > cr(coords.window_main.width) - 5 && x < cr(coords.window_main.width)) || downid == skin_main_endl)
+				SetCursor(LoadCursor(0, IDC_SIZEWE));
+			if((y > cr(coords.window_main.height) - 5 && y < cr(coords.window_main.height)) || downid == skin_main_endb)
+				SetCursor(LoadCursor(0, IDC_SIZENS));
+
+			if(!downid)
 			{
-				int mx = (dx - 120 - menu_position) / 66;
-
-				if(mx >= 0 && mx <= 4) menu_selected_item = mx;
-			}
-		}
-
-	
-		if(mouse_down_controller == 0)
-		{
-			switch(get_mask_id(dx, dy))
-			{
-			case mask_id_play:
-				mouse_over_controller = 1;
-				break;
-
-			case mask_id_close:
-				mouse_over_controller = 2;
-				break;
-
-			case mask_id_eject:
-				mouse_over_controller = 3;
-				break;
-
-			case mask_id_maximize:
-				mouse_over_controller = 4;
-				break;
-
-			default:
-				mouse_over_controller = 0;
+				skin_move_window(wnd, dx, dy);
 				break;
 			}
 
-
-
-			if(dx > 340)
+			if(downid == skin_main_button_seek)
 			{
-				main_panel_active = 1;
-				main_panel_display_time = 100;
-				main_panel_slide = 0;
-			}else{
-				main_panel_active = 0;
-			}
+				int v = x - cr(coords.window_main.bar_seek.x);
+				double  pos;
 
-		}else{
-			mouse_over_controller = 0;
-		}
+				if(v < 0)   v = 0;
+				if(v > cr(coords.window_main.bar_seek.w)) v = cr(coords.window_main.bar_seek.w);
 
-		switch(mouse_down_controller)
-		{
-		case 1:
-			switch(skin_mode)
-			{
-			case mode_display:
-				display_content_x = dx - downx;
-				if(display_content_x > 290) display_content_x = 290;
-				if(display_content_x < -290) display_content_x = -290;
-				break;
+				blt_coord(hdc, mdc_sheet, 0, &coords.window_main.bar_seek);
+				blt_coord_ew(hdc, mdc_sheet, 1, &coords.window_main.bar_seek, (int)((float)v / coords.zoom));
 
-			case mode_menu:
-				menu_position = dx - downx - (menu_button_shift * 66);
-				if(menu_position  > 70) menu_position  = 70;
-				if(menu_position  < -70) menu_position  = -70;
-				break;
-
-			case mode_eq:
-				{
-					int ex = dx - 109, ey = dy - (108 - 94 / 2);
-					int barwidth = 14;
-
-					if(ex > 0 && ex < 200)
-					{
-						if(ex < barwidth) /* first bar - preamp */
-						{
-							int j;
-							float v;
-
-							eq_current_bar = -1;
-
-							if(down_button == 2)
-							{
-								v = 0.0f;
-							}else{
-
-								v = ey / (float)(94 / 2);
-
-								if(v > 1.0f)       v = 1.0f;
-								else if(v < -1.0f) v = -1.0f;
-
-								v *= -12.0f;
-							}
-
-
-							if(eq_channel == -1)
-							{
-								for(j=0; j<max_channels; j++)
-								{
-									skin.shared->audio.equalizer.set_preamp(j, v);
-								}
-							}else{
-								skin.shared->audio.equalizer.set_preamp(eq_channel, v);
-							}
-
-						}else if(ex > (barwidth * 2)){
-
-							/* ----------- eq set*/
-							
-							int barid = ((ex - (barwidth * 2)) / barwidth);
-							float v, eb[10];
-							int   j;
-
-							if(barid >= 10) break;
-
-							eq_current_bar = barid;
-
-							eq_wait = 1;
-
-							skin.shared->audio.equalizer.get_bands(eq_channel == -1 ? 0 : eq_channel, 10, eb);
-							
-							if(down_button == 2)
-							{
-								eb[barid] = 0.0f;
-							}else{
-								v = ey / (float)(94 / 2);
-
-								if(v > 1.0f)       v = 1.0f;
-								else if(v < -1.0f) v = -1.0f;
-
-								eb[barid] = v * -12.0f;
-							}
-							
-
-							if(eq_channel == -1)
-							{
-								for(j=0; j<max_channels; j++)
-								{
-									skin.shared->audio.equalizer.set_bands(j, 10, eb);
-								}
-							}else{
-								skin.shared->audio.equalizer.set_bands(eq_channel, 10, eb);
-							}
-
-							
-
-							/*------------- */
-
-						}
-					}
-				}
-				break;
-			}
-			break;
-
-		case 2:
-			//if(!media_init)
-			{
-				POINT pt;
-
-				GetCursorPos(&pt);
-				
-				settings_data.main.x = pt.x - downx;
-				settings_data.main.y = pt.y - downy;
-
-				SetWindowPos(wnd, 0, pt.x - downx, pt.y - downy, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
-
-				if(window_vid && vid_init)
-				{
-					SetWindowPos(window_vid, 0, pt.x - downx - vid_diff_x, pt.y - downy - vid_diff_y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
-				}
-			}
-			break;
-
-		case 4:
-			{
-				double v, pi = 3.1415926535897932384626433832795;
-				static double lastv = -1.0;
-
-				if(get_mask_id(downx, downy) == mask_id_volume)
-				{
-					int vx, vy;
-					POINT pt;
-
-					GetCursorPos(&pt);
-					ScreenToClient(wnd, &pt);
-
-					vx = pt.x - 58;
-					vy = pt.y - 58;
-
-					if(vx)
-					{
-						if(vx < 0)
-							v = 0.25 + ((atan((double)vy / (double)vx)) / (2 * pi));
-						else
-							v = 0.75 + ((atan((double)vy / (double)vx)) / (2 * pi));
-					}else{
-
-						if(vy < 0)
-							v = 0.5;
-						else
-							v = 0.0;
-					}
-
-					if(v > 0.95)v = 1.0;
-					else if(v < 0.05)v = 0.0;
-
-					if(lastv > 0.9 && v < 0.7) break;
-					if(lastv < 0.2 && v > 0.4)
-						break;
-					lastv = v;
-
-					skin.shared->audio.output.setvolume(v, v);
-					delay_counter = 100;
-				}
-			}
-			break;
-
-		case 5:
-			{
-				double v, pi = 3.1415926535897932384626433832795;
-				static double lastv = -1.0;
-
-				if(get_mask_id(downx, downy) == mask_id_position)
-				{
-					int vx, vy;
-					POINT pt;
-
-					GetCursorPos(&pt);
-					ScreenToClient(wnd, &pt);
-
-					vx = pt.x - 58;
-					vy = pt.y - 58;
-
-					if(vx)
-					{
-						if(vx < 0)
-							v = 0.25 + ((atan((double)vy / (double)vx)) / (2 * pi));
-						else
-							v = 0.75 + ((atan((double)vy / (double)vx)) / (2 * pi));
-					}else{
-
-						if(vy < 0)
-							v = 0.5;
-						else
-							v = 0.0;
-					}
-
-					if(v > 1.0)v = 1.0;
-					else if(v < 0.05)v = 0.0;
-
-					if(lastv > 0.9 && v < 0.7) break;
-					if(lastv < 0.2 && v > 0.4)
-						break;
-					lastv = v;
-
-					skin.shared->audio.output.setposition(v);
-					delay_counter = 100;
-				}
-			}
-			break;
-
-		case 3:
-			{
-				POINT pt;
-				int   mx, my;
-
-				GetCursorPos(&pt);
-				ScreenToClient(wnd, &pt);
-
-				mx = pt.x; my = pt.y;
-
-				if(downx + 20 < mx || downx - 20 > mx || play_button_position_set == 1)
-				{
-					if(play_button_position_set != 2)
-					{
-						double p = 0.0;
-
-						skin.shared->audio.output.getposition(&p);
-
-						if(play_button_position_set != 1) start_p = p;
-
-						//if(downx - mx > 0) p -= 0.01;
-						//else               p += 0.01;
-
-						if(downx - mx > 0)
-							p = start_p + -(downx - mx - 20) / 200.0;
-						else
-							p = start_p + -(downx - mx + 20) / 200.0;
-
-						if(p > 1.0)p = 1.0;
-						else if(p < 0.0)p = 0.0;
-
-						skin.shared->audio.output.setposition(p);
-
-						play_button_position_set = 1;
-					}
-				}
-
-				if(downy + 20 < my || downy - 20 > my || play_button_position_set == 2)
-				{
-					if(play_button_position_set != 1)
-					{
-						double l = 0.0, r = 0.0;
-
-						skin.shared->audio.output.getvolume(&l, &r);
-
-
-						//if(downy - my > 0)l += 0.02;
-						//else              l -= 0.02;
-
-						if(play_button_position_set != 2)start_v = l;
-
-
-						//if(downx - mx > 0) p -= 0.01;
-						//else               p += 0.01;
-
-						if(downy - my > 0)
-							l = start_v + (downy - my) / 100.0;
-						else
-							l = start_v + (downy - my) / 100.0;
-
-						if(l > 1.0)l = 1.0;
-						else if(l < 0.0)l = 0.0;
-
-						skin.shared->audio.output.setvolume(l, l);
-
-						play_button_position_set = 2;
-					}
-				}
-			}
-			break;
-		}
-		break;
-
-
-	case WM_RBUTTONUP:
-
-		down_button = 0;
-		ReleaseCapture();
-		mouse_down_controller = 0;
-
-
-		switch(get_mask_id(downx, downy))
-		{
-		case mask_id_display:
-			if(skin_mode != mode_eq)
-			{
-				if(downy < 60)
-					skin.shared->general.show_tageditor(0, 0, 0);
+				pos =  (((double)v) / ((double)coords.window_main.bar_seek.w)) / ((double)coords.zoom);
+				if(pos <= 1.0)
+					skin.shared->audio.output.setposition(pos);
 				else
-					SendMessage(hwnd, (WM_USER + 123), 0, WM_RBUTTONUP);
+					skin.shared->audio.output.setposition(1.0);
+				break;
 			}
-			break;
-		
-		case mask_id_eject:
+
+			if(downid == skin_main_button_volume)
 			{
-				POINT pt;
-				HMENU mc = user_create_menu(menu_open, 0);
-				
-				GetCursorPos(&pt);
+				double vv;
+				int v = x - cr(coords.window_main.bar_volume.x);
 
-				switch((int)TrackPopupMenu(mc, TPM_LEFTALIGN | TPM_RIGHTBUTTON | TPM_RETURNCMD, pt.x, pt.y, 0, hwnd, 0))
-				{
-				case mid_addfiles:
-					skin.shared->simple.show_addfile();
-					break;
+				if(v < 0)   v = 0;
+				if(v > cr(coords.window_main.bar_volume.w)) v = cr(coords.window_main.bar_volume.w);
 
-				case mid_adddirs:
-					skin.shared->simple.show_addfolder();
-					break;
+				blt_coord(hdc, mdc_sheet, 0, &coords.window_main.bar_volume);
+				blt_coord_ew(hdc, mdc_sheet, 1, &coords.window_main.bar_volume, (int)((float)v / coords.zoom));
 
-				case mid_tray:
-					skin.shared->general.sendcommand(uni(">eject"));
-					break;
-
-				case mid_seldrive:
-					skin.shared->general.sendcommand(uni(">selectdrive"));
-					break;
-
-				case mid_loadtracks:
-					skin.shared->general.sendcommand(uni(">loadtracks"));
-					break;
-
-				case mid_experimental:
-					skin.shared->call_function(show_open_experimental, 0, 0, 0);
-					break;
-				}
-
-				DestroyMenu(mc);
+				vv =  (((double)v) / ((double)coords.window_main.bar_volume.w)) / ((double)coords.zoom);
+	
+				skin.shared->audio.output.setvolume(vv, vv);
+				break;
 			}
-			break;
 
-		case mask_id_play:
-			skin.shared->audio.output.stop();
-			break;
-		
-		default:
-			SendMessage(hwnd, (WM_USER + 123), 0, WM_RBUTTONUP);
-			break;
+			if(downid == skin_main_endr || downid == skin_main_endb)
+			{
+				if(downid == skin_main_endr)
+					coords.zoom = (float)x / (float)coords.window_main.width;
+				else
+					coords.zoom = (float)y / (float)coords.window_main.height;
+
+				if(coords.zoom < 0.2f)coords.zoom = 0.2f;
+				if(coords.zoom > 0.98f && coords.zoom < 1.2f)coords.zoom = 1.0f;
+
+				skin_settings.zoom = coords.zoom;
+
+				//SetWindowRgn(hwnd, 0, 0);
+				if(wndmainrgn) DeleteObject(wndmainrgn);
+				wndmainrgn = CreateRoundRectRgn(0, 0, cr(coords.window_main.width), cr(coords.window_main.height), cr(coords.window_main.window_edge), cr(coords.window_main.window_edge));
+				//SetWindowRgn(hwnd, wndmainrgn, 1);
+
+				setwinpos_clip(hwnd, 0, skin_settings.main_x, skin_settings.main_y,
+								cr(coords.window_main.width), cr(coords.window_main.height), SWP_NOZORDER);
+
+				if(cliprgn)DeleteObject(cliprgn);
+				cliprgn = CreateRectRgn(cr(coords.window_main.display_region.x), cr(coords.window_main.display_region.y), cr(coords.window_main.display_region.w), cr(coords.window_main.display_region.h));
+
+				if(displayfont)DeleteObject(displayfont);
+
+				displayfont = CreateFont(-MulDiv(cr(8), GetDeviceCaps(hdc, LOGPIXELSY), 72),
+                            0, 0, 0, FW_BOLD, 0, 0, 0, DEFAULT_CHARSET,
+                            OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, 5,
+                            DEFAULT_PITCH, skin_settings.font_display);
+
+				eq_skinchange();
+
+				display_timer((HWND)-1, WM_USER + 221, 0, 0);
+				
+			}
+
+			skin_draw_button_hover(skin_get_button_index(x, y), hdc);
 		}
 		break;
 
 	case WM_RBUTTONDOWN:
-		down_button = 2;
+		{
+			int x = LOWORD(lParam), y = HIWORD(lParam), id;
+
+			id = skin_get_button_index(x, y);
+
+			switch(id)
+			{
+			case skin_main_button_previous: 
+				SetCapture(hwnd);
+				seekmode = 2;
+				break;
+
+			case skin_main_button_next:
+				SetCapture(hwnd);
+				seekmode = 1;
+				break;
+			
+			case 0:
+				
+				break;
+			}
+		}
+		break;
+
+	case WM_RBUTTONUP:
+		{
+			int x = LOWORD(lParam), y = HIWORD(lParam), id;
+
+			if(incoordx(x, y, &coords.window_main.display_text_area))
+			{
+				skin.shared->general.show_tageditor(0, 0, 0);
+
+			}else{
+				id = skin_get_button_index(x, y);
+
+				switch(id)
+				{
+				case 0:
+					SendMessage(hwnd, (WM_USER + 123), 0, WM_RBUTTONUP);
+					break;
+
+				case skin_main_button_open: 
+					{
+						POINT pt;
+						HMENU mc = user_create_menu(menu_open, 0);
+						
+						GetCursorPos(&pt);
+
+						switch((int)TrackPopupMenu(mc, TPM_LEFTALIGN | TPM_RIGHTBUTTON | TPM_RETURNCMD, pt.x, pt.y, 0, hwnd, 0))
+						{
+						case mid_addfiles:
+							skin.shared->simple.show_addfile();
+							break;
+
+						case mid_adddirs:
+							skin.shared->simple.show_addfolder();
+							break;
+
+						case mid_tray:
+							skin.shared->general.sendcommand(uni(">eject"));
+							break;
+
+						case mid_seldrive:
+							skin.shared->general.sendcommand(uni(">selectdrive"));
+							break;
+
+						case mid_loadtracks:
+							skin.shared->general.sendcommand(uni(">loadtracks"));
+							break;
+
+						case mid_experimental:
+							skin.shared->call_function(show_open_experimental, 0, 0, 0);
+							break;
+						}
+
+						DestroyMenu(mc);
+					}
+					break;
+				}
+			}
+		}
+
+		ReleaseCapture();
+		seekmode = 0;
+		break;
 
 	case WM_LBUTTONDOWN:
-		downx = LOWORD(lParam), downy = HIWORD(lParam);
 
-		if(down_button == 0) down_button = 1;
-
-		if(window_vid && vid_init)
-		{
-			RECT rct, rctm;
-
-			GetWindowRect(hwnd, &rctm);
-			GetWindowRect(window_vid, &rct);
-			
-			vid_diff_x = rctm.left - rct.left;
-			vid_diff_y = rctm.top - rct.top;
-		}
-
-
-		switch(get_mask_id(downx, downy))
-		{
-		case mask_id_display:
-			mouse_down_controller = 1;
-			break;
-
-		case mask_id_play:
-			mouse_down_controller = 3;
-			break;
-
-		case mask_id_volume:
-			mouse_down_controller = 4;
-			break;
-
-		case mask_id_position:
-			mouse_down_controller = 5;
-			break;
-
-		case mask_id_close:
-			mouse_down_controller = 6;
-			break;
-
-		case mask_id_eject:
-			mouse_down_controller = 7;
-			break;
-
-		case mask_id_maximize:
-			mouse_down_controller = 8;
-			break;
-
+		dx = LOWORD(lParam), dy = HIWORD(lParam);
 		
-		default:
-			mouse_down_controller = 2;
+		downid = skin_get_button_index(dx, dy);
+
+		if(dx > cr(coords.window_main.width)  - 5)downid = skin_main_endr;
+		if(dy > cr(coords.window_main.height) - 5)downid = skin_main_endb;
+	
+
+		if(downid == 0 || downid == skin_main_button_seek || downid == skin_main_button_volume || downid == skin_main_endr || downid == skin_main_endb)
+		{
+			PostMessage(hwnd, WM_MOUSEMOVE, 0, lParam);
+			SetCapture(hwnd);
 		}
 
-		play_button_position_set = 0;
+		if(downid != skin_main_endr)
+			skin_draw_button_down(downid, hdc);
 
-		SetCapture(wnd);
 		break;
 
 	case WM_LBUTTONUP:
-		
-		down_button = 0;
-		ReleaseCapture();
-
-		if(GetTickCount() - lbuttondown_time < GetDoubleClickTime())
 		{
-			search_create(wnd);
-		}
+			int x = LOWORD(lParam), y = HIWORD(lParam), id;
 
-		lbuttondown_time = GetTickCount();
+			ReleaseCapture();
+			downid = 1;
 
+			id = skin_get_button_index(x, y);
 
-		if(skin_mode == mode_display && settings_data.video.force_hide && is_video_playing)
-		{
-			POINT pt;
+			skin_draw_button_hover(id, hdc);
 
-			GetCursorPos(&pt);
-			ScreenToClient(wnd, &pt);
-
-			if(downx > 242 && downx < 242 + 30 && downy > 70 && downy < 70 + 30)
+			switch(id)
 			{
-				if(pt.x > 242 && pt.x < 242 + 30 && pt.y > 70 && pt.y < 70 + 30)
-				{
-					settings_data.video.force_hide = 0;
-				
-					vid_create(skin.wnd, (double)last_video_dsize / 1000000);
-
-					if(settings_data.vis.show_vis && !settings_data.vis.video_when_available)
-					{
-
-					}else{
-						vis_used = 0;
-						skin.shared->call_function(call_videoout_initialize, 0, 0, 0);
-					}
-				}
-			}
-		}
-
-		switch(mouse_down_controller)
-		{
-			case 1:
-				{
-					POINT pt;
-
-					GetCursorPos(&pt);
-					ScreenToClient(wnd, &pt);
-
-					if(downy - pt.y > 50)
-					{
-						if(skin_mode < mode_count - 1) skin_mode++;
-						skin_panel_display_time = 0;
-
-					}else if(downy - pt.y < -50){
-
-						if(skin_mode > 0) skin_mode--;
-						skin_panel_display_time = 0;
-					}
-
-					eq_wait = 0;
-				}
-
-
-				if(skin_mode == mode_menu)
-				{
-					switch(menu_selected_item)
-					{
-					case 0: /* conversion */
-						skin.shared->general.show_conversion(0, 0, 0);
-						break;
-
-					case 1: /* joining */
-						skin.shared->general.show_joining(0, 0, 0);
-						break;
-
-					case 2: /* ripping */
-						skin.shared->general.show_ripping(0, 0, 0);
-						break;
-
-					case 3: /* visualization */
-						if(settings_data.vis.show_vis)
-						{
-							vid_close();
-							vis_active = 0;
-							vis_used = 0;
-							settings_data.vis.show_vis = 0;
-
-						}else{
-							
-							vis_used = 1;
-							vis_active = 1;
-							settings_data.vis.show_vis = 1;
-							vid_create(wnd, 16.0 / 9.0);
-
-							if(is_video_playing && !settings_data.vis.video_when_available)
-							{
-								if(!settings_data.video.force_hide)
-								{
-									vis_used = 0;
-									skin.shared->call_function(call_videoout_initialize, 0, 0, 0);
-								}else{
-									str_cpy(skin.shared->settings.general->visualizations.selected, settings_data.vis.current_vis);
-									skin.shared->call_function(call_visualizations_select_next, 0, 0, 0);
-								}
-							}else{
-								str_cpy(skin.shared->settings.general->visualizations.selected, settings_data.vis.current_vis);
-								skin.shared->call_function(call_visualizations_select_next, 0, 0, 0);
-							}
-						}
-						break;
-
-					case 4: /* settings */
-						skin.shared->general.show_settings(0, 0, 0);
-						break;
-					}
-
-				}
-				break;
-
-			case 6:
-				switch(skin_mode)
-				{
-				case mode_menu:
-				case mode_display:
-					SendMessage(wnd, WM_DESTROY, 0, 0);
-					break;
-
-				case mode_eq:
-					eq_wait = 1;
-					eq_menu();
-					eq_wait = 0;
-					break;
-				}
-				break;
-
-			case 7:
-				switch(skin_mode)
-				{
-				case mode_menu:
-				case mode_display:
-					skin.shared->simple.show_openfile();
-					break;
-
-				case mode_eq:
-					eq_wait = 1;
-					skin.shared->simple.show_equalizer_presets((void*)wnd);
-					eq_wait = 0;
-					break;
-				}
-				break;
-
-			case 8:
-				switch(skin_mode)
-				{
-				case mode_menu:
-				case mode_display:
-					if(media_init)
-						media_close();
-					else
-						media_create(hwnd);
-
-					settings_data.playlist.visible = media_init;
-					break;
-
-				case mode_eq:
-					skin.shared->settings.general->player.equalizer_enable ^= 1;
-					break;
-				}
-				break;
-
-			case 4:
-			{
-				double v, pi = 3.1415926535897932384626433832795;
-				static double lastv = -1.0;
-
-				if(get_mask_id(downx, downy) == mask_id_volume)
-				{
-					int vx, vy;
-					POINT pt;
-
-					GetCursorPos(&pt);
-					ScreenToClient(wnd, &pt);
-
-					vx = pt.x - 58;
-					vy = pt.y - 58;
-
-					if(vx)
-					{
-						if(vx < 0)
-							v = 0.25 + ((atan((double)vy / (double)vx)) / (2 * pi));
-						else
-							v = 0.75 + ((atan((double)vy / (double)vx)) / (2 * pi));
-					}else{
-
-						if(vy < 0)
-							v = 0.5;
-						else
-							v = 0.0;
-					}
-
-					if(v > 0.95)v = 1.0;
-					else if(v < 0.05)v = 0.0;
-
-					if(lastv > 0.9 && v < 0.7) break;
-					if(lastv < 0.2 && v > 0.4)
-						break;
-					lastv = v;
-
-					skin.shared->audio.output.setvolume(v, v);
-					delay_counter = 100;
-				}
-			}
-			break;
-
-			case 5:
-			{
-				double v, pi = 3.1415926535897932384626433832795;
-				static double lastv = -1.0;
-
-				if(get_mask_id(downx, downy) == mask_id_position)
-				{
-					int vx, vy;
-					POINT pt;
-
-					GetCursorPos(&pt);
-					ScreenToClient(wnd, &pt);
-
-					vx = pt.x - 58;
-					vy = pt.y - 58;
-
-					if(vx)
-					{
-						if(vx < 0)
-							v = 0.25 + ((atan((double)vy / (double)vx)) / (2 * pi));
-						else
-							v = 0.75 + ((atan((double)vy / (double)vx)) / (2 * pi));
-					}else{
-
-						if(vy < 0)
-							v = 0.5;
-						else
-							v = 0.0;
-					}
-
-					if(v > 1.0)v = 1.0;
-					else if(v < 0.05)v = 0.0;
-
-					if(lastv > 0.9 && v < 0.7) break;
-					if(lastv < 0.2 && v > 0.4)
-						break;
-					lastv = v;
-
-					skin.shared->audio.output.setposition(v);
-					delay_counter = 100;
-				}
-			}
-			break;
-		}
-
-		if(skin_mode == mode_display)
-		{
-			if(display_content_x > 100)
-			{
-				skin.shared->audio.output.playlist.next();
-				display_content_x = display_content_x - 270;
-			}
-
-			if(display_content_x <= -100)
-			{
-				skin.shared->audio.output.playlist.previous();
-				display_content_x = display_content_x + 270;
-			}
-		}
-
-
-		if(mouse_down_controller == 3) /* play button */
-		{
-			if(!play_button_position_set)
+			case skin_main_button_play: 
 				skin.shared->audio.output.play();
+				break;
 
+			case skin_main_button_stop: 
+				skin.shared->audio.output.stop();
+				break;
+
+			case skin_main_button_previous: 
+				skin.shared->audio.output.playlist.previous();
+				break;
+
+			case skin_main_button_next: 
+				skin.shared->audio.output.playlist.next();
+				break;
+
+			case skin_main_button_open: 
+				skin.shared->simple.show_openfile();
+				break;
+
+			case skin_main_button_minimize:
+				ShowWindow(wnd, SW_MINIMIZE);
+				break;
+
+			case skin_main_button_exit:
+				SendMessage(wnd, WM_DESTROY, 0, 0);
+				break;
+
+			case skin_main_button_playlist:
+				if(!skin_settings.ml_show)
+				{
+					skin_settings.ml_show = 1;
+					ml_create(hwnd);
+					
+				}else{
+					ml_close();
+					skin_settings.ml_show = 0;
+				}
+				break;
+
+			case skin_main_button_equalizer:
+				if(!skin_settings.eq_show)
+				{
+					skin_settings.eq_show = 1;
+					eq_create(hwnd);
+					
+				}else{
+					eq_close();
+					skin_settings.eq_show = 0;
+				}
+				break;
+
+			case skin_main_button_settings:
+				skin.shared->general.show_settings(0, 0, 0);
+				break;
+
+			case skin_main_button_convert:
+				skin.shared->general.show_conversion(0, 0, 0);
+				break;
+
+			case skin_main_button_rip:
+				skin.shared->general.show_ripping(0, 0, 0);
+				break;
+
+			case skin_main_button_join:
+				skin.shared->general.show_joining(0, 0, 0);
+				break;
+
+			case skin_main_button_visual:
+				skin_settings.vis_show ^= 1;
+
+				if(skin_settings.vis_show)
+					vis_create(hwnd);
+				else
+					vis_close();
+				break;
+
+			case skin_main_button_video:
+				skin_settings.vid_show ^= 1;
+
+				if(skin_settings.vid_show)
+					vid_create(hwnd);
+				else
+					vid_close();
+				break;
+
+			case skin_main_button_dsp:
+				skin.shared->general.show_settings(0, 0, 11);
+				break;
+
+			case skin_main_button_lock:
+				skin_settings.skin_lock ^= 1;
+				break;
+			}
 		}
-
-		
-		mouse_down_controller = 0;
 		break;
 
 	case WM_LBUTTONDBLCLK:
-		//downx = LOWORD(lParam), downy = HIWORD(lParam);
+		if(incoord((int)(short)LOWORD(lParam), (int)(short)HIWORD(lParam), 7, 17, 204, 11))
+			skin.shared->general.show_tageditor(0, 0, 0);
 
-		//if(downx > 105)
-		//{
-			skin.shared->simple.show_openfile();
-		//}else{
-		//	skin.shared->audio.output.stop();
-		//}
+		break;
+
+	case WM_NCPAINT:
+		{
+			HDC hdc;
+			hdc = GetDCEx(hwnd, (HRGN)wParam, DCX_WINDOW | DCX_PARENTCLIP);
+
+			Rectangle(hdc, 0, 0, 1000, 1000);
+	 	
+			ReleaseDC(hwnd, hdc);
+		}
 		break;
 
 	case WM_PAINT:
 		{
 			PAINTSTRUCT  ps;
-			BLENDFUNCTION bf;
-			double        p;
-			double        vl, vr;
-
+			RECT rct;
+			int win_h, win_w;
+			double pos = 0.0;
+		
 			BeginPaint(hwnd, &ps);
 
-			BitBlt(mdc, 0, 0, main_w, main_h, background_dc, 0, 0, SRCCOPY);
+			GetClientRect(hwnd, &rct);
 
-			bf.BlendOp = AC_SRC_OVER;
-			bf.BlendFlags = 0;
-			bf.AlphaFormat = AC_SRC_ALPHA;
-			bf.SourceConstantAlpha = 0xff;
+			win_h = rct.bottom;
+			win_w = rct.right;
 
+			display_timer(0, WM_USER + 221, 0, 0);
+
+			gr_rect(&gr_main, 0xf0f0f0, 0, 45, win_w, win_h - 45 - 75);
+
+			gr_rect(&gr_main, 0x656565, 0, 0, win_w, 45);
+			gr_rect(&gr_main, 0xf5f5f5, 0, win_h - 75, win_w, 75);
+
+
+			skin.shared->audio.output.getposition(&pos);
+			if(pos > 1.0)pos = 1.0;
+			else if(pos < 0.0) pos = 0.0;
+
+			gr_rect(&gr_main, 0x9d9181, 10, win_h - 75 + 6, win_w - 20, 6);
+			gr_rect(&gr_main, 0xff7f29, 10, win_h - 75 + 6, ((int)(win_w - 20) * pos), 6);
+
+
+			//BitBlt(hdc, 0, 0, cr(coords.window_main.width), cr(coords.window_main.height), mdc_sheet, skin_main_x, skin_main_y, SRCCOPY);
 			
-			display_control_button(&bf, 0);
-
-			
-			skin.shared->audio.output.getposition(&p);
-			AlphaBlend(mdc, 4, 9, 100, 100, wheel_pos_dc, 0, (int)(p * 34.0) * 100, 100, 100, bf);
-
-			bf.SourceConstantAlpha = 0xaf;
-			skin.shared->audio.output.getvolume(&vl, &vr);
-			AlphaBlend(mdc, 12, 17, 85, 85, wheel_vol_dc, 0, (int)(vl * 34.0) * 85, 85, 85, bf);
-
-
-			neo_display_update();
-
-			//BitBlt(hdc, 0, 0, main_w, main_h, mdc, 0, 0, SRCCOPY);
-
 			EndPaint(hwnd, &ps);
 		}
 		break;

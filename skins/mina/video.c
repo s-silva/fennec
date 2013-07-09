@@ -1,15 +1,14 @@
 #include "skin.h"
-#include "skin_settings.h"
 
 #define vid_window_class uni("fennec.skin.3.video")
 #define user_msg_start_keep_cursor 0x1
 #define user_msg_end_keep_cursor   0x2
 
-void draw_imagebox(HDC ddc, HDC sdc, int w, int h, struct coord *lt, struct coord *rt, struct coord *bl, struct coord *br, struct coord *t, struct coord *b, struct coord *l, struct coord *r);
+LRESULT CALLBACK callback_vid_window(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 int   vid_init = 0;
-HWND  window_vid = 0;
-HDC   hdc_vid = 0;
+HWND  window_vid;
+HDC   hdc_vid;
 HRGN  rgn_vid = 0;
 int   power_timeouts_set = 0;
 UINT  power_timeout_screensaver = 0;
@@ -20,40 +19,17 @@ int   video_thread_terminate = 0;
 CRITICAL_SECTION video_cs;
 int   video_window_maximized = 0, hide_cursor = 0, hide_cursor_done = 0;
 int   keep_cursor = 0;
-int   vid_draw_next = 0;
 
-void vid_reinit(double aspect)
-{
-	RECT     wrect, area_rect;
-	int      vheight;
-
-	if(video_window_maximized)return; /* nothing to do if the window is maximized */
-
-	GetWindowRect(wnd, &wrect);
-	SystemParametersInfo(SPI_GETWORKAREA, 0, &area_rect, 0);
-
-	vheight = (int)((double)(wrect.right - wrect.left) / aspect);
-	
-	SetWindowPos(window_vid, 0, wrect.left, wrect.top - vheight - 5, wrect.right - wrect.left, vheight, SWP_NOZORDER);
-	return;
-}
-
-
-void vid_create(HWND hwndp, double aspect)
+void vid_create(HWND hwndp)
 {
 	WNDCLASS wndc;
-	RECT     wrect, area_rect;
-	int      vheight;
 
-	if(vid_init)
-	{
-		vid_reinit(aspect);
-		return;
-	}
+	if(vid_init)return;
+	if(!skin_settings.vid_show)return;
 
 	power_timeouts_set = 0;
 
-	wndc.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS | CS_DROPSHADOW;
+	wndc.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
 	wndc.lpfnWndProc   = (WNDPROC)callback_vid_window;
 	wndc.cbClsExtra    = 0;
 	wndc.cbWndExtra    = 0;
@@ -67,14 +43,10 @@ void vid_create(HWND hwndp, double aspect)
 	RegisterClass(&wndc);
 
 	/* create window */
-
-	GetWindowRect(hwndp, &wrect);
-	SystemParametersInfo(SPI_GETWORKAREA, 0, &area_rect, 0);
-
-	vheight = (int)((double)(wrect.right - wrect.left) / aspect);
 	
-	window_vid = CreateWindow(vid_window_class, uni("vidualization"), WS_POPUP, wrect.left, wrect.top - vheight - 5, wrect.right - wrect.left, vheight, hwndp, 0, instance_skin, 0);
+	window_vid = CreateWindow(vid_window_class, uni("vidualization"), WS_POPUP, skin_settings.vid_x, skin_settings.vid_y, max(skin_settings.vid_w, 30), max(skin_settings.vid_h, 30), hwndp, 0, instance_skin, 0);
 
+	setwinpos_clip(window_vid, 0, skin_settings.vid_x, skin_settings.vid_y, max(skin_settings.vid_w, 30), max(skin_settings.vid_h, 30), SWP_NOSIZE | SWP_NOZORDER);
 	
 	ShowWindow(window_vid, SW_SHOW);
 	UpdateWindow(window_vid);
@@ -118,74 +90,24 @@ void vid_close(void)
 {
 	if(!vid_init)return;
 
-	vid_init = 0;
-
-	//EnterCriticalSection(&video_cs);
-	//video_thread_terminate = 1;
-	//LeaveCriticalSection(&video_cs);
-	//while(video_thread_terminate)
-	//	Sleep(0);
-	//
-
-	str_cpy(settings_data.vis.current_vis, skin.shared->settings.general->visualizations.selected);
-	skin.shared->call_function(call_visualizations_select_none, 0, 0, 0);
-
-
+	/*
+	EnterCriticalSection(&video_cs);
+	video_thread_terminate = 1;
+	LeaveCriticalSection(&video_cs);
+	while(video_thread_terminate)
+		Sleep(0);
+	DeleteCriticalSection(&video_cs); */
 
 	if(hdc_vid)DeleteDC(hdc_vid);
 	DestroyWindow(window_vid);
 	if(rgn_vid)DeleteObject(rgn_vid);
+	vid_init = 0;
 }
-
-
-DWORD th(LPVOID lp)
-{
-
-point_start:
-
-	//EnterCriticalSection(&video_cs);
-	
-	if(video_thread_terminate)
-	{
-		//LeaveCriticalSection(&video_cs);
-		video_thread_terminate = 0;
-
-		//DeleteCriticalSection(&video_cs);
-		return 0;
-	}
-
-	if(vid_init)
-	{
-		if(skin.shared->audio.output.getplayerstate() != v_audio_playerstate_playing)
-		{
-			//Sleep(100);
-			//LeaveCriticalSection(&video_cs);
-			goto point_start;
-		}
-
-
-		{
-			RECT rct;
-			vid_get_position(&rct);
-			SendMessage(window_vid, WM_USER + 21, (WPARAM)hdc_vid, (LPARAM)&rct);
-		}
-
-		if(vid_draw_next > 0 && vid_draw_next < 100)
-			Sleep(vid_draw_next);
-		else
-			Sleep(30);
-
-	}
-
-	//LeaveCriticalSection(&video_cs);
-	goto point_start;
-}
-
-
 
 void vid_draw_background(int maxd)
 {
 	RECT  rct;
+	int   i, c;
 
 	GetClientRect(window_vid, &rct);	
 
@@ -196,35 +118,62 @@ void vid_draw_background(int maxd)
 		SetWindowRgn(window_vid, 0, 1);
 
 		drawrect(hdc_vid, 0, 0, rct.right, rct.bottom, 0);
-
-		skin.shared->call_function(call_visualizations_refresh, v_fennec_refresh_force_less, 0, 0);
 		return;
 
 	}else{
 		if(rgn_vid)DeleteObject(rgn_vid);
-		rgn_vid = CreateRoundRectRgn(0, 0, rct.right, rct.bottom, 4, 4);
+		rgn_vid = CreateRoundRectRgn(0, 0, rct.right, rct.bottom, coords.window_vid.window_edge, coords.window_vid.window_edge);
 		SetWindowRgn(window_vid, rgn_vid, 1);
 	}
 
+	/* drawing stuff */
 
+	drawrect(hdc_vid, coords.window_vid.crop_ml.w, coords.window_vid.crop_tm.h, rct.right - coords.window_vid.crop_ml.w - coords.window_vid.crop_mr.w, rct.bottom - coords.window_vid.crop_tm.h - coords.window_vid.crop_bm.h, 0);
+
+	/* top */
+
+	c = (rct.right - coords.window_vid.crop_tl.w - coords.window_vid.crop_tr.w);
+
+	for(i=0; i<c; i+=coords.window_vid.crop_tm.w)
 	{
-		struct coord tl = {0, 0, 6, 208, 0, 0, 0, 0, 0, 0};
-		struct coord tr = {0, 0, 7, 208, 7, 0, 0, 0, 0, 0};
-		struct coord bl = {0, 0, 7, 9, 0, 235, 0, 0, 0, 0};
-		struct coord br = {0, 0, 7, 7, 7, 236, 0, 0, 0, 0};
-		struct coord t  = {0, 0, 15, 6, 0, 244, 0, 0, 0, 0};
-		struct coord b  = {0, 0, 15, 6, 0, 252, 0, 0, 0, 0};
-		struct coord l  = {0, 0, 5, 28, 0, 208, 0, 0, 0, 0};
-		struct coord r  = {0, 0, 5, 28, 9, 208, 0, 0, 0, 0};
-
-		draw_imagebox(hdc_vid, windowsheet_dc, rct.right, rct.bottom, &tl, &tr, &bl, &br, &t, &b, &l, &r);
+		BitBlt(hdc_vid, coords.window_vid.crop_tl.w + i, 0, coords.window_vid.crop_tm.w, coords.window_vid.crop_tm.h, mdc_sheet, coords.window_vid.crop_tm.sx_n, coords.window_vid.crop_tm.sy_n, SRCCOPY);
 	}
 
-	drawrect(hdc_vid, 5, 5, rct.right - 10, rct.bottom - 10, 0x0);
+	/* bottom */
 
-	skin.shared->call_function(call_visualizations_refresh, v_fennec_refresh_force_less, 0, 0);
+	c = (rct.right - coords.window_vid.crop_bl.w - coords.window_vid.crop_br.w);
+
+	for(i=0; i<c; i+=coords.window_vid.crop_bm.w)
+	{
+		BitBlt(hdc_vid, coords.window_vid.crop_bl.w + i, rct.bottom - coords.window_vid.crop_bm.h, coords.window_vid.crop_bm.w, coords.window_vid.crop_bm.h, mdc_sheet, coords.window_vid.crop_bm.sx_n, coords.window_vid.crop_bm.sy_n, SRCCOPY);
+	}
+
+	/* left */
+
+	c = (rct.bottom - coords.window_vid.crop_tl.h - coords.window_vid.crop_bl.h);
+
+	for(i=0; i<c; i+=coords.window_vid.crop_ml.h)
+	{
+		BitBlt(hdc_vid, 0, coords.window_vid.crop_tl.h + i, coords.window_vid.crop_ml.w, coords.window_vid.crop_ml.h, mdc_sheet, coords.window_vid.crop_ml.sx_n, coords.window_vid.crop_ml.sy_n, SRCCOPY);
+	}
+
+	/* right */
+
+	c = (rct.bottom - coords.window_vid.crop_tl.h - coords.window_vid.crop_bl.h);
+
+	for(i=0; i<c; i+=coords.window_vid.crop_mr.h)
+	{
+		BitBlt(hdc_vid, rct.right - coords.window_vid.crop_mr.w, coords.window_vid.crop_tl.h + i, coords.window_vid.crop_mr.w, coords.window_vid.crop_mr.h, mdc_sheet, coords.window_vid.crop_mr.sx_n, coords.window_vid.crop_mr.sy_n, SRCCOPY);
+	}
+
+
+	/* finalize */
+
+	BitBlt(hdc_vid, 0, 0, coords.window_vid.crop_tl.w, coords.window_vid.crop_tl.h, mdc_sheet, coords.window_vid.crop_tl.sx_n, coords.window_vid.crop_tl.sy_n, SRCCOPY);
+	BitBlt(hdc_vid, rct.right - coords.window_vid.crop_tr.w, 0, coords.window_vid.crop_tr.w, coords.window_vid.crop_tr.h, mdc_sheet, coords.window_vid.crop_tr.sx_n, coords.window_vid.crop_tr.sy_n, SRCCOPY);
+	BitBlt(hdc_vid, 0, rct.bottom - coords.window_vid.crop_bl.h, coords.window_vid.crop_bl.w, coords.window_vid.crop_bl.h, mdc_sheet, coords.window_vid.crop_bl.sx_n, coords.window_vid.crop_bl.sy_n, SRCCOPY);
+	BitBlt(hdc_vid, rct.right - coords.window_vid.crop_br.w, rct.bottom - coords.window_vid.crop_br.h, coords.window_vid.crop_br.w, coords.window_vid.crop_br.h, mdc_sheet, coords.window_vid.crop_br.sx_n, coords.window_vid.crop_br.sy_n, SRCCOPY);
 }
-
 
 int vid_refresh(void)
 {
@@ -268,15 +217,79 @@ int vid_get_position(RECT *retp)
 
 	}else{
 
-		retp->left   = 5;
-		retp->top    = 5;
-		retp->right  = rct.right  - 5;
-		retp->bottom = rct.bottom - 5;
+		retp->left   = coords.window_vid.vid_l;
+		retp->top    = coords.window_vid.vid_t;
+		retp->right  = rct.right  - coords.window_vid.vid_r;
+		retp->bottom = rct.bottom - coords.window_vid.vid_b;
 		video_window_maximized = 0;
 	}
 	return 1;
 }
 
+DWORD th(LPVOID lp)
+{
+	/*int delay = 0;
+	RECT rct;
+	int  nreturn;
+
+point_start:
+
+	EnterCriticalSection(&video_cs);
+	
+	if(video_thread_terminate)
+	{
+		LeaveCriticalSection(&video_cs);
+		video_thread_terminate = 0;
+		return 0;
+	}
+
+	vid_get_position(&rct);
+
+	skin.shared->video.easy_draw(window_vid, hdc_vid, &rct);
+
+	nreturn = skin.shared->audio.output.getplayerstate();
+
+	if(nreturn != video_last_state)
+	{
+		WINDOWPLACEMENT  wp;
+
+		if(nreturn == v_audio_playerstate_playing)
+		{
+			GetWindowPlacement(window_vid, &wp);
+
+			if(wp.showCmd == SW_MAXIMIZE)
+				set_power_timeouts();
+			else
+				restore_power_timeouts();
+		}else{
+			restore_power_timeouts();
+		}
+
+		video_last_state = nreturn;
+	}
+
+	if(video_window_maximized)
+	{
+		if(hide_cursor < 100)
+		{
+			hide_cursor++;
+		}else{
+			//if(!hide_cursor_done)
+				SetCursor(0);
+			hide_cursor_done = 1;
+		}
+
+	}else{
+		hide_cursor = 0;
+		hide_cursor_done = 0;
+	}
+
+	sys_sleep(30);
+	LeaveCriticalSection(&video_cs);
+	goto point_start;
+	*/
+	return 0;
+}
 
 LRESULT CALLBACK callback_vid_window(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -285,87 +298,56 @@ LRESULT CALLBACK callback_vid_window(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 
 	switch(msg)
 	{
-	case WM_USER + 21:
-		//vid_draw_next = skin.shared->video.easy_draw(window_vid, hdc_vid, (RECT*)lParam);
-
-		if(vid_draw_next != 0)
-		{
-			vis_active = 0;
-		}
-		break;
-
 	case WM_TIMER:
 		{
-			int  nreturn;
 			RECT rct;
-			static int  iv = 0;
-
-			if(settings_data.vis.show_vis && !settings_data.vis.video_when_available) break;
-
-			if(settings_data.vis.show_vis && settings_data.vis.video_when_available)
-			{
-				if(vis_used) break;
-			}
+			int  nreturn;
 
 			vid_get_position(&rct);
-			//SendMessage(window_vid, WM_USER + 21, (WPARAM)hdc_vid, (LPARAM)&rct);
 
-			vid_draw_next = skin.shared->video.easy_draw(window_vid, hdc_vid, (RECT*)&rct);
+			skin.shared->video.easy_draw(window_vid, hdc_vid, &rct);
 
-			iv++;
+			nreturn = skin.shared->audio.output.getplayerstate();
 
-			if(iv > 6)
+			if(nreturn != video_last_state) /* some changes.. start, stopped or such */
 			{
-				iv = 0;
+				WINDOWPLACEMENT  wp;
 
-				nreturn = skin.shared->audio.output.getplayerstate();
-
-				if(nreturn != video_last_state) /* some changes.. start, stopped or such */
+				if(nreturn == v_audio_playerstate_playing)
 				{
-					WINDOWPLACEMENT  wp;
+					GetWindowPlacement(window_vid, &wp);
 
-					if(nreturn == v_audio_playerstate_playing)
-					{
-						GetWindowPlacement(window_vid, &wp);
-
-						if(wp.showCmd == SW_MAXIMIZE)
-							set_power_timeouts();
-						else
-							restore_power_timeouts();
-					}else{
+					if(wp.showCmd == SW_MAXIMIZE)
+						set_power_timeouts();
+					else
 						restore_power_timeouts();
-					}
-
-					video_last_state = nreturn; 
-				}
-
-				/* hide mouse cursor */
-				if(video_window_maximized)
-				{
-					if(!keep_cursor)
-					{
-						if(hide_cursor < 15)
-						{
-							hide_cursor++;
-						}else{
-							//if(!hide_cursor_done)
-								SetCursor(0);
-							hide_cursor_done = 1;
-						}
-					}
-
 				}else{
-					hide_cursor = 0;
-					hide_cursor_done = 0;
+					restore_power_timeouts();
 				}
+
+				video_last_state = nreturn;
+			}
+
+			/* hide mouse cursor */
+			if(video_window_maximized)
+			{
+				if(!keep_cursor)
+				{
+					if(hide_cursor < 100)
+					{
+						hide_cursor++;
+					}else{
+						//if(!hide_cursor_done)
+							SetCursor(0);
+						hide_cursor_done = 1;
+					}
+				}
+
+			}else{
+				hide_cursor = 0;
+				hide_cursor_done = 0;
 			}
 		}
-		break;
-
-	case WM_USER + 22: /* force hide */
-		settings_data.video.force_hide = 1;
-		//skin.shared->call_function(call_videoout_uninitialize, 0, 0, 0);
-		vid_close();
 		break;
 
 	case WM_MOUSEMOVE:
@@ -387,19 +369,19 @@ LRESULT CALLBACK callback_vid_window(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 
 			if(mdown == 1)
 			{
-				//POINT pt;
+				POINT pt;
 
-				//GetCursorPos(&pt);
+				GetCursorPos(&pt);
 
-				//move_docking_window(window_id_vid, pt.x - dx, pt.y - dy);
+				move_docking_window(window_id_vid, pt.x - dx, pt.y - dy);
 
 							
-				//skin.shared->call_function(call_videoout_refresh, 0, 0, 0);
+				skin.shared->call_function(call_videoout_refresh, 0, 0, 0);
 
 			
 			}else if(mdown == 2){ /* resize */
 				
-				/*POINT pt;
+				POINT pt;
 
 				GetCursorPos(&pt);
 
@@ -420,14 +402,14 @@ LRESULT CALLBACK callback_vid_window(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 				vid_draw_background(maximized);
 
 							
-				skin.shared->call_function(call_videoout_refresh, 0, 0, 0);*/
+				skin.shared->call_function(call_videoout_refresh, 0, 0, 0);
 
 			}
 
 
 			if(!maximized)
 			{
-				/*if(incoord_vpos_nozoom((int)LOWORD(lParam), (int)HIWORD(lParam), &coords.window_vid.button_close, coords.window_vid.button_close_align, skin_settings.vid_w, skin_settings.vid_h))
+				if(incoord_vpos_nozoom((int)LOWORD(lParam), (int)HIWORD(lParam), &coords.window_vid.button_close, coords.window_vid.button_close_align, skin_settings.vid_w, skin_settings.vid_h))
 				{
 					show_tip(oooo_skins_close, 0);
 					blt_coord_vpos_nozoom(hdc_vid, mdc_sheet, 1, &coords.window_vid.button_close, coords.window_vid.button_close_align, skin_settings.vid_w, skin_settings.vid_h);
@@ -441,7 +423,7 @@ LRESULT CALLBACK callback_vid_window(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 					blt_coord_vpos_nozoom(hdc_vid, mdc_sheet, 1, &coords.window_vid.button_max, coords.window_vid.button_max_align, skin_settings.vid_w, skin_settings.vid_h);
 				}else{
 					blt_coord_vpos_nozoom(hdc_vid, mdc_sheet, 0, &coords.window_vid.button_max, coords.window_vid.button_max_align, skin_settings.vid_w, skin_settings.vid_h);
-				} */
+				}
 			}
 		}
 		break;
@@ -459,9 +441,14 @@ LRESULT CALLBACK callback_vid_window(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 
 		if(LOWORD(wParam) == MK_SHIFT) /* seek */
 		{
-			/*WPARAM  newwp = MAKEWPARAM(0, HIWORD(wParam));
-			SendMessage(skin.wnd, msg, newwp, lParam); */
+			WPARAM  newwp = MAKEWPARAM(0, HIWORD(wParam));
+			SendMessage(skin.wnd, msg, newwp, lParam);
 
+		}else if(LOWORD(wParam) == MK_CONTROL){ /* switch list */
+			SendMessage(skin.wnd, msg, wParam, lParam);
+		
+		}else{
+			
 			double cpos, dur, steps;
 			
 			dur  = skin.shared->audio.output.getduration_ms();
@@ -471,14 +458,6 @@ LRESULT CALLBACK callback_vid_window(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 			if(cpos > dur)cpos = dur;
 			else if(cpos < 0.0)cpos = 0.0;
 			skin.shared->audio.output.setposition_ms(cpos);
-
-		}else if(LOWORD(wParam) == MK_CONTROL){ /* switch list */
-			SendMessage(skin.wnd, msg, wParam, lParam);
-		
-		}else{
-			SendMessage(skin.wnd, msg, wParam, lParam);
-			/*
-			 */
 		}
 
 		break;
@@ -547,6 +526,7 @@ LRESULT CALLBACK callback_vid_window(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 
 
 	case WM_LBUTTONDBLCLK:
+offset_fullscreen:
 		{
 			WINDOWPLACEMENT  wp;
 
@@ -575,7 +555,7 @@ LRESULT CALLBACK callback_vid_window(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 
 	case WM_LBUTTONDOWN:
 		{
-			/*RECT rct;
+			RECT rct;
 
 			if(maximized)break;
 
@@ -632,7 +612,7 @@ LRESULT CALLBACK callback_vid_window(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 			}else{
 				mdown = 1;
 			}
-			*/
+
 			SetCapture(hwnd);
 		}
 		break;
@@ -651,11 +631,10 @@ LRESULT CALLBACK callback_vid_window(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
 
 	case WM_CREATE:
 		hdc_vid = GetDC(hwnd);
-		//SetTimer(hwnd, 123, 200, 0);
-		SetTimer(hwnd, 123, 35, 0);
-		//InitializeCriticalSection(&video_cs);
+		SetTimer(hwnd, 123, 25, 0);
+		/*InitializeCriticalSection(&video_cs);
 		video_thread_terminate = 0;
-		//CreateThread(0, 0, (LPTHREAD_START_ROUTINE)th, 0, 0, 0);/* */
+		CreateThread(0, 0, (LPTHREAD_START_ROUTINE)th, 0, 0, 0); */
 		break;
 
 	case WM_PAINT:

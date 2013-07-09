@@ -1,17 +1,10 @@
 #include "skin.h"
-#include "skin_settings.h"
-
 #include "ids.h"
 
 #define sort_score_max  1.0e200
 #define sort_score_min  0.0
 #define sort_score_fall (1.0 / 65536.0)
 #define letter_max      (1 << (sizeof(letter) * 8))
-
-extern int   enable_transparency;
-extern int   window_transparency_amount;
-
-
 
 double list_sort_score(string sv)
 {
@@ -42,8 +35,8 @@ void list_sort_column(int cid, int smode)
 
 	if(smode < 2)
 	{
-		//skin_settings.ml_sorted_column = cid;
-		//skin_settings.ml_sorted_mode   = smode;
+		skin_settings.ml_sorted_column = cid;
+		skin_settings.ml_sorted_mode   = smode;
 
 		for(i=0; i<c; i++)
 		{
@@ -172,74 +165,6 @@ void list_sort_column(int cid, int smode)
 
 
 
-
-
-void misc_time_to_string(int seconds, string buf)
-{
-	int     p = seconds;
-	letter  pbuf[32], tbuf[32];
-
-	memset(pbuf, 0, sizeof(pbuf));
-	memset(tbuf, 0, sizeof(tbuf));
-	
-
-	{
-		int x;
-
-		memset(pbuf, 0, sizeof(pbuf));
-		
-		if(p / 60 < 60)
-		{
-			_itow(p / 60, pbuf, 10);
-			pbuf[str_len(pbuf)] = uni(':');
-
-			if((p % 60) < 10)
-			{	
-				pbuf[str_len(pbuf)] = uni('0');
-				_itow(p % 60, pbuf + str_len(pbuf), 10);
-			}else{
-				_itow(p % 60, pbuf + str_len(pbuf), 10);
-			}
-
-		}else{
-
-			x = p / 3600;
-			_itow(x, pbuf, 10);
-			str_cat(pbuf, uni(":"));
-
-			x = (p - (x * 3600)) / 60;
-
-
-			if(x < 10)
-			{
-				_itow(x, tbuf, 10);
-				str_cat(pbuf, uni("0"));
-				str_cat(pbuf, tbuf);
-				str_cat(pbuf, uni(":"));
-			}else{
-				_itow(x, tbuf, 10);
-				str_cat(pbuf, tbuf);
-				str_cat(pbuf, uni(":"));
-			}
-
-			x = p % 60;
-
-			if(x < 10)
-			{
-				_itow(x, tbuf, 10);
-				str_cat(pbuf, uni("0"));
-				str_cat(pbuf, tbuf);
-			}else{
-				_itow(x, tbuf, 10);
-				str_cat(pbuf, tbuf);
-			}
-		}
-	}
-
-	str_cpy(buf, pbuf);
-}
-
-
 HMENU user_create_menu(int mid, int flags)
 {
 	HMENU  m = CreatePopupMenu(), c;
@@ -248,14 +173,12 @@ HMENU user_create_menu(int mid, int flags)
 #	define menugroup(x)      (InsertMenu(x, (UINT)-1, MF_BYPOSITION | MF_SEPARATOR, 0, 0) )
 #	define addchild(x, h, v) (InsertMenu(x, (UINT)-1, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT_PTR)(h), (v)) )
 #	define menubegin(x)      (x = CreatePopupMenu())
-#	define checkmenuitem(x, i, c)(CheckMenuItem((x), (i), (c ? MFS_CHECKED : MFS_UNCHECKED)))
 #	define menuend(x)        (DestroyMenu(x))
 
 	switch(mid)
 	{
-	case menu_ml_columns:
+	case menu_ml_options:
 		
-		/*
 		addmenu(m, mid_repeat_list,   skin.shared->language_text[oooo_skins_repeat_list]);
 		addmenu(m, mid_repeat_track,  skin.shared->language_text[oooo_skins_repeat_track]);
 		addmenu(m, mid_autoswitching, skin.shared->language_text[oooo_skins_autoswitching]);
@@ -264,34 +187,34 @@ HMENU user_create_menu(int mid, int flags)
 		addmenu(m, mid_switch_sindex, skin.shared->language_text[oooo_skins_display_shuffle_index]);
 		menugroup(m);
 		
-		menubegin(c); */
+		menubegin(c);
 
-		addmenu(m, midc_title     , skin.shared->language_text[oooo_tag_title]);
-		addmenu(m, midc_album     , skin.shared->language_text[oooo_tag_album]);
-		addmenu(m, midc_artist    , skin.shared->language_text[oooo_tag_artist]);
-		addmenu(m, midc_oartist   , skin.shared->language_text[oooo_tag_origartist]);
-		addmenu(m, midc_composer  , skin.shared->language_text[oooo_tag_composer]);
-		addmenu(m, midc_lyricist  , skin.shared->language_text[oooo_tag_lyricist]);
-		addmenu(m, midc_band      , skin.shared->language_text[oooo_tag_band]);
-		addmenu(m, midc_copyright , skin.shared->language_text[oooo_tag_copyright]);
-		addmenu(m, midc_publisher , skin.shared->language_text[oooo_tag_publish]);
-		addmenu(m, midc_encodedby , skin.shared->language_text[oooo_tag_encodedby]);
-		addmenu(m, midc_genre	  , skin.shared->language_text[oooo_tag_genre]);
-		addmenu(m, midc_year	  , skin.shared->language_text[oooo_tag_year]);
-		addmenu(m, midc_url       , skin.shared->language_text[oooo_tag_url]);
-		addmenu(m, midc_ourl	  , skin.shared->language_text[oooo_tag_offiartisturl]);
-		addmenu(m, midc_filepath  , skin.shared->language_text[oooo_tag_filepath]);
-		addmenu(m, midc_filename  , skin.shared->language_text[oooo_tag_filename]);
-		addmenu(m, midc_bpm		  , skin.shared->language_text[oooo_tag_bpm]);
-		addmenu(m, midc_track	  , skin.shared->language_text[oooo_tag_tracknum]);
-		addmenu(m, midc_index     , skin.shared->language_text[oooo_tag_index]);
+		addmenu(c, midc_title     , skin.shared->language_text[oooo_tag_title]);
+		addmenu(c, midc_album     , skin.shared->language_text[oooo_tag_album]);
+		addmenu(c, midc_artist    , skin.shared->language_text[oooo_tag_artist]);
+		addmenu(c, midc_oartist   , skin.shared->language_text[oooo_tag_origartist]);
+		addmenu(c, midc_composer  , skin.shared->language_text[oooo_tag_composer]);
+		addmenu(c, midc_lyricist  , skin.shared->language_text[oooo_tag_lyricist]);
+		addmenu(c, midc_band      , skin.shared->language_text[oooo_tag_band]);
+		addmenu(c, midc_copyright , skin.shared->language_text[oooo_tag_copyright]);
+		addmenu(c, midc_publisher , skin.shared->language_text[oooo_tag_publish]);
+		addmenu(c, midc_encodedby , skin.shared->language_text[oooo_tag_encodedby]);
+		addmenu(c, midc_genre	  , skin.shared->language_text[oooo_tag_genre]);
+		addmenu(c, midc_year	  , skin.shared->language_text[oooo_tag_year]);
+		addmenu(c, midc_url       , skin.shared->language_text[oooo_tag_url]);
+		addmenu(c, midc_ourl	  , skin.shared->language_text[oooo_tag_offiartisturl]);
+		addmenu(c, midc_filepath  , skin.shared->language_text[oooo_tag_filepath]);
+		addmenu(c, midc_filename  , skin.shared->language_text[oooo_tag_filename]);
+		addmenu(c, midc_bpm		  , skin.shared->language_text[oooo_tag_bpm]);
+		addmenu(c, midc_track	  , skin.shared->language_text[oooo_tag_tracknum]);
+		addmenu(c, midc_index     , skin.shared->language_text[oooo_tag_index]);
 
-		//addchild(m, c, skin.shared->language_text[oooo_skins_columns]);
+		addchild(m, c, skin.shared->language_text[oooo_skins_columns]);
 
-		//menuend(c);
+		menuend(c);
 
-		//addmenu(m, midc_font      , uni("Select Font"));
-		//addmenu(m, mid_settings     , skin.shared->language_text[oooo_skins_show_preferences]);
+		addmenu(m, midc_font      , uni("Select Font"));
+		addmenu(m, mid_settings     , skin.shared->language_text[oooo_skins_show_preferences]);
 
 		break;
 
@@ -300,8 +223,6 @@ HMENU user_create_menu(int mid, int flags)
 		addmenu(m, mid_add_dir  , skin.shared->language_text[oooo_skins_addfolders]);
 		menugroup(m);
 		addmenu(m, mid_add_mlib , skin.shared->language_text[oooo_skins_addtoml]);
-		menugroup(m);
-		addmenu(m, mid_removeml,  skin.shared->language_text[oooo_skins_clearml]);
 		break;
 
 	case menu_ml_save:
@@ -327,96 +248,13 @@ HMENU user_create_menu(int mid, int flags)
 		addmenu(m, mid_edittags,   skin.shared->language_text[oooo_skins_edit_tags]);
 		addmenu(m, mid_removesel,  skin.shared->language_text[oooo_skins_remove_sel]);
 		menugroup(m);
-		addmenu(m, mid_removeall, skin.shared->language_text[oooo_skins_clear_playlist]);
-		menugroup(m);
 		addmenu(m, mid_preview,    uni("Preview"));
 		addmenu(m, mid_preview_stop,    uni("Stop preview"));
-
 
 		if(flags == 1) /* media library */
 		{
 			addmenu(m, mid_addtoplaylist,  skin.shared->language_text[oooo_skins_addtoplaylist]);
 		}
-		break;
-
-	case menu_ml_settings:
-		menubegin(c);
-		addmenu(c, mid_settings_wallpaper_sel, uni("Select Wallpaper"));
-		menugroup(c);
-		addmenu(c, mid_settings_wallpaper_def, uni("Default"));
-		addmenu(c, mid_settings_wallpaper_ld, uni("Default Low Definition"));
-		addchild(m, c, uni("Wallpaper"));
-		menuend(c);
-
-		menubegin(c);
-		addmenu(c, mid_settings_display_big, uni("Large"));
-		addmenu(c, mid_settings_display_small, uni("Small"));
-
-		if(settings_data.playlist.display_mode == playlist_display_small)
-			checkmenuitem(c, mid_settings_display_small, 1);
-		else
-			checkmenuitem(c, mid_settings_display_big, 1);
-
-		addchild(m, c, uni("Display"));
-
-
-		menuend(c);
-
-
-		menubegin(c);
-		addmenu(c, mid_settings_transparency_no, uni("No Transparency"));
-		addmenu(c, mid_settings_transparency_10, uni("10%"));
-		addmenu(c, mid_settings_transparency_20, uni("20%"));
-		addmenu(c, mid_settings_transparency_30, uni("30%"));
-		addmenu(c, mid_settings_transparency_40, uni("40%"));
-		addmenu(c, mid_settings_transparency_50, uni("50%"));
-		addmenu(c, mid_settings_transparency_60, uni("60%"));
-		addmenu(c, mid_settings_transparency_70, uni("70%"));
-
-		if(enable_transparency)
-		{
-			switch(window_transparency_amount)
-			{
-			case 10:   checkmenuitem(c, mid_settings_transparency_10, 1); break;
-			case 20:   checkmenuitem(c, mid_settings_transparency_20, 1); break;
-			case 30:   checkmenuitem(c, mid_settings_transparency_30, 1); break;
-			case 40:   checkmenuitem(c, mid_settings_transparency_40, 1); break;
-			case 50:   checkmenuitem(c, mid_settings_transparency_50, 1); break;
-			case 60:   checkmenuitem(c, mid_settings_transparency_60, 1); break;
-			case 70:   checkmenuitem(c, mid_settings_transparency_70, 1); break;
-			}
-		}else{
-			checkmenuitem(c, mid_settings_transparency_no, 1); 
-		}
-
-		addchild(m, c, uni("Transparency"));
-		menuend(c);
-
-		menubegin(c);
-		addmenu(c, mid_settings_vis_showvideo,   uni("Show Video When Available"));
-
-		if(settings_data.vis.video_when_available)
-			checkmenuitem(c, mid_settings_vis_showvideo, 1);
-
-		addchild(m, c, uni("Visualization"));
-		menuend(c);
-
-		menubegin(c);
-		addmenu(c, mid_settings_covers_download,   uni("Automatically Download Albums Covers and Photos"));
-		addmenu(c, mid_settings_covers_albums,   uni("Enable Album Art"));
-		addmenu(c, mid_settings_covers_photos,   uni("Enable Artists\' Photos"));
-
-		if(settings_data.advanced.auto_download_covers)
-			checkmenuitem(c, mid_settings_covers_download, 1);
-
-		if(settings_data.advanced.enable_album_art)
-			checkmenuitem(c, mid_settings_covers_albums, 1);
-
-		if(settings_data.advanced.enable_artist_photo)
-			checkmenuitem(c, mid_settings_covers_photos, 1);
-
-		addchild(m, c, uni("Album Covers and Photos"));
-		menuend(c);
 		break;
 
 
@@ -438,72 +276,24 @@ HMENU user_create_menu(int mid, int flags)
 			addmenu(m, mid_experimental, exptext);
 		}
 		break;
-
-
-	case menu_ml_repeat:
-		addmenu(m, mid_repeat_list,   skin.shared->language_text[oooo_skins_repeat_list]);
-		addmenu(m, mid_repeat_track,  skin.shared->language_text[oooo_skins_repeat_track]);
-		break;
-
-	case menu_ml_dv_popup:
-		addmenu(m, mid_dv_play,   uni("Play Now"));
-		addmenu(m, mid_dv_add,  skin.shared->language_text[oooo_skins_addtoplaylist]);
-		break;
 	}
 
 	return m;
 }
 
-
-void draw_imagebox(HDC ddc, HDC sdc, int w, int h, struct coord *tl, struct coord *tr, struct coord *bl, struct coord *br, struct coord *t, struct coord *b, struct coord *l, struct coord *r)
+int setwinpos_clip(HWND hwnd, HWND hwa, int x, int y, int w, int h, UINT flags)
 {
-	int   i, c;
+	int   rv;
+	int   rx = x, ry = y;
+	RECT  wrect;
 
-	/* drawing stuff */
+	SystemParametersInfo(SPI_GETWORKAREA, 0, &wrect, 0);
 
-	//	drawrect(hdc_vid, coords.window_vid.crop_ml.w, coords.window_vid.crop_tm.h, rct.right - coords.window_vid.crop_ml.w - coords.window_vid.crop_mr.w, rct.bottom - coords.window_vid.crop_tm.h - coords.window_vid.crop_bm.h, 0);
+	if(rx >= wrect.right) rx = wrect.right  - w;
+	if(ry >= wrect.bottom)ry = wrect.bottom - h;
+	if(rx + w <= 0)rx = 0;
+	if(ry + h <= 0)ry = 0;
 
-	/* top */
-
-	c = (w - tl->w - tr->w);
-
-	for(i=0; i<c; i+=t->w)
-	{
-		BitBlt(ddc, tl->w + i, 0, t->w, t->h, sdc, t->sx_n, t->sy_n, SRCCOPY);
-	}
-
-	/* bottom */
-
-	c = (w - bl->w - br->w);
-
-	for(i=0; i<c; i+=b->w)
-	{
-		BitBlt(ddc, bl->w + i, h - b->h, b->w, b->h, sdc, b->sx_n, b->sy_n, SRCCOPY);
-	}
-
-	/* left */
-
-	c = (h - tl->h - bl->h);
-
-	for(i=0; i<c; i+=l->h)
-	{
-		BitBlt(ddc, 0, tl->h + i, l->w, l->h, sdc, l->sx_n, l->sy_n, SRCCOPY);
-	}
-
-	/* right */
-
-	c = (h - tl->h - bl->h);
-
-	for(i=0; i<c; i+=r->h)
-	{
-		BitBlt(ddc, w - r->w, tl->h + i, r->w, r->h, sdc, r->sx_n, r->sy_n, SRCCOPY);
-	}
-
-
-	/* finalize */
-
-	BitBlt(ddc, 0, 0, tl->w, tl->h, sdc, tl->sx_n, tl->sy_n, SRCCOPY);
-	BitBlt(ddc, w - tr->w, 0, tr->w, tr->h, sdc, tr->sx_n, tr->sy_n, SRCCOPY);
-	BitBlt(ddc, 0, h - bl->h, bl->w, bl->h, sdc, bl->sx_n, bl->sy_n, SRCCOPY);
-	BitBlt(ddc, w - br->w, h - br->h, br->w, br->h, sdc, br->sx_n, br->sy_n, SRCCOPY);
+	rv = SetWindowPos(hwnd, hwa, rx, ry, w, h, flags);
+	return rv;
 }
