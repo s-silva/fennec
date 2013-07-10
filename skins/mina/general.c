@@ -416,6 +416,7 @@ void gr_init(graphic_context *gr)
 	gr->ltext_color = 0;
 	gr->firstbrush = 0;
 	gr->firstpen = 0;
+	gr->lfont = 0;
 }
 
 void gr_delete(graphic_context *gr)
@@ -442,6 +443,7 @@ void gr_setcolor(graphic_context *gr, uint32_t pencolor, uint32_t brushcolor)
 		}
 
 		gr->lbrush = nbrush;
+		gr->lbrush_color = brushcolor;
 	}
 
 	if(!gr->lpen || gr->lpen_color != pencolor)
@@ -457,8 +459,17 @@ void gr_setcolor(graphic_context *gr, uint32_t pencolor, uint32_t brushcolor)
 		}
 
 		gr->lpen = npen;
+		gr->lpen_color = pencolor;
 	}
 }
+
+void gr_settextcolor(graphic_context *gr, uint32_t fcolor, uint32_t bkcolor, int bkmode)
+{
+	if(!gr) return; if(!gr->dc) return;
+
+	SetTextColor(gr->dc, color_convertorder_rgb(fcolor));
+}
+
 
 void gr_rect(graphic_context *gr, uint32_t color, int x, int y, int w, int h)
 {
@@ -481,17 +492,38 @@ void gr_circle(graphic_context *gr, uint32_t color, int x, int y, int w, int h)
 
 void gr_line(graphic_context *gr, int size, uint32_t color, int x1, int y1, int x2, int y2)
 {
-	
+	gr_setcolor(gr, color, gr->lbrush_color);
+	MoveToEx(gr->dc, x1, y1, (LPPOINT) NULL);
+	LineTo(gr->dc, x2, y2);
 }
 
 void gr_text(graphic_context *gr, int mode, const string text, int x, int y, int w, int h)
 {
-
+	if(w == 0 && h == 0)
+	{
+		TextOut(gr->dc, x, y, text, (int)str_len(text));
+	}
 }
 
 void gr_setfont(graphic_context *gr, const string fontface, int size, int bold, int italic, int underlined, int extramode)
 {
+	HFONT nfont;
 
+	if(!gr) return; if(!gr->dc) return;
+
+	if(gr->lfont)
+	{
+		DeleteObject(gr->lfont);
+		gr->lfont = 0;
+	}
+
+	nfont = CreateFont(-MulDiv(size, GetDeviceCaps(gr->dc, LOGPIXELSY), 72),
+                                0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET,
+                                OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, 5,
+                                DEFAULT_PITCH, fontface);
+
+	SelectObject(gr->dc, nfont);
+	gr->lfont = nfont;
 }
 
 void gr_blit(graphic_context *grdst, int sx, int sy, int dx, int dy, int w, int h)
