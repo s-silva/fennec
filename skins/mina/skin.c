@@ -160,13 +160,16 @@ int __stdcall fennec_skin_initialize(struct skin_data *indata, struct skin_data_
 
 	gr_init(&gr_main);
 	gr_main.dc = hdc;
+	SetBkMode(hdc, TRANSPARENT);
+
+
 	//fill_skin_coords();
 
 	/* load settings */
 
 	{
 		int     i, er = 0;
-		letter  tmp_buf[1024];
+		letter  tmp_buf[1024], tmp_buf2[1024];
 
 		GetModuleFileName(instance_skin, tmp_buf, sizeof(tmp_buf));
 
@@ -181,8 +184,11 @@ int __stdcall fennec_skin_initialize(struct skin_data *indata, struct skin_data_
 			}
 			i--;
 		}
-
+		str_cpy(tmp_buf2, tmp_buf);
+		str_cat(tmp_buf2, uni("skin_font_mina.ttf"));
 		str_cat(tmp_buf, uni("settings - mina.fsd"));
+
+		AddFontResourceEx(tmp_buf2, FR_PRIVATE, 0);
 
 		file_skin_settings = _wfopen(tmp_buf, uni("rb+"));
 
@@ -1719,17 +1725,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 		break;
 
-	case WM_NCPAINT:
-		{
-			HDC hdc;
-			hdc = GetDCEx(hwnd, (HRGN)wParam, DCX_WINDOW | DCX_PARENTCLIP);
-
-			Rectangle(hdc, 0, 0, 1000, 1000);
-	 	
-			ReleaseDC(hwnd, hdc);
-		}
-		break;
-
 	case WM_PAINT:
 		{
 			PAINTSTRUCT  ps;
@@ -1746,7 +1741,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			display_timer(0, WM_USER + 221, 0, 0);
 
-			gr_rect(&gr_main, 0xf0f0f0, 0, 45, win_w, win_h - 45 - 75);
+			gr_rect(&gr_main, 0xe6e6e6, 0, 45, win_w, win_h - 45 - 117);
+			gr_rect(&gr_main, 0xf5f5f5, 0, win_h - 117, win_w, 117 - 75);
+
 
 			gr_rect(&gr_main, 0x656565, 0, 0, win_w, 45);
 			gr_rect(&gr_main, 0xf5f5f5, 0, win_h - 75, win_w, 75);
@@ -1758,6 +1755,31 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			gr_rect(&gr_main, 0x9d9181, 10, win_h - 75 + 6, win_w - 20, 6);
 			gr_rect(&gr_main, 0xff7f29, 10, win_h - 75 + 6, ((int)(win_w - 20) * pos), 6);
+
+			gr_setfont(&gr_main, uni("Your Icons"), 19, 0, 0, 0, 0);
+			gr_settextcolor(&gr_main, 0x656565, 0, 0);
+
+			gr_text(&gr_main, 0, uni("a"), 10,  win_h - 55, 0, 0);
+			gr_text(&gr_main, 0, uni("b"), 65,  win_h - 45, 0, 0);
+			gr_text(&gr_main, 0, uni("c"), 101, win_h - 45, 0, 0);
+			gr_text(&gr_main, 0, uni("d"), 135, win_h - 45, 0, 0);
+			gr_text(&gr_main, 0, uni("e"), 169, win_h - 45, 0, 0);
+			gr_text(&gr_main, 0, uni("f"), 204, win_h - 45, 0, 0);
+
+			gr_setfont(&gr_main, uni("Your Icons"), 17, 0, 0, 0, 0);
+			gr_settextcolor(&gr_main, 0xbbbcbc, 0, 0);
+			gr_text(&gr_main, 0, uni("g"), win_w - 34, win_h - 44, 0, 0);
+			gr_text(&gr_main, 0, uni("h"), win_w - 62, win_h - 44, 0, 0);
+			gr_text(&gr_main, 0, uni("i"), win_w - 89, win_h - 44, 0, 0);
+
+
+			gr_line(&gr_main, 1, 0xcccccc, 0, 0, 0, win_h);
+			gr_line(&gr_main, 1, 0xcccccc, 0, 0, 0, win_w);
+			gr_line(&gr_main, 1, 0xcccccc, win_w -1 , 0, win_w -1, win_h);
+			gr_line(&gr_main, 1, 0xcccccc, 0, win_h-1, win_w, win_h-1);
+
+			gr_line(&gr_main, 1, 0xcccccc, 0, win_h-76, win_w, win_h-76);
+			gr_line(&gr_main, 1, 0xb3b3b3, 0, win_h-117, win_w, win_h-117);
 
 
 			//BitBlt(hdc, 0, 0, cr(coords.window_main.width), cr(coords.window_main.height), mdc_sheet, skin_main_x, skin_main_y, SRCCOPY);

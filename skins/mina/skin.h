@@ -61,6 +61,7 @@ typedef struct _graphic_context
 	HDC      dc;
 	HPEN     lpen, firstpen;
 	HBRUSH   lbrush, firstbrush;
+	HFONT    lfont, firstfont;
 	int      ltext_mode;
 	uint32_t lbrush_color;
 	uint32_t lpen_color;
@@ -434,6 +435,7 @@ void gr_text(graphic_context *gr, int mode, const string text, int x, int y, int
 void gr_setfont(graphic_context *gr, const string fontface, int size, int bold, int italic, int underlined, int extramode);
 void gr_blit(graphic_context *grdst, int sx, int sy, int dx, int dy, int w, int h);
 void gr_blitto(graphic_context *grsrc, int sx, int sy, int dx, int dy, int w, int h);
+void gr_settextcolor(graphic_context *gr, uint32_t fcolor, uint32_t bkcolor, int bkmode);
 
 /*-----------------------------------------------------------------------------
   eof.
