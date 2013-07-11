@@ -156,12 +156,12 @@ HRGN              rgn_ml = 0;
 
 HFONT             font_ml_pl, font_ml_pl_small_link;
 TEXTMETRIC        tm_ml_pl;
-COLORREF          color_ml_pl_normal   = RGB(204, 204, 255);
-COLORREF          color_ml_pl_faint    = RGB(53,  77,  173);
-COLORREF          color_ml_pl_item_cur = RGB(124, 124, 192);
-COLORREF          color_ml_pl_item_sel = RGB(170, 154, 90);
-COLORREF          color_ml_pl_item_col = RGB(118, 132, 205);
-COLORREF          color_ml_pl_header   = RGB(0, 30, 50);
+COLORREF          color_ml_pl_normal   = RGB(103, 103, 103);
+COLORREF          color_ml_pl_faint    = RGB(230, 230, 230);
+COLORREF          color_ml_pl_item_cur = RGB(250, 250, 250);
+COLORREF          color_ml_pl_item_sel = RGB(237, 56, 64);
+COLORREF          color_ml_pl_item_col = RGB(220, 220, 220);
+COLORREF          color_ml_pl_header   = RGB(200, 200, 200);
 
 //int               mode_ml = 0;
 unsigned long     ml_current_item = 0;
@@ -818,9 +818,15 @@ void ml_draw_hover(int idx)
 void ml_create(HWND hwndp)
 {
 	WNDCLASS wndc;
+	RECT     rct;
+	int      pwnd_h, pwnd_w;
 
 	if(ml_init)return;
-	if(!skin_settings.ml_show)return;
+	//if(!skin_settings.ml_show)return;
+
+	GetClientRect(hwndp, &rct);
+	pwnd_h = rct.bottom;
+	pwnd_w = rct.right;
 
 	ml_cache_init();
 
@@ -839,9 +845,9 @@ void ml_create(HWND hwndp)
 
 	
 	
-	window_ml = CreateWindow(ml_window_class, uni("Media Library"), WS_POPUP, skin_settings.ml_x, skin_settings.ml_y, skin_settings.ml_w, skin_settings.ml_h, hwndp, 0, instance_skin, 0);
+	window_ml = CreateWindow(ml_window_class, uni("Media Library"), WS_CHILD, 0, 45, pwnd_w, pwnd_h - 117 - 45, hwndp, 0, instance_skin, 0);
 	
-	setwinpos_clip(window_ml, 0, skin_settings.ml_x, skin_settings.ml_y, skin_settings.ml_w, skin_settings.ml_h, SWP_NOSIZE | SWP_NOZORDER);
+	//setwinpos_clip(window_ml, 0, skin_settings.ml_x, skin_settings.ml_y, skin_settings.ml_w, skin_settings.ml_h, SWP_NOSIZE | SWP_NOZORDER);
 
 
 	skin_settings.ml_d = skin_settings.ml_d;
@@ -903,7 +909,7 @@ void ml_close(void)
 void ml_refresh(int lv)
 {
 	if(!ml_init)return;
-
+	/*
 	if(!skin_settings.use_color)
 	{
 		color_ml_pl_normal   = RGB(204, 204, 255);
@@ -951,7 +957,7 @@ void ml_refresh(int lv)
 		rv = r; gv = g; bv = b;
 		lv = skin_settings.theme_mode == 1 ? -20 : -80;
 		color_ml_pl_header = RGBx(rv + lv, gv + lv, bv + lv);
-	}
+	} */
 
 	SendMessage(window_ml, WM_PAINT, 0, 0);
 
@@ -2275,7 +2281,7 @@ void ml_draw_header(HDC dc, int x, int y, int w, int h)
 	HRGN crgn;
 	int  i, tid = 0;
 
-	drawrect(dc, x, y, w, ml_list_header_height, color_setbrightness(color_ml_pl_header, 1.7));
+	drawrect(dc, x, y, w, ml_list_header_height, color_ml_pl_header);
 
 	lc = GetTextColor(dc);
 	SetTextColor(dc, color_setbrightness(color_ml_pl_item_cur, 1.7));
@@ -2468,7 +2474,7 @@ void ml_draw_window(int rd)
 	{
 		if(rgn_ml)DeleteObject(rgn_ml);
 		rgn_ml = CreateRoundRectRgn(0, 0, rct.right, rct.bottom, 5, 5);
-		SetWindowRgn(window_ml, rgn_ml, 1);
+		//SetWindowRgn(window_ml, rgn_ml, 1);
 	}
 
 	mdc_pl = CreateCompatibleDC(hdc_ml);
@@ -2493,7 +2499,7 @@ void ml_draw_window(int rd)
 	SetTextColor(mdc_pl, color_ml_pl_normal);
 	SetBkMode(mdc_pl, TRANSPARENT);
 
-	/* top */
+	/* top
 
 	c = (rct.right - coords.window_ml.crop_tl.w - coords.window_ml.crop_tr.w);
 
@@ -2502,16 +2508,12 @@ void ml_draw_window(int rd)
 		BitBlt(mdc_pl, coords.window_ml.crop_tl.w + i, 0, coords.window_ml.crop_tm.w, coords.window_ml.crop_tm.h, mdc_sheet, coords.window_ml.crop_tm.sx_n, coords.window_ml.crop_tm.sy_n, SRCCOPY);
 	}
 
-	/* bottom */
-
 	c = (rct.right - coords.window_ml.crop_bl.w - coords.window_ml.crop_br.w);
 
 	for(i=0; i<c; i+=coords.window_ml.crop_bm.w)
 	{
 		BitBlt(mdc_pl, coords.window_ml.crop_bl.w + i, rct.bottom - coords.window_ml.crop_br.h, coords.window_ml.crop_bm.w, coords.window_ml.crop_bm.h, mdc_sheet, coords.window_ml.crop_bm.sx_n, coords.window_ml.crop_bm.sy_n, SRCCOPY);
 	}
-
-	/* left */
 
 	c = (rct.bottom - coords.window_ml.crop_tl.h - coords.window_ml.crop_bl.h);
 
@@ -2520,7 +2522,7 @@ void ml_draw_window(int rd)
 		BitBlt(mdc_pl, 0, coords.window_ml.crop_tl.h + i, coords.window_ml.crop_ml.w, coords.window_ml.crop_ml.h, mdc_sheet, coords.window_ml.crop_ml.sx_n, coords.window_ml.crop_ml.sy_n, SRCCOPY);
 	}
 
-	/* right */
+	*/
 
 	c = (rct.bottom - coords.window_ml.crop_tl.h - coords.window_ml.crop_bl.h);
 
@@ -2532,11 +2534,12 @@ void ml_draw_window(int rd)
 
 	/* finalize */
 
-	BitBlt(mdc_pl, 0, 0, coords.window_ml.crop_tl.w, coords.window_ml.crop_tl.h, mdc_sheet, coords.window_ml.crop_tl.sx_n, coords.window_ml.crop_tl.sy_n, SRCCOPY);
-	BitBlt(mdc_pl, rct.right - coords.window_ml.crop_tr.w, 0, coords.window_ml.crop_tr.w, coords.window_ml.crop_tr.h, mdc_sheet, coords.window_ml.crop_tr.sx_n, coords.window_ml.crop_tr.sy_n, SRCCOPY);
-	BitBlt(mdc_pl, 0, rct.bottom - coords.window_ml.crop_bl.h, coords.window_ml.crop_bl.w, coords.window_ml.crop_bl.h, mdc_sheet, coords.window_ml.crop_bl.sx_n, coords.window_ml.crop_bl.sy_n, SRCCOPY);
-	BitBlt(mdc_pl, rct.right - coords.window_ml.crop_br.w, rct.bottom - coords.window_ml.crop_br.h, coords.window_ml.crop_br.w, coords.window_ml.crop_br.h, mdc_sheet, coords.window_ml.crop_br.sx_n, coords.window_ml.crop_br.sy_n, SRCCOPY);
+	//BitBlt(mdc_pl, 0, 0, coords.window_ml.crop_tl.w, coords.window_ml.crop_tl.h, mdc_sheet, coords.window_ml.crop_tl.sx_n, coords.window_ml.crop_tl.sy_n, SRCCOPY);
+	//BitBlt(mdc_pl, rct.right - coords.window_ml.crop_tr.w, 0, coords.window_ml.crop_tr.w, coords.window_ml.crop_tr.h, mdc_sheet, coords.window_ml.crop_tr.sx_n, coords.window_ml.crop_tr.sy_n, SRCCOPY);
+	//BitBlt(mdc_pl, 0, rct.bottom - coords.window_ml.crop_bl.h, coords.window_ml.crop_bl.w, coords.window_ml.crop_bl.h, mdc_sheet, coords.window_ml.crop_bl.sx_n, coords.window_ml.crop_bl.sy_n, SRCCOPY);
+	//BitBlt(mdc_pl, rct.right - coords.window_ml.crop_br.w, rct.bottom - coords.window_ml.crop_br.h, coords.window_ml.crop_br.w, coords.window_ml.crop_br.h, mdc_sheet, coords.window_ml.crop_br.sx_n, coords.window_ml.crop_br.sy_n, SRCCOPY);
 
+	drawrect(mdc_pl, 0, 0, 100, pl_h, RGB(199, 199, 199));
 
 	i = 1;
 	while(ml_draw_normalex(i, mdc_pl))i++;

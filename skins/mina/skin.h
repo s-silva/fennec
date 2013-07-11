@@ -123,10 +123,21 @@ typedef struct _local_skin_settings
 
 }local_skin_settings;
 
+
+#define coord_align_top_left     1
+#define coord_align_top_right    2
+#define coord_align_bottom_left  3
+#define coord_align_bottom_right 4
+
 struct coord
 {
-	int   x, y, w, h;
-	int   sx_n, sy_n, sx_h, sy_h, sx_d, sy_d;
+	int       x, y, w, h;
+	int       sx_n, sy_n, sx_h, sy_h, sx_d, sy_d;
+	int       align;
+	uint32_t  ncolor, hcolor;
+	int       mode;
+	letter    icon_text; 
+	int       font_size;
 };
 
 typedef struct _skin_coords
