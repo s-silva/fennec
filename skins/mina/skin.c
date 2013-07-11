@@ -129,6 +129,7 @@ letter                  skin_sheet_table[v_sys_maxpath];
 		extern HDC hdc_vid;
 
 graphic_context         gr_main;
+float                   beat_level = 0.0f;
 
 /* code ---------------------------------------------------------------------*/
 
@@ -258,7 +259,7 @@ int __stdcall fennec_skin_initialize(struct skin_data *indata, struct skin_data_
 
 			skin_settings.sel_theme  = 0;
 			skin_settings.theme_mode = 0;
-			skin_settings.ml_font_size = 8;
+			skin_settings.ml_font_size = 9;
 
 			skin_settings.ml_sorted_column = -1;
 			skin_settings.ml_sorted_mode = 0;
@@ -270,7 +271,7 @@ int __stdcall fennec_skin_initialize(struct skin_data *indata, struct skin_data_
 			skin_settings.mode_ml           = 0;
 			skin_settings.skin_lock         = 1;
 
-			str_cpy(skin_settings.font_display, uni("Tahoma"));
+			str_cpy(skin_settings.font_display, uni("Arial"));
 			str_cpy(skin_settings.skin_file_name, uni("<default>"));
 
 
@@ -291,8 +292,8 @@ int __stdcall fennec_skin_initialize(struct skin_data *indata, struct skin_data_
 	
 	ShowWindow(wnd, SW_SHOW);
 
-	/*ml_create(skin.wnd);
-	eq_create(skin.wnd);
+	ml_create(skin.wnd);
+	/*eq_create(skin.wnd);
 	vis_create(skin.wnd);
 	vid_create(skin.wnd);*/
 	return 1;
@@ -300,7 +301,6 @@ int __stdcall fennec_skin_initialize(struct skin_data *indata, struct skin_data_
 
 void skin_recreate(void)
 {
-	return;
 	//if(wndmainrgn) DeleteObject(wndmainrgn);
 	if(cliprgn) DeleteObject(cliprgn);
 	if(bmp_sheet)
@@ -326,14 +326,14 @@ void skin_recreate(void)
 	sys_pass();
 
 
-	set_theme_colors();
-
-	mdc_sheet = CreateCompatibleDC(hdc);
-	bmp_sheet = load_skin_sheet_bitmap();
-
-	if(skin_settings.use_color)adjust_colors(bmp_sheet, skin_settings.hue, skin_settings.sat, skin_settings.light);
-
-	oldbmp_sheet = SelectObject(mdc_sheet, bmp_sheet);
+	//set_theme_colors();
+//
+	//mdc_sheet = CreateCompatibleDC(hdc);
+	//bmp_sheet = load_skin_sheet_bitmap();
+//
+	//if(skin_settings.use_color)adjust_colors(bmp_sheet, skin_settings.hue, skin_settings.sat, skin_settings.light);
+//
+	//oldbmp_sheet = SelectObject(mdc_sheet, bmp_sheet);
 
 	timer_id_seek    = (unsigned int) SetTimer(0, 0, 35,  (TIMERPROC) display_timer);
 	timer_id_display = (unsigned int) SetTimer(0, 0, 100, (TIMERPROC) seek_timer);
@@ -349,7 +349,7 @@ void skin_recreate(void)
 	/*setwinpos_clip(wnd, 0, skin_settings.main_x, skin_settings.main_y,
 		cr(coords.window_main.width), cr(coords.window_main.height), SWP_NOZORDER);*/
 
-	eq_skinchange();
+	//eq_skinchange();
 
 	display_timer((HWND)-1, WM_USER + 221, 0, 0);
 }
@@ -825,7 +825,60 @@ int skin_getdata(int id, void *rdata, int dsize)
 
 /* skin interface  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+int in_control(int x, int y, int win_w, int win_h, struct coord *sc)
+{
+	switch(sc->align)
+	{
+	case coord_align_top_left:
+		return incoord(x, y, sc->x, sc->y, sc->w, sc->h);
 
+	case coord_align_top_right:
+		return incoord(x, y, win_w - sc->x, sc->y, sc->w, sc->h);
+
+	case coord_align_bottom_left:
+		return incoord(x, y, sc->x, win_h - sc->y, sc->w, sc->h);
+
+	case coord_align_bottom_right:
+		return incoord(x, y, win_w - sc->x, win_h - sc->y, sc->w, sc->h);
+	}
+}
+
+void draw_control(graphic_context *gr, graphic_context *gr_sc, int state, int win_w, int win_h, struct coord *sc)
+{
+	letter stext[16];
+
+	if(state == 0)
+	{
+		gr_settextcolor(&gr_main, 0x656565, 0, 0);
+	}else if(state == 1){
+		gr_settextcolor(&gr_main, 0xff7f29, 0, 0);
+	}else if(state == 2){	
+		gr_settextcolor(&gr_main, 0x656565, 0, 0);
+	}
+
+	stext[0] = sc->icon_text;
+	stext[1] = uni('\0');
+	stext[2] = uni('\0');
+
+	switch(sc->align)
+	{
+	case coord_align_top_left:
+		gr_text(gr, 0, stext, sc->x, sc->y, 0, 0);
+		break;
+
+	case coord_align_top_right:
+		gr_text(gr, 0, stext, win_w - sc->x, sc->y, 0, 0);
+		break;
+
+	case coord_align_bottom_left:
+		gr_text(gr, 0, stext, sc->x, win_h - sc->y, 0, 0);
+		break;
+
+	case coord_align_bottom_right:
+		gr_text(gr, 0, stext, win_w - sc->x, win_h - sc->y, 0, 0);
+		break;
+	}
+}
 
 
 /*
@@ -833,32 +886,40 @@ int skin_getdata(int id, void *rdata, int dsize)
  */
 int skin_get_button_index(int x, int y)
 {
+	RECT rct;
+	int  win_w, win_h;
 
-	if(incoordx(x, y, &coords.window_main.button_play    ))     return skin_main_button_play;
-	if(incoordx(x, y, &coords.window_main.button_stop    ))     return skin_main_button_stop;
-	if(incoordx(x, y, &coords.window_main.button_previous))     return skin_main_button_previous;
-	if(incoordx(x, y, &coords.window_main.button_next    ))     return skin_main_button_next;
-	if(incoordx(x, y, &coords.window_main.button_open    ))     return skin_main_button_open;
-	if(incoordx(x, y, &coords.window_main.button_playlist))     return skin_main_button_playlist;
-	if(incoordx(x, y, &coords.window_main.button_eq      ))     return skin_main_button_equalizer;
-	if(incoordx(x, y, &coords.window_main.button_minimize))     return skin_main_button_minimize;
-	if(incoordx(x, y, &coords.window_main.button_exit    ))     return skin_main_button_exit;
+	GetClientRect(wnd, &rct);
+	win_w = rct.right;
+	win_h = rct.bottom;
 
-	if(incoordx(x, y, &coords.window_main.bar_seek       ))     return skin_main_button_seek;
-	if(incoordx(x, y, &coords.window_main.bar_volume     ))     return skin_main_button_volume;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.button_play    ))     return skin_main_button_play;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.button_stop    ))     return skin_main_button_stop;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.button_previous))     return skin_main_button_previous;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.button_next    ))     return skin_main_button_next;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.button_open    ))     return skin_main_button_open;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.button_playlist))     return skin_main_button_playlist;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.button_eq      ))     return skin_main_button_equalizer;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.button_minimize))     return skin_main_button_minimize;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.button_exit    ))     return skin_main_button_exit;
 
-	if(incoordx(x, y, &coords.window_main.button_settings))     return skin_main_button_settings;
-	if(incoordx(x, y, &coords.window_main.button_convert ))     return skin_main_button_convert;
-	if(incoordx(x, y, &coords.window_main.button_rip     ))     return skin_main_button_rip;
-	if(incoordx(x, y, &coords.window_main.button_join    ))     return skin_main_button_join;
-	if(incoordx(x, y, &coords.window_main.button_vis     ))     return skin_main_button_visual;
-	if(incoordx(x, y, &coords.window_main.button_video   ))     return skin_main_button_video;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.bar_seek       ))     return skin_main_button_seek;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.bar_volume     ))     return skin_main_button_volume;
 
-	if(incoordx(x, y, &coords.window_main.button_dsp     ))     return skin_main_button_dsp;
-	if(incoordx(x, y, &coords.window_main.button_lock    ))     return skin_main_button_lock;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.button_settings))     return skin_main_button_settings;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.button_convert ))     return skin_main_button_convert;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.button_rip     ))     return skin_main_button_rip;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.button_join    ))     return skin_main_button_join;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.button_vis     ))     return skin_main_button_visual;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.button_video   ))     return skin_main_button_video;
+
+	//if(incoordx(x, y, &coords.window_main.button_dsp     ))     return skin_main_button_dsp;
+	//if(incoordx(x, y, &coords.window_main.button_lock    ))     return skin_main_button_lock;
 
 	return 0;
 }
+
+
 
 
 /*
@@ -866,35 +927,34 @@ int skin_get_button_index(int x, int y)
  */
 int skin_draw_button_normal(int id, HDC dc)
 {
+	RECT rct;
+	int  win_w, win_h;
+
+	GetClientRect(wnd, &rct);
+	win_w = rct.right;
+	win_h = rct.bottom;
 
 #	define blt(x, y, w, h, sx, sy) (StretchBlt(dc, (x), (y), ((w) * 2), ((h) * 2), mdc_sheet, (sx), (sy), (w), (h), SRCCOPY))
 	
 	switch(id)
 	{
-	case skin_main_button_play:      blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_play);     break;
-	case skin_main_button_stop:      blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_stop);     break;
-	case skin_main_button_previous:  blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_previous); break;
-	case skin_main_button_next:      blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_next);     break;
-	case skin_main_button_open:      blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_open);     break;
-	case skin_main_button_playlist:  blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_playlist); break;
-	case skin_main_button_equalizer: blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_eq);       break;
-	case skin_main_button_minimize:  blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_minimize); break;
-	case skin_main_button_exit:      blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_exit);     break;
+	case skin_main_button_play:      draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_play);     break;
+	case skin_main_button_stop:      draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_stop);     break;
+	case skin_main_button_previous:  draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_previous); break;
+	case skin_main_button_next:      draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_next);     break;
+	case skin_main_button_open:      draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_open);     break;
+	case skin_main_button_playlist:  draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_playlist); break;
+	case skin_main_button_equalizer: draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_eq);       break;
+	case skin_main_button_minimize:  draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_minimize); break;
+	case skin_main_button_exit:      draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_exit);     break;
 
-	case skin_main_button_settings:  blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_settings); break; 
-	case skin_main_button_convert:   blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_convert);  break;
-	case skin_main_button_rip:       blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_rip);      break;
-	case skin_main_button_join:      blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_join);     break;
-	case skin_main_button_visual:    blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_vis);      break;
-	case skin_main_button_video:     blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_video);    break;
-	case skin_main_button_dsp:       blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_dsp);      break;
-	
-	case skin_main_button_lock:
-		if(skin_settings.skin_lock)
-			blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_lock);
-		else
-			blt_coord(dc, mdc_sheet, 0, &coords.window_main.button_unlock);
-		break;
+	case skin_main_button_settings:  draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_settings); break; 
+	case skin_main_button_convert:   draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_convert);  break;
+	case skin_main_button_rip:       draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_rip);      break;
+	case skin_main_button_join:      draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_join);     break;
+	case skin_main_button_visual:    draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_vis);      break;
+	case skin_main_button_video:     draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_video);    break;
+	case skin_main_button_dsp:       draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_dsp);      break;
 	}
 
 	return 1;
@@ -906,36 +966,34 @@ int skin_draw_button_normal(int id, HDC dc)
  */
 int skin_draw_button_hover(int id, HDC dc)
 {
+	RECT rct;
+	int  win_w, win_h;
 	static int lid = -1;
+
+	GetClientRect(wnd, &rct);
+	win_w = rct.right;
+	win_h = rct.bottom;
+
 
 	switch(id)
 	{
-	case skin_main_button_play:      blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_play);     show_tip(oooo_skins_play_pause,          0); break;
-	case skin_main_button_stop:      blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_stop);     show_tip(oooo_skins_stop,                0); break;
-	case skin_main_button_previous:  blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_previous); show_tipex(oooo_skins_previous, oooo_skins_rewind,        0, uni("\nRight: ")); break;
-	case skin_main_button_next:      blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_next);     show_tipex(oooo_skins_next,     oooo_skins_fast_forward,  1, uni("\nRight: ")); break;
-	case skin_main_button_open:      blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_open);     show_tipex(oooo_skins_open,     oooo_skins_add_files,     2, uni("\nRight: ")); break;
-	case skin_main_button_playlist:  blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_playlist); show_tip(oooo_skins_show_playlist,       0); break;
-	case skin_main_button_equalizer: blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_eq);       show_tip(oooo_skins_show_equalizer,      0); break;
-	case skin_main_button_minimize:  blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_minimize); show_tip(oooo_skins_minimize,            0); break;
-	case skin_main_button_exit:      blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_exit);     show_tip(oooo_skins_close,               0); break;
-																									   
-	case skin_main_button_settings:  blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_settings); show_tip(oooo_skins_show_preferences,    0); break;
-	case skin_main_button_convert:   blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_convert);  show_tip(oooo_skins_show_conversion,     0); break;
-	case skin_main_button_rip:       blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_rip);      show_tip(oooo_skins_show_ripping,        0); break;
-	case skin_main_button_join:      blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_join);     show_tip(oooo_skins_show_joining,        0); break;
-	case skin_main_button_visual:    blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_vis);      show_tip(oooo_skins_Show_visualizations, 0); break;
-	case skin_main_button_video:     blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_video);    show_tip(0, uni("Show/Hide video window")); break;
-	case skin_main_button_dsp:       blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_dsp);      show_tip(0, uni("DSP/Effects")); break;
-	
-	case skin_main_button_lock:
-		if(skin_settings.skin_lock)
-		{
-			blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_lock); show_tip(0, uni("Turn off window lock")); break;
-		}else{
-			blt_coord(dc, mdc_sheet, 1, &coords.window_main.button_unlock); show_tip(0, uni("Turn on window lock")); break;
-		}
-		break;
+	case skin_main_button_play:      draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_play);     show_tip(oooo_skins_play_pause,          0); break;
+	case skin_main_button_stop:      draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_stop);     show_tip(oooo_skins_stop,                0); break;
+	case skin_main_button_previous:  draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_previous); show_tipex(oooo_skins_previous, oooo_skins_rewind,        0, uni("\nRight: ")); break;
+	case skin_main_button_next:      draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_next);     show_tipex(oooo_skins_next,     oooo_skins_fast_forward,  1, uni("\nRight: ")); break;
+	case skin_main_button_open:      draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_open);     show_tipex(oooo_skins_open,     oooo_skins_add_files,     2, uni("\nRight: ")); break;
+	case skin_main_button_playlist:  draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_playlist); show_tip(oooo_skins_show_playlist,       0); break;
+	case skin_main_button_equalizer: draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_eq);       show_tip(oooo_skins_show_equalizer,      0); break;
+	case skin_main_button_minimize:  draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_minimize); show_tip(oooo_skins_minimize,            0); break;
+	case skin_main_button_exit:      draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_exit);     show_tip(oooo_skins_close,               0); break;
+						
+	case skin_main_button_settings:  draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_settings); show_tip(oooo_skins_show_preferences,    0); break;
+	case skin_main_button_convert:   draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_convert);  show_tip(oooo_skins_show_conversion,     0); break;
+	case skin_main_button_rip:       draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_rip);      show_tip(oooo_skins_show_ripping,        0); break;
+	case skin_main_button_join:      draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_join);     show_tip(oooo_skins_show_joining,        0); break;
+	case skin_main_button_visual:    draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_vis);      show_tip(oooo_skins_Show_visualizations, 0); break;
+	case skin_main_button_video:     draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_video);    show_tip(0, uni("Show/Hide video window")); break;
+	case skin_main_button_dsp:       draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_dsp);      show_tip(0, uni("DSP/Effects")); break;
 	}
 
 	if(id == 0 || id != lid)
@@ -951,29 +1009,35 @@ int skin_draw_button_hover(int id, HDC dc)
  */
 int skin_draw_button_down(int id, HDC dc)
 {
+	RECT rct;
+	int  win_w, win_h;
 	static int lid = -1;
+
+	GetClientRect(wnd, &rct);
+	win_w = rct.right;
+	win_h = rct.bottom;
 
 #	define blt(x, y, w, h, sx, sy) (StretchBlt(dc, (x), (y), ((w) * 2), ((h) * 2), mdc_sheet, (sx), (sy), (w), (h), SRCCOPY))
 	
 	switch(id)
 	{
-	case skin_main_button_play:      blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_play);     break;
-	case skin_main_button_stop:      blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_stop);     break;
-	case skin_main_button_previous:  blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_previous); break;
-	case skin_main_button_next:      blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_next);     break;
-	case skin_main_button_open:      blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_open);     break;
-	case skin_main_button_playlist:  blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_playlist); break;
-	case skin_main_button_equalizer: blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_eq);       break;
-	case skin_main_button_minimize:  blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_minimize); break;
-	case skin_main_button_exit:      blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_exit);     break;
+	case skin_main_button_play:      draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_play);     break;
+	case skin_main_button_stop:      draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_stop);     break;
+	case skin_main_button_previous:  draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_previous); break;
+	case skin_main_button_next:      draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_next);     break;
+	case skin_main_button_open:      draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_open);     break;
+	case skin_main_button_playlist:  draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_playlist); break;
+	case skin_main_button_equalizer: draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_eq);       break;
+	case skin_main_button_minimize:  draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_minimize); break;
+	case skin_main_button_exit:      draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_exit);     break;
 
-	case skin_main_button_settings:  blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_settings); break; 
-	case skin_main_button_convert:   blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_convert);  break;
-	case skin_main_button_rip:       blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_rip);      break;
-	case skin_main_button_join:      blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_join);     break;
-	case skin_main_button_visual:    blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_vis);      break;
-	case skin_main_button_video:     blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_video);    break;
-	case skin_main_button_dsp:       blt_coord(dc, mdc_sheet, 2, &coords.window_main.button_dsp);      break;
+	case skin_main_button_settings:  draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_settings); break; 
+	case skin_main_button_convert:   draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_convert);  break;
+	case skin_main_button_rip:       draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_rip);      break;
+	case skin_main_button_join:      draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_join);     break;
+	case skin_main_button_visual:    draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_vis);      break;
+	case skin_main_button_video:     draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_video);    break;
+	case skin_main_button_dsp:       draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_dsp);      break;
 	
 	case skin_main_button_lock:
 		if(skin_settings.skin_lock)
@@ -1090,6 +1154,52 @@ void CALLBACK seek_timer(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 	}
 }
 
+void vis_update()
+{
+	int i, x = 0, n;
+	static int y[32]; /* 97 max */
+	static float ss[512];
+	RECT rct;
+	int  win_w, win_h, c, j;
+	float bheight = 117 - 75 - 2;
+
+	GetClientRect(wnd, &rct);
+	win_w = rct.right;
+	win_h = rct.bottom;
+
+	skin.shared->audio.output.getfloatbuffer((float*)&ss, 512, (dword)-1);
+
+	beat_level = 0.0f;
+
+	for(i=0; i<22; i++)
+	{
+		n = (int)(ss[511 / 22 * i] * bheight);
+		beat_level += (float)fabs(((float)n) / bheight);
+		//n *= 97;
+
+		y[i] -= 4;
+		if(y[i] < 0)y[i] = 0;
+		if(n > y[i]) y[i] = n;
+
+		//BitBlt(mdc, 109 + x, 108 - y[i], 12, main_h, main_vis_dc, 109 + x, 108 - y[i], SRCCOPY);
+		
+		x += 14;
+	}
+
+	c = win_w / 9;
+	for(i=0; i<c; i++)
+	{
+		j = i % 22;
+		gr_rect(&gr_main, 0xf5f5f5, i * 9, win_h - 117 , 8, bheight - y[j]);
+		gr_rect(&gr_main, 0xe2e2e2, i * 9, win_h - 117 - 1 + bheight - y[j], 8, y[j]);
+	}
+
+	if(beat_level > 20.0f) beat_level = 20.0f;
+	else if(beat_level < 0.0f) beat_level = 0.0f;
+
+}
+
+
 void CALLBACK display_timer(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
 
@@ -1109,13 +1219,10 @@ void CALLBACK display_timer(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime
 
 	if(!gr_main.dc) return;
 
+	vis_update();
+
 	c = win_w / 9;
 
-	for(i=0; i<10; i++)
-	{
-		gr_rect(&gr_main, 0x000000, i * 9, 45, 8, win_h - 45 - 75);
-
-	}
 
 	return;
 
@@ -1719,6 +1826,17 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 
+	case WM_SIZE:
+	case WM_SIZING:
+
+		if(window_ml)
+		{
+			RECT rct;
+			GetClientRect(hwnd, &rct);
+			SetWindowPos(window_ml, 0, 0, 0, rct.right, rct.bottom - 117 - 45, SWP_NOMOVE | SWP_NOZORDER);
+		}	
+		break;
+
 	case WM_LBUTTONDBLCLK:
 		if(incoord((int)(short)LOWORD(lParam), (int)(short)HIWORD(lParam), 7, 17, 204, 11))
 			skin.shared->general.show_tageditor(0, 0, 0);
@@ -1739,9 +1857,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			win_h = rct.bottom;
 			win_w = rct.right;
 
-			display_timer(0, WM_USER + 221, 0, 0);
+			
 
-			gr_rect(&gr_main, 0xe6e6e6, 0, 45, win_w, win_h - 45 - 117);
+			//gr_rect(&gr_main, 0xe6e6e6, 0, 45, win_w, win_h - 45 - 117);
 			gr_rect(&gr_main, 0xf5f5f5, 0, win_h - 117, win_w, 117 - 75);
 
 
@@ -1781,7 +1899,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			gr_line(&gr_main, 1, 0xcccccc, 0, win_h-76, win_w, win_h-76);
 			gr_line(&gr_main, 1, 0xb3b3b3, 0, win_h-117, win_w, win_h-117);
 
-
+			display_timer(0, WM_USER + 221, 0, 0);
 			//BitBlt(hdc, 0, 0, cr(coords.window_main.width), cr(coords.window_main.height), mdc_sheet, skin_main_x, skin_main_y, SRCCOPY);
 			
 			EndPaint(hwnd, &ps);

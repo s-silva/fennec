@@ -164,6 +164,8 @@ void scoord(struct coord *c, int x, int y, int w, int h, int sxn, int syn, int s
 	c->sy_h = syh;
 	c->sx_d = sxd;
 	c->sy_d = syd;
+	c->align = 0;
+	c->icon_text = uni('a');
 }
 
 int incoordx(int x, int y, struct coord *sc)
@@ -267,6 +269,20 @@ void blt_button_on_coord_vb(HDC dc, HDC sdc, struct coord *bar, struct coord *bu
 	StretchBlt(dc, cr(bar->x + (bar->w / 2) - (button->w / 2)), cr(bar->y - (button->h / 2) + (int)((float)bar->h * (pos + 0.5f))), cr(button->w), cr(button->h), sdc, button->sx_d, button->sy_d, button->w, button->h, SRCCOPY);
 }
 
+void scontrol(struct coord *c, int x, int y, int w, int h, int align, uint32_t ncolor, uint32_t hcolor, int mode, letter icon_text, int font_size)
+{
+	c->x = x;
+	c->y = y;
+	c->w = w;
+	c->h = h;
+	c->align     = align; 
+	c->ncolor    = ncolor;
+	c->hcolor    = hcolor;
+	c->mode      = mode;
+	c->icon_text = icon_text;
+	c->font_size = font_size;
+}
+
 
 void fill_skin_coords(void)
 {
@@ -289,11 +305,14 @@ void fill_skin_coords(void)
 	coords.window_main.pos_text_x = 200;
 	coords.window_main.pos_text_y = 15;
 
-	scoord(&coords.window_main.button_play,      4,   40, 36, 15, 1,   117, 1,   133, 1,   149);
-	scoord(&coords.window_main.button_stop,      42,  40, 36, 15, 39,  117, 39,  133, 39,  149);
-	scoord(&coords.window_main.button_previous,  80,  40, 36, 15, 77,  117, 77,  133, 77,  149);
-	scoord(&coords.window_main.button_next,      118, 40, 36, 15, 115, 117, 115, 133, 115, 149);
-	scoord(&coords.window_main.button_open,      156, 40, 36, 15, 153, 117, 153, 133, 153, 149);
+	scontrol(&coords.window_main.button_play,       10, 55, 55, 55, coord_align_bottom_left, 0x656565, 0xff7f29, 0, uni('a'), 32);
+	scontrol(&coords.window_main.button_stop,       65, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff7f29, 0, uni('b'), 19);
+	scontrol(&coords.window_main.button_previous,  101, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff7f29, 0, uni('c'), 19);
+	scontrol(&coords.window_main.button_next,      135, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff7f29, 0, uni('d'), 19);
+	// volume                                    169,
+	scontrol(&coords.window_main.button_open,      204, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff7f29, 0, uni('f'), 19);
+
+
 	scoord(&coords.window_main.button_playlist,  194, 40, 36, 15, 191, 117, 191, 133, 191, 149);
 	scoord(&coords.window_main.button_eq,        232, 40, 36, 15, 229, 117, 229, 133, 229, 149);
 	scoord(&coords.window_main.button_minimize,  250, 3,  9,  9,  250, 3  , 1,   165, 21,  165);
@@ -412,12 +431,12 @@ void fill_skin_coords(void)
 	coords.window_ml.min_width   = 100;
 	coords.window_ml.min_height  = 50;
 	coords.window_ml.window_mode = 0; /* round rect */
-	coords.window_ml.window_edge = 5;
+	coords.window_ml.window_edge = 0;
 
 	coords.window_ml.list_l = 26;
-	coords.window_ml.list_r = 14;
-	coords.window_ml.list_t = 19;
-	coords.window_ml.list_b = 11;
+	coords.window_ml.list_r = 0;
+	coords.window_ml.list_t = 0;
+	coords.window_ml.list_b = 0;
 
 	coords.window_ml.button_close_align     = 1;
 	coords.window_ml.button_medialib_align  = 0;
