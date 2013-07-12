@@ -424,7 +424,7 @@ void gr_delete(graphic_context *gr)
 
 } 
 
- #define color_convertorder_rgb(rgb)((((BYTE) (rgb)) << 16) | (((WORD) (rgb)) << 8) | ((BYTE) ((rgb) >> 16)) )
+ #define color_convertorder_rgb(rgb)(RGB(GetBValue(rgb), GetGValue(rgb), GetRValue(rgb)))
 
 void gr_setcolor(graphic_context *gr, uint32_t pencolor, uint32_t brushcolor)
 {
@@ -519,7 +519,7 @@ void gr_setfont(graphic_context *gr, const string fontface, int size, int bold, 
 
 	nfont = CreateFont(-MulDiv(size, GetDeviceCaps(gr->dc, LOGPIXELSY), 72),
                                 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET,
-                                OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, 5,
+                                OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
                                 DEFAULT_PITCH, fontface);
 
 	SelectObject(gr->dc, nfont);

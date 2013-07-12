@@ -166,6 +166,8 @@ void scoord(struct coord *c, int x, int y, int w, int h, int sxn, int syn, int s
 	c->sy_d = syd;
 	c->align = 0;
 	c->icon_text = uni('a');
+	c->bk   = 0;
+	c->font_id = 0;
 }
 
 int incoordx(int x, int y, struct coord *sc)
@@ -281,7 +283,28 @@ void scontrol(struct coord *c, int x, int y, int w, int h, int align, uint32_t n
 	c->mode      = mode;
 	c->icon_text = icon_text;
 	c->font_size = font_size;
+	c->bk        = 0;
+	c->font_id   = 0;
 }
+
+void scontrol_ex(struct coord *c, int x, int y, int w, int h, int align, uint32_t ncolor, uint32_t hcolor, int mode, letter icon_text, int font_size, int usebk, uint32_t bk_ncolor, uint32_t bk_hcolor, int font_id)
+{
+	c->x = x;
+	c->y = y;
+	c->w = w;
+	c->h = h;
+	c->align     = align; 
+	c->ncolor    = ncolor;
+	c->hcolor    = hcolor;
+	c->mode      = mode;
+	c->icon_text = icon_text;
+	c->font_size = font_size;
+	c->bk        = usebk;
+	c->bk_ncolor = bk_ncolor;
+	c->bk_hcolor = bk_hcolor;
+	c->font_id   = font_id;
+}
+
 
 
 void fill_skin_coords(void)
@@ -305,19 +328,20 @@ void fill_skin_coords(void)
 	coords.window_main.pos_text_x = 200;
 	coords.window_main.pos_text_y = 15;
 
-	scontrol(&coords.window_main.button_play,       10, 55, 55, 55, coord_align_bottom_left, 0x656565, 0xff7f29, 0, uni('a'), 32);
-	scontrol(&coords.window_main.button_stop,       65, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff7f29, 0, uni('b'), 19);
-	scontrol(&coords.window_main.button_previous,  101, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff7f29, 0, uni('c'), 19);
-	scontrol(&coords.window_main.button_next,      135, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff7f29, 0, uni('d'), 19);
+	scontrol(&coords.window_main.button_play,       10, 55, 55, 55, coord_align_bottom_left, 0x656565, 0xf42e3e, 0, uni('t'), 36);
+	scontrol(&coords.window_main.button_stop,       65, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xf42e3e, 0, uni('b'), 19);
+	scontrol(&coords.window_main.button_previous,  101, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xf42e3e, 0, uni('c'), 19);
+	scontrol(&coords.window_main.button_next,      135, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xf42e3e, 0, uni('d'), 19);
 	// volume                                    169,
-	scontrol(&coords.window_main.button_open,      204, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff7f29, 0, uni('f'), 19);
+	scontrol(&coords.window_main.button_open,      204, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xf42e3e, 0, uni('f'), 19);
 
 
+	/*
 	scoord(&coords.window_main.button_playlist,  194, 40, 36, 15, 191, 117, 191, 133, 191, 149);
-	scoord(&coords.window_main.button_eq,        232, 40, 36, 15, 229, 117, 229, 133, 229, 149);
-	scoord(&coords.window_main.button_minimize,  250, 3,  9,  9,  250, 3  , 1,   165, 21,  165);
-	scoord(&coords.window_main.button_exit,      260, 3,  9,  9,  260, 3  , 11,  165, 31,  165);
-																		   
+	scoord(&coords.window_main.button_eq,        232, 40, 36, 15, 229, 117, 229, 133, 229, 149); */
+	scoord(&coords.window_main.button_exit,      36, 22, 27, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('i'), 19);				
+	scoord(&coords.window_main.button_minimize,  64, 22, 27, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('h'), 19);
+														   
 	scoord(&coords.window_main.button_settings,  187, 3,  9,  9,  46,  165, 100, 165, 100, 165);
 	scoord(&coords.window_main.button_convert,   198, 3,  9,  9,  57,  165, 111, 165, 111, 165);
 	scoord(&coords.window_main.button_rip,       209, 3,  9,  9,  68,  165, 122, 165, 122, 165);

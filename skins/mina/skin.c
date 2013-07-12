@@ -148,7 +148,7 @@ int __stdcall fennec_skin_initialize(struct skin_data *indata, struct skin_data_
 	outdata->refresh      = skin_refresh;
 	outdata->uninitialize = skin_uninitialize;
 	outdata->callback     = WindowProc;
-	outdata->woptions     = WS_OVERLAPPEDWINDOW;//WS_POPUP | WS_SYSMENU | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_MINIMIZEBOX;
+	outdata->woptions     = WS_POPUP | WS_SYSMENU | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_MINIMIZEBOX;
 	outdata->subs_get     = skin_subskins_get;
 	outdata->subs_select  = skin_subskins_select;
 
@@ -163,6 +163,16 @@ int __stdcall fennec_skin_initialize(struct skin_data *indata, struct skin_data_
 	gr_main.dc = hdc;
 	SetBkMode(hdc, TRANSPARENT);
 
+	SetClassLong(wnd, GCL_STYLE, GetClassLong(wnd, GCL_STYLE) | CS_DROPSHADOW);
+
+	SystemParametersInfo(SPI_SETFONTSMOOTHING,
+                     TRUE,
+                     0,
+                     SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
+	SystemParametersInfo(SPI_SETFONTSMOOTHINGTYPE,
+	                     0,
+	                     (PVOID)FE_FONTSMOOTHINGCLEARTYPE,
+	                     SPIF_UPDATEINIFILE | SPIF_SENDCHANGE); 
 
 	//fill_skin_coords();
 
@@ -225,7 +235,9 @@ int __stdcall fennec_skin_initialize(struct skin_data *indata, struct skin_data_
 
 			skin_settings.main_x     = px;
 			skin_settings.main_y     = py;
-			
+			skin_settings.main_w     = 477;
+			skin_settings.main_h     = 320;
+
 			skin_settings.eq_x       = px;
 			skin_settings.eq_y       = py + cr(coords.window_main.height);
 			skin_settings.eq_d       = 1;
@@ -320,8 +332,10 @@ void skin_recreate(void)
 	//wndmainrgn = CreateRoundRectRgn(0, 0, cr(coords.window_main.width), cr(coords.window_main.height), cr(coords.window_main.window_edge), cr(coords.window_main.window_edge));
 	//SetWindowRgn(wnd, wndmainrgn, 1);
 
-	setwinpos_clip(wnd, 0, skin_settings.main_x, skin_settings.main_y,
-		cr(coords.window_main.width), cr(coords.window_main.height), SWP_NOZORDER);
+
+	SetWindowPos(wnd, 0, skin_settings.main_x, skin_settings.main_y, skin_settings.main_w, skin_settings.main_h, SWP_NOZORDER);
+	//setwinpos_clip(wnd, 0, skin_settings.main_x, skin_settings.main_y,
+	//	cr(coords.window_main.width), cr(coords.window_main.height), SWP_NOZORDER);
 
 	sys_pass();
 
@@ -860,6 +874,8 @@ void draw_control(graphic_context *gr, graphic_context *gr_sc, int state, int wi
 	stext[1] = uni('\0');
 	stext[2] = uni('\0');
 
+	gr_setfont(&gr_main, uni("Your Icons"), sc->font_size, 0, 0, 0, 0);
+
 	switch(sc->align)
 	{
 	case coord_align_top_left:
@@ -1161,7 +1177,7 @@ void vis_update()
 	static float ss[512];
 	RECT rct;
 	int  win_w, win_h, c, j;
-	float bheight = 117 - 75 - 2;
+	float bheight = 117 - 75 - 4;
 
 	GetClientRect(wnd, &rct);
 	win_w = rct.right;
@@ -1190,8 +1206,8 @@ void vis_update()
 	for(i=0; i<c; i++)
 	{
 		j = i % 22;
-		gr_rect(&gr_main, 0xf5f5f5, i * 9, win_h - 117 , 8, bheight - y[j]);
-		gr_rect(&gr_main, 0xe2e2e2, i * 9, win_h - 117 - 1 + bheight - y[j], 8, y[j]);
+		gr_rect(&gr_main, 0xf5f5f5, i * 9, win_h - 117 + 2, 8, bheight - y[j]);
+		gr_rect(&gr_main, 0xe2e2e2, i * 9, win_h - 117 + 2 + bheight - y[j], 8, y[j]);
 	}
 
 	if(beat_level > 20.0f) beat_level = 20.0f;
@@ -1210,8 +1226,9 @@ void CALLBACK display_timer(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime
 	int     i, c;
 	int     win_h, win_w;
 	RECT    rct;
+	double  pos = 0.0;
 
-	GetClientRect(hwnd, &rct);
+	GetClientRect(wnd, &rct);
 
 	win_h = rct.bottom;
 	win_w = rct.right;
@@ -1224,6 +1241,17 @@ void CALLBACK display_timer(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime
 	c = win_w / 9;
 
 
+
+	/* MINA */
+
+	skin.shared->audio.output.getposition(&pos);
+	if(pos > 1.0)pos = 1.0;
+	else if(pos < 0.0) pos = 0.0;
+
+	gr_rect(&gr_main, 0x9d9181, 10, win_h - 75 + 6, win_w - 20, 6);
+	gr_rect(&gr_main, 0xff2e3e, 10, win_h - 75 + 6, ((int)(win_w - 20) * pos), 6);
+
+	/*
 	return;
 
 
@@ -1484,7 +1512,7 @@ void CALLBACK display_timer(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime
 	else		
 		blt_coord_nozoom(hdc, ldcmem, 0, &coords.window_main.display_area);
 
-
+	*/
 
 }
 
@@ -1521,10 +1549,21 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			int x = (int)(short)LOWORD(lParam), y = (int)(short)HIWORD(lParam);
 
-			if((x > cr(coords.window_main.width) - 5 && x < cr(coords.window_main.width)) || downid == skin_main_endl)
-				SetCursor(LoadCursor(0, IDC_SIZEWE));
-			if((y > cr(coords.window_main.height) - 5 && y < cr(coords.window_main.height)) || downid == skin_main_endb)
-				SetCursor(LoadCursor(0, IDC_SIZENS));
+			{
+				RECT rct;
+				GetClientRect(hwnd, &rct);
+
+				if((x > rct.right - 5 && x < rct.right) || downid == skin_main_endl)
+					SetCursor(LoadCursor(0, IDC_SIZEWE));
+				if((y > rct.bottom - 5 && y < rct.bottom) || downid == skin_main_endb)
+					SetCursor(LoadCursor(0, IDC_SIZENS));
+				if((x < 5))
+					SetCursor(LoadCursor(0, IDC_SIZEWE));
+				if((y < 5))
+					SetCursor(LoadCursor(0, IDC_SIZENS));
+
+			}
+
 
 			if(!downid)
 			{
@@ -1568,6 +1607,25 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				break;
 			}
 
+			if(downid == skin_main_endr)
+			{
+				RECT rct;
+				GetClientRect(hwnd, &rct);
+
+				SetWindowPos(hwnd, 0, 0, 0, x, rct.bottom, SWP_NOZORDER | SWP_NOMOVE);
+				skin_settings.main_w = x;
+			}
+
+			if(downid == skin_main_endb)
+			{
+				RECT rct;
+				GetClientRect(hwnd, &rct);
+
+				SetWindowPos(hwnd, 0, 0, 0, rct.right, y, SWP_NOZORDER | SWP_NOMOVE);
+				skin_settings.main_h = y;
+			}
+
+			/* 
 			if(downid == skin_main_endr || downid == skin_main_endb)
 			{
 				if(downid == skin_main_endr)
@@ -1602,7 +1660,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 				display_timer((HWND)-1, WM_USER + 221, 0, 0);
 				
-			}
+			} */
 
 			skin_draw_button_hover(skin_get_button_index(x, y), hdc);
 		}
@@ -1696,24 +1754,27 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_LBUTTONDOWN:
-
-		dx = LOWORD(lParam), dy = HIWORD(lParam);
-		
-		downid = skin_get_button_index(dx, dy);
-
-		if(dx > cr(coords.window_main.width)  - 5)downid = skin_main_endr;
-		if(dy > cr(coords.window_main.height) - 5)downid = skin_main_endb;
-	
-
-		if(downid == 0 || downid == skin_main_button_seek || downid == skin_main_button_volume || downid == skin_main_endr || downid == skin_main_endb)
 		{
-			PostMessage(hwnd, WM_MOUSEMOVE, 0, lParam);
-			SetCapture(hwnd);
+			RECT rct;
+			GetClientRect(hwnd, &rct);
+	
+			dx = LOWORD(lParam), dy = HIWORD(lParam);
+			
+			downid = skin_get_button_index(dx, dy);
+
+			if(dx > rct.right  - 5)downid = skin_main_endr;
+			if(dy > rct.bottom - 5)downid = skin_main_endb;
+		
+
+			if(downid == 0 || downid == skin_main_button_seek || downid == skin_main_button_volume || downid == skin_main_endr || downid == skin_main_endb)
+			{
+				PostMessage(hwnd, WM_MOUSEMOVE, 0, lParam);
+				SetCapture(hwnd);
+			}
+
+			if(downid != skin_main_endr)
+				skin_draw_button_down(downid, hdc);
 		}
-
-		if(downid != skin_main_endr)
-			skin_draw_button_down(downid, hdc);
-
 		break;
 
 	case WM_LBUTTONUP:
@@ -1838,9 +1899,11 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_LBUTTONDBLCLK:
+
 		if(incoord((int)(short)LOWORD(lParam), (int)(short)HIWORD(lParam), 7, 17, 204, 11))
 			skin.shared->general.show_tageditor(0, 0, 0);
 
+		if(HIWORD(lParam) < 45) ShowWindow(hwnd, SW_MAXIMIZE);
 		break;
 
 	case WM_PAINT:
@@ -1866,18 +1929,14 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			gr_rect(&gr_main, 0x656565, 0, 0, win_w, 45);
 			gr_rect(&gr_main, 0xf5f5f5, 0, win_h - 75, win_w, 75);
 
-
-			skin.shared->audio.output.getposition(&pos);
-			if(pos > 1.0)pos = 1.0;
-			else if(pos < 0.0) pos = 0.0;
-
-			gr_rect(&gr_main, 0x9d9181, 10, win_h - 75 + 6, win_w - 20, 6);
-			gr_rect(&gr_main, 0xff7f29, 10, win_h - 75 + 6, ((int)(win_w - 20) * pos), 6);
-
-			gr_setfont(&gr_main, uni("Your Icons"), 19, 0, 0, 0, 0);
+			gr_setfont(&gr_main, uni("Your Icons"), 36, 0, 0, 0, 0);
 			gr_settextcolor(&gr_main, 0x656565, 0, 0);
 
-			gr_text(&gr_main, 0, uni("a"), 10,  win_h - 55, 0, 0);
+			gr_rect(&gr_main, 0x9d9181, 10, win_h - 75 + 6, win_w - 20, 6);
+
+			gr_text(&gr_main, 0, uni("t"), 10,  win_h - 55, 0, 0);
+
+			gr_setfont(&gr_main, uni("Your Icons"), 19, 0, 0, 0, 0);
 			gr_text(&gr_main, 0, uni("b"), 65,  win_h - 45, 0, 0);
 			gr_text(&gr_main, 0, uni("c"), 101, win_h - 45, 0, 0);
 			gr_text(&gr_main, 0, uni("d"), 135, win_h - 45, 0, 0);
@@ -1891,18 +1950,20 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			gr_text(&gr_main, 0, uni("i"), win_w - 89, win_h - 44, 0, 0);
 
 
-			gr_line(&gr_main, 1, 0xcccccc, 0, 0, 0, win_h);
+			gr_line(&gr_main, 1, 0xcccccc, 0, 45, 0, win_h);
 			gr_line(&gr_main, 1, 0xcccccc, 0, 0, 0, win_w);
-			gr_line(&gr_main, 1, 0xcccccc, win_w -1 , 0, win_w -1, win_h);
+			gr_line(&gr_main, 1, 0xcccccc, win_w -1 , 45, win_w -1, win_h);
 			gr_line(&gr_main, 1, 0xcccccc, 0, win_h-1, win_w, win_h-1);
 
 			gr_line(&gr_main, 1, 0xcccccc, 0, win_h-76, win_w, win_h-76);
 			gr_line(&gr_main, 1, 0xb3b3b3, 0, win_h-117, win_w, win_h-117);
 
-			display_timer(0, WM_USER + 221, 0, 0);
+			
 			//BitBlt(hdc, 0, 0, cr(coords.window_main.width), cr(coords.window_main.height), mdc_sheet, skin_main_x, skin_main_y, SRCCOPY);
 			
 			EndPaint(hwnd, &ps);
+
+			display_timer(0, WM_USER + 221, 0, 0);
 		}
 		break;
 
