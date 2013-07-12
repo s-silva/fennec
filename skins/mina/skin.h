@@ -73,6 +73,8 @@ typedef struct _local_skin_settings
 {
 	int main_x;
 	int main_y;
+	int main_w;
+	int main_h;
 
 	int eq_x;
 	int eq_y;
@@ -138,6 +140,9 @@ struct coord
 	int       mode;
 	letter    icon_text; 
 	int       font_size;
+	int       font_id;
+	int       bk;
+	uint32_t  bk_ncolor, bk_hcolor;
 };
 
 typedef struct _skin_coords
