@@ -1,0 +1,551 @@
+<html><head>
+
+	<style type="text/css">
+
+		html
+		{
+			height: 100%;
+		}
+
+		body
+		{
+			background: #e6e6e6;
+			color: #656565;
+			font-size: 11pt;
+			font-family: "Roboto Lt";
+			line-height: 130%;
+			height: 100%;
+			text-rendering: optimizeLegibility;
+			padding: 0;
+			margin: 0;
+			font-weight: 200;
+		}
+
+		h1
+		{
+			color: #9e9e9e;
+			font-weight: 400;
+			font-size: 22px;
+		}
+
+		a
+		{
+			text-decoration: none;
+			color: #45bdea;
+		}
+
+		a:hover
+		{
+			text-decoration: underline;
+			color: #45bdea;
+		}
+
+
+		.content
+		{
+			text-align: left;
+			margin: 0 0 0 0;
+		}
+
+		.coverimage
+		{
+			width: 100%;
+			overflow: hidden;
+			text-align: center;
+			height: 319px; 
+			background: url('img/newpv.jpg') no-repeat center center; 
+	        -webkit-background-size: cover;
+	        -moz-background-size: cover;
+	        -o-background-size: cover;
+	        background-size: cover;
+		}
+
+		.cblock
+		{
+			max-width: 1160px;
+			margin: 0 auto;
+		}
+
+		.ctblock
+		{
+			padding: 20px;
+		}
+
+		.qtext
+		{
+			background: #fdfdfd;
+			width: 100%;
+			display:block;
+			position:relative;	
+			margin-top: 25px;
+			border-radius: 4px;
+		}
+
+		.qtext::after
+		{
+			display:block;
+			position:absolute;
+			z-index:1;
+			top: -40px;
+			left: 40px;
+			width:0px;
+			height:0px;
+			border-style:solid;
+			border-width: 20px 20px 20px 20px;
+			border-color: transparent transparent #fdfdfd transparent ;
+			content:' ';
+		}
+
+		.qtext_text
+		{
+			padding: 28px;
+			max-width: 750px;
+			font-size: 13px;
+			font-weight: 300;
+		}
+
+		.color_strip
+		{
+			width: 100%;
+			padding: 35px 0 35px 0;
+		}
+
+		.color_strip h1
+		{
+			font-size: 36px;
+			color: inherit;
+		}
+
+		.color_strip h2
+		{
+			font-size: 24px;
+			font-weight: 400;
+			margin: 0;
+			padding: 0;
+			color: inherit;
+			line-height: 120%;
+		}
+
+		.downblock
+		{
+			width: 340px;
+			padding: 20px 0px 10px 0;
+			color: #ffffff;
+			text-decoration: none;
+		}
+
+
+		.scblock
+		{
+			background: #ffffff;
+			padding: 10px;
+			border-radius: 4px;
+		}
+
+		.scblock img
+		{
+			float: left;
+		}
+
+		.scblock_text
+		{
+			background: #ffffff;
+			float: left;
+			width: 40%;
+			padding: 5%;
+		}
+
+		table{border: 1px solid #858585; padding: 20px; width: 600px;}
+		td, tr{border: none;}
+		th{border: none; font-weight: 500;}
+		h3{font-weight: 400;}
+
+		.topbar
+		{
+			padding: 35px 0 35px 0;
+		}
+
+		.topbar-title
+		{
+			float: left;
+			max-width: 355px;
+			color: #333333;
+		}
+
+		.topbar-title h1
+		{
+			font-size: 14pt;
+			font-weight: 300;
+			color: #333333;
+			margin: 0;
+		}
+
+		.topbar-title h2
+		{
+			font-size: 10pt;
+			font-weight: 300;
+			color: #333333;
+			margin: 0;
+		}
+
+		.topbar-links
+		{
+			float: right;
+			padding: 20px 0 20px 0;
+		}
+
+		.topbar-links a
+		{
+			font-size: 14pt;
+			color: #333333;
+			padding: 0 20px 0 20px;
+		}
+
+		.ct-right
+		{
+			float: right;
+			width: 50%;
+		}
+
+		.ct-left
+		{
+			float: right;
+			width: 50%;
+			background: #efefef;
+		}
+
+		.ct-left li
+		{
+			padding: 10px 0 10px 0;
+		}
+
+		.picture-box
+		{
+			max-width: 650px;
+			margin-bottom: 50px;
+		}
+
+		.picture-box img
+		{
+			width: 100%;
+			height: auto;
+		}
+
+		.picture-box-tt
+		{
+			background: #333333;
+			color: #ffffff;
+			width: 100%;
+		}
+
+		.picture-box-tt h1
+		{
+			padding: 25px 10px 25px 20px;
+			margin: 0;
+		}
+
+		.footer
+		{	
+			min-height: 220px;
+			background: #d2d2d2;
+			border-top: 4px solid #45bdea;
+			margin-top: 120px;
+			text-align: center;
+			padding-top: 30px;
+		}
+
+		.statusbar
+		{
+			background: #d2d2d2;
+			padding: 20px 10px 20px 10px;
+		}
+
+		.statusbari
+		{
+			background: #d2d2d2;
+			padding: 0px 2px 2px 2px;
+			overflow: hidden;
+		}
+
+		@media screen and (max-width:800)
+		{
+			.ct-right
+			{
+				float: none;
+				width: 100%;
+				padding: 0;
+			}
+
+			.statusbari
+			{
+				display: none;
+			}
+
+			#tech-slideshow > div
+			{
+		        height: 319px;
+		        width: 606px;
+		        background: none;
+	    	}
+
+			.ct-left
+			{
+				float: none;
+				width: 100%;
+				padding: 0;
+			}
+
+			.content
+			{
+				margin: 10px
+			}
+		}
+
+
+	</style>
+
+	<title>Fennec Media Project</title>
+
+	<link href='http://fonts.googleapis.com/css?family=Roboto:300,400' rel='stylesheet' type='text/css'>
+	
+</head><body onload='init()'>
+	<div class='content'>
+		<div class='topbar'><div class='cblock'>
+			<div class='topbar-title'>
+				<img src='img/logo.png' style='float: left; padding-right: 15px'/>
+				<h1>Fennec Media Project</h1>
+				<h2>Open source universal multimedia player and transcoder.</h2>
+			</div>
+			<div class='topbar-links'>
+				<a href="http://fennec.sourceforge.net/">Home</a> | 
+				<a href="http://sourceforge.net/projects/fennec/files/fennec/">Downloads</a> | 
+				<a href="http://sourceforge.net/projects/fennec">Project Site</a> | 
+				<a href="http://sourceforge.net/users/c-h">Contact</a>
+			</div>
+
+			<div style='clear:both'></div>
+		</div></div>
+
+
+		<div class='coverimage'></div>
+
+		<div class='cblock'><div class='qtext'><div class='qtext_text'>
+			Concept of the new version, with a new skin, REX support, new MPEG tag handler, quick smart search
+			features for media library and vector graphic based UI.
+			<br/>
+			Currently developing the new skin and fixing video display performance issues and video decoder issues,
+			The codebase have been transfrred into GCC/mingw64, in order to build from source code or to contribute
+			visit the official <a href='http://github.com/s-silva/fennec'>Github Repository</a>.
+
+		</div></div></div>
+
+		<div style='height: 55px;'></div>
+
+
+		<div class='color_strip' style='background: #ed3840; color: #ffffff;'><div class='cblock'><div class='ctblock'>
+			<h1>Downloads</h1>
+
+			<div style='float: left;'>
+				<a href='http://sourceforge.net/projects/fennec/files/latest/download'><div class='downblock' style='border: 1px solid #f3767b; padding: 10px;'>
+					<h2>Version 1.4</h2><br/>
+					Microsoft Windows Installation (MSI)<br/>
+					<i>There are some issues with video support</i><br/>
+				</div></a>
+				<a href="http://prdownloads.sourceforge.net/fennec/fennec_player_1.3_beta1.exe?download"><div class='downblock'>
+					<h2>Version 1.3</h2><br/>
+					Microsoft Windows Installation (EXE)<br/>
+					<i>On Windows Vista and later, use Right Click -> Run as Administrator</i><br/>
+				</div></a>
+			</div>
+			<div style='float: left;'>
+				<div class='downblock' style='visibility: hidden;'>
+					<h2>Version 1.4</h2><br/>
+					Microsoft Windows Installation (MSI)<br/>
+					<i>There are some issues with video support</i><br/>
+				</div>
+				<a href="http://prdownloads.sourceforge.net/fennec/fennec_1.2_beta_1_binaries.zip?download"><div class='downblock'>
+					<h2>Version 1.3</h2><br/>
+					Portable Binary Package (7-zip)<br/>
+					<i>Use 7-zip (www.7-zip.org) to extract files</i><br/>
+				</div></a>
+			</div>
+			<div style='float: left;'>
+				<a href="http://prdownloads.sourceforge.net/fennec/fennec_source_july_16th_2010.7z?download">
+					<div class='downblock'>
+						<h2>Source Code Archive (July 16, 2010)</h2><br/>
+						7-zip Archive<br/>
+					</div>
+				</a>
+
+				<a href="http://prdownloads.sourceforge.net/fennec/fennec_1.2b2_source.7z?download">
+					<div class='downblock'>
+						<h2>Source Code Archive (February, 2009)</h2><br/>
+						Microsoft Windows Installation (MSI)<br/>
+						<i>Use 7-zip to extract source files.</i><br/>
+					</div>
+				</a>
+
+			</div><div style='clear: both;'></div>
+
+			<div style='text-align: right; border-top: 2px solid #f3767b; margin-top: 40px; padding-top: 20px; width: 100%;'>
+				Source code repository has been moved to <a href='http://github.com/s-silva/fennec'>Github</a>
+				<h3><a href=''>Older Releases...</a></h3>
+			</div>
+		</div></div></div>
+
+
+
+
+		<div class='color_strip'><div class='cblock'><div class='ctblock'>
+			<h1>Fennec Media Suite - Introduction</h1><br/>
+			<p>Fennec Media Suite is an open source universal media player/transcoder for Microsoft Windows platform (currently working
+				on porting). Written in C/C++ with Assembly optimizations, allowing great performances and HD playback for almost every audio/video file format available (see feature list below). Fennec player is released under GNU General Public License, so you can obtain/modify source code files and contribute your support to the project freely.</p>
+			</div>
+			<div class='scblock'>
+				<img src='img/intro.png' style='width: 50%;'/>
+				<div class='scblock_text'>
+					<h1>Version 1.3</h1>
+					Introduces smart media search, album art downloader/manager for media library, video playback support
+					and external subtitle file decoding for almost every subtitle file format (including SubRip, Advanced SubStation Alpha, AQTitle, Scantitle, Spruce...)
+
+				</div>
+				<div style='clear: both;'></div>
+			</div>
+			<div style='height: 55px;'></div>
+		</div></div>
+
+
+		<div class='color_strip' style='background: #4d4d4d; color: #ffffff;'><div class='cblock'><div class='ctblock'>
+			<h1>Features</h1><br/>
+				<div style='max-width: 650px; color: #e6e6e6;'>
+				<ul>
+					<li>Supports playing and converting: mpg, mpeg, avi, vob, flv, 3gp, mov, qt, asf, wmv, divx, mkv, mp4, ogm, rm, rmvb, swf, mp4, m2a, m4a, aac, amr, flac, ape, mpc, raw, aif, aiff, wav, wave, au, caf, snd, svx, paf, fap, gsm, nist, ircam, sf, voc, w64, mat4, mat5, mat, xi, pvf, sds, sd2, vox, spx, ogg, wv, ac3, mod, nst, mdz, mdr, m15, s3m, stm, s3z, xm, xmz, it, itz, mtm, 669, ult, wow, far, mdl, okt, dmf, ptm, med, ams, dbm, dsm, umx, amf, psm, mt2, mid, midi, rmi, smf, mp1, mp2, mp3, cda, wma...</li>
+					<li>Audio CD ripping with batch tagging.</li>
+					<li>Joining multiple media files into a single file</li>
+					<li>Highly dynamic plug-in interface, so you can add/remove plug-ins and edit their settings manually.</li>
+					<li>Visualizations.</li>
+					<li>Multichannel support (up to 16 channels) for both playback and transcoding.</li>
+					<li>A customizable 10 band equalizer for each channel.</li>
+					<li>High definition audio processing and output (64bit floating point audio processing, 8bit fixed point-32bit floating/fixed point to 64bit floating/fixed output).</li>
+					<li>Tag viewing and editing.</li>
+					<li>Formatting file name according to tags.</li>
+					<li>Group tag editing (copying and pasting selected tags into many files).</li>
+					<li>Equalizers on conversion/ripping and joining.</li>
+					<li>Volume and gain adjustments on conversion/ripping and joining.</li>
+					<li>Group tagging on conversion (could apply some constant tags into every file converted, artist name etc.).</li>
+					<li>Date and time editing on conversion/ripping and joining.</li>
+					<li>Editable DSP effects: you can add many effects simultaneously into the playing media and change the order of effects (you can add a bass boost and a reverb at the same time, boost bass before/after reverb etc.).</li>
+					<li>Skins (Fennec player doesn't have a user interface itself, it depends on plug-ins you can select to display the user interface).</li>
+					<li>Color schemes and manual tints for skins.</li>
+					<li>Automatic volume fade up/down.</li>
+					<li>Can decode multiple files at the same time (you can keep something playing while doing conversion, a new example for this is 'preview' system).</li>
+					<li>File association selection with many options (Fennec player comes with an icon library which has an icon for almost every file format).</li>
+					<li>High quality icons for file association settings (256x256 pixel 32bit).</li>
+					<li>Multilingual user interface (completely UNICODE user interface so everyone can create a simple text file called a language pack to modify user interface language).</li>
+					<li>Highly editable global and local shortcut keys interface.</li>
+					<li>Fast and customizable media library.</li>
+					<li>Windows shell integration (Fennec player places a context menu item group with open/add options).</li>
+					<li>Audio file preview (you can listen to a media file using headphones without interrupting the file which is being played; in order to experience this feature, you need to have two sound cards or multi-streaming enabled sound card).</li>
+					<li><u>Video zoom-in, zoom-out, vertical/horizontal scaling.</u></li>
+					<li><u>Dual subtitle display - you'll be able to select primary and secondary subtitles for video files, preferably in two languages.</u></li>
+					<li><u>Supports reading over 50 subtitle formats and over 10 playlist formats (with Unicode support).</u></li>
+				</ul></div>
+		</div></div></div>
+
+		<div class='color_strip' style='background: #ed3840; color: #ffffff;'><div class='cblock'><div class='ctblock'>
+			
+
+			<div style='float: left;'>
+				<b>Project</b>
+				<br/><br/>
+				<div class='downblock' style='padding: 5px 0;'><a style='color: #ffffff;' href="http://sourceforge.net/projects/fennec">Project Page</a></div>
+				<div class='downblock' style='padding: 5px 0;'><a style='color: #ffffff;' href="https://sourceforge.net/project/screenshots.php?group_id=206988">Screenshots</a></div>
+				<div class='downblock' style='padding: 5px 0;'><a style='color: #ffffff;' href="http://sourceforge.net/project/showfiles.php?group_id=206988">Files</a></div>
+				<div class='downblock' style='padding: 5px 0;'><a style='color: #ffffff;' href="http://github.com/s-silva/fennec">Source Code</a></div>
+
+			</div>
+			<div style='float: left;'>
+				<b>Community</b>
+				<br/><br/>
+				<div class='downblock' style='padding: 5px 0;'><a style='color: #ffffff;' href="https://sourceforge.net/forum/?group_id=206988">Forums</a></div>
+				<div class='downblock' style='padding: 5px 0;'><a style='color: #ffffff;' href="https://sourceforge.net/tracker2/?group_id=206988&amp;atid=999802">Bug Reporting</a></div>
+				<div class='downblock' style='padding: 5px 0;'><a style='color: #ffffff;' href="https://sourceforge.net/forum/?group_id=206988">Feature Requests</a></div>
+
+			</div>
+			<div style='clear: both;'></div>
+
+		</div></div></div>
+
+
+		<div class='color_strip' style='background: #4d4d4d; color: #ffffff;'><div class='cblock'><div class='ctblock'>
+				<div style='max-width: 650px; color: #e6e6e6;'>
+					Released under GNU General Public License (GPL) version 3, 2, 1 and other open source licenses.<br/>Check the source code
+					package for more details. <br/><br/>
+					Powered By<br/><br/>
+					<a href="http://sourceforge.net/projects/fennec"><img src="http://sourceforge.net/sflogo.php?group_id=206988&amp;type=1" width="88" height="31" border="0" alt="SourceForge Logo" /></a><br/><br/>
+					<script type="text/javascript" src="http://www.ohloh.net/p/26510/widgets/project_partner_badge.js"></script><br/><br/>
+
+				</div>
+		</div></div></div>
+
+
+
+
+
+
+		<!--
+
+
+		<div class='ct-left'><div style='padding: 30px;'>
+
+
+
+
+			<h1>Downloads</h1>
+			<a href="http://prdownloads.sourceforge.net/fennec/fennec_player_1.3_beta1.exe?download">Latest Version</a> (Please use 'Run as Administrator' mode to open the installation program)
+
+			<h3>Installation</h3>
+
+			<ul>
+				<li><a href="http://prdownloads.sourceforge.net/fennec/fennec_player_1.3_beta1.exe?download">Version - 1.3 Beta 1 (November, 2011)</a> <p>Notes: New interface...</p></li>
+				<li><a href="http://prdownloads.sourceforge.net/fennec/fennec_installation_1_2_beta_3.exe?download">Version 1.2 Beta 3 (March, 2009)</a> <p>Notes: With video playback.</p></li>
+				<li><a href="http://prdownloads.sourceforge.net/fennec/fennec_installation_1_2_beta_2_1.exe?download">Version 1.2 Beta 2.1 "Video Test" (February, 2009)</a></li>
+				<li><a href="http://prdownloads.sourceforge.net/fennec/fennec_installation_video_test_2.exe?download">Version 1.2 Beta 2.1 (February, 2009)</a></li>
+				<li><a href="http://prdownloads.sourceforge.net/fennec/fennec_installation_1_2_beta_2.exe?download">Version 1.2 Beta 2 (February, 2009)</a></li>
+				<li><a href="http://prdownloads.sourceforge.net/fennec/fennec_1.2_b1_installation.exe?download">Version 1.2 Beta 1 (January, 2008)</a></li>
+			</ul>
+
+			<h3>Portable</h3>
+			<ul>
+				<li><a href="http://prdownloads.sourceforge.net/fennec/fennec_1.2_beta_1_binaries.zip?download">Version 1.2 Beta1 (January, 2008)</a></li>
+			</ul>
+			<br></br>
+			<hr></hr>
+
+			<h1>Downloads - Source Code</h1>
+
+			<p>Recent updates can be obtained from <a href="http://github.com/s-silva/fennec">http://github.com/s-silva/fennec</a></p>
+
+			<ul>
+				<li><a href="http://prdownloads.sourceforge.net/fennec/fennec_source_july_16th_2010.7z?download">Version 1.2 Alpha (July 16, 2010)</a></li>
+				<li><a href="http://prdownloads.sourceforge.net/fennec/fennec_1.2b2_source.7z?download">Version 1.2 Beta 2 (February, 2009)</a></li>
+				<li><a href="http://prdownloads.sourceforge.net/fennec/fennec_source_1.2.7z?download">Version 1.2 Beta 1 (January, 2008)</a></li>
+			</ul>
+			</div>
+
+
+
+		</div><div class='ct-right'><div style='padding: 0 20px 20px 0'>
+
+
+
+			<div class='picture-box'>
+				<div class='picture-box-tt'><h1>Screenshot</h1></div>
+				<img src='img/intro.png'/>
+			</div>
+
+			<h1>Features</h1>
+
+				<br></br>
+	</div></div>-->
+</body></html>
