@@ -235,10 +235,10 @@ HFONT typo_makefont(const string fface, int size, int bold, int italic)
 void typo_create_fonts(void)
 {
 	
-	typo_fonts[typo_song_title]    = typo_makefont(uni("Arial"), 8, 1, 0);
-	typo_fonts[typo_song_artist]   = typo_makefont(uni("Arial"), 8, 1, 0);
+	typo_fonts[typo_song_title]    = typo_makefont(uni("Arial"), 8, 0, 0);
+	typo_fonts[typo_song_artist]   = typo_makefont(uni("Arial"), 8, 0, 0);
 	typo_fonts[typo_song_album]    = typo_makefont(uni("Arial"), 8, 0, 1);
-	typo_fonts[typo_song_position] = typo_makefont(uni("Arial"), 8, 1, 0);
+	typo_fonts[typo_song_position] = typo_makefont(uni("Arial"), 8, 0, 0);
 
 }
 
@@ -544,6 +544,8 @@ int skin_refresh(int inum, void *idata)
 
 	if(ctag.tag_artist.tsize)
 		str_ncpy(artist, ctag.tag_artist.tdata, sizeof(artist) / sizeof(letter));
+	else
+		str_cpy(artist, uni("Unknown"));
 
 	if(ctag.tag_album.tsize)
 		str_ncpy(album, ctag.tag_album.tdata, sizeof(album) / sizeof(letter));
@@ -551,12 +553,32 @@ int skin_refresh(int inum, void *idata)
 	if(ctag.tag_title.tsize)
 		str_ncpy(title, ctag.tag_title.tdata, sizeof(title) / sizeof(letter));
 
+	if(ctag.tag_year.tsize)
+		str_ncpy(year, ctag.tag_year.tdata, sizeof(year) / sizeof(letter));
+
 	if(!ctag.tag_title.tsize)
 	{
 		_wsplitpath(fpath, 0, 0, fname, 0);
 		str_ncpy(title, fname, sizeof(title) / sizeof(letter));
 	}
-	
+
+
+	if(album[0])
+	{
+		str_cpy(album_year, album);
+		str_cat(album_year, uni(" - "));
+		str_cat(album_year, year);
+	}else{
+		if(year[0])
+		{
+			str_cpy(album_year, year);
+		}else{
+			str_cpy(album_year, uni("Unknown"));
+		}
+	}
+
+	str_cat(artist, uni(" - "));
+	str_cat(artist, title);
 
 	skin.shared->audio.input.tagread_known(id, 0, &ctag);
 
@@ -1372,28 +1394,21 @@ void text_display_update()
 	//}
 
 	
-	typo_print_shadow(gr_main.dc, title,  4 + display_content_x - dpoffset_title, (win_h - 117) + 4, 0x656565, typo_song_title);
-	
-	if(dpoffset_update){
-		GetTextExtentPoint32(gr_main.dc, title, (int)str_len(title), &txtsz);
-		dpoffset_max_title = txtsz.cx - 270;
-	}
-
-	typo_print_shadow(gr_main.dc, artist, 4 + display_content_x - dpoffset_artist, (win_h - 117) + 4 + 10, 0x656565, typo_song_artist);
+	typo_print_shadow(gr_main.dc, artist,  4 + display_content_x - dpoffset_title, (win_h - 117) + 4, 0x656565, typo_song_title);
 	
 	if(dpoffset_update){
 		GetTextExtentPoint32(gr_main.dc, artist, (int)str_len(artist), &txtsz);
-		dpoffset_max_artist = txtsz.cx - 270;
+		dpoffset_max_title = txtsz.cx - 270;
 	}
 
-	typo_print_shadow(gr_main.dc, album_year,  4 + display_content_x - dpoffset_album_year, (win_h - 117) + 4 + 10 + 10, 0x656565, typo_song_album);
+	typo_print_shadow(gr_main.dc, album_year,  4 + display_content_x - dpoffset_album_year, (win_h - 117) + 4 + 10, 0x656565, typo_song_album);
 	
 	if(dpoffset_update){
 		GetTextExtentPoint32(gr_main.dc, album_year, (int)str_len(album_year), &txtsz);
 		dpoffset_max_album_year = txtsz.cx - 270;
 	}
 
-	typo_print_shadow(gr_main.dc, pos_str, 4 + display_content_x, (win_h - 117) + 4 + 10 + 20, 0x656565, typo_song_position);
+	typo_print_shadow(gr_main.dc, pos_str, 4 + display_content_x, (win_h - 117) + 4 + 20, 0x656565, typo_song_position);
 
 	dpoffset_update = 0;
 
