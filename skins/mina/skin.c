@@ -863,11 +863,11 @@ void draw_control(graphic_context *gr, graphic_context *gr_sc, int state, int wi
 
 	if(state == 0)
 	{
-		gr_settextcolor(&gr_main, 0x656565, 0, 0);
+		gr_settextcolor(&gr_main, sc->ncolor, 0, 0);
 	}else if(state == 1){
-		gr_settextcolor(&gr_main, 0xff7f29, 0, 0);
+		gr_settextcolor(&gr_main, sc->hcolor, 0, 0);
 	}else if(state == 2){	
-		gr_settextcolor(&gr_main, 0x656565, 0, 0);
+		gr_settextcolor(&gr_main, sc->ncolor, 0, 0);
 	}
 
 	stext[0] = sc->icon_text;
