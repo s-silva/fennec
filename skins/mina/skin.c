@@ -235,10 +235,10 @@ HFONT typo_makefont(const string fface, int size, int bold, int italic)
 void typo_create_fonts(void)
 {
 	
-	typo_fonts[typo_song_title]    = typo_makefont(uni("Verdana"), 18, 1, 0);
-	typo_fonts[typo_song_artist]   = typo_makefont(uni("Verdana"), 12, 1, 0);
-	typo_fonts[typo_song_album]    = typo_makefont(uni("Verdana"), 12, 0, 1);
-	typo_fonts[typo_song_position] = typo_makefont(uni("Verdana"), 12, 1, 0);
+	typo_fonts[typo_song_title]    = typo_makefont(uni("Arial"), 8, 1, 0);
+	typo_fonts[typo_song_artist]   = typo_makefont(uni("Arial"), 8, 1, 0);
+	typo_fonts[typo_song_album]    = typo_makefont(uni("Arial"), 8, 0, 1);
+	typo_fonts[typo_song_position] = typo_makefont(uni("Arial"), 8, 1, 0);
 
 }
 
@@ -250,9 +250,6 @@ void typo_print_shadow(HDC hdc, const string text, int x, int y, COLORREF color,
 		last_font = ifont;
 		SetBkMode(hdc, TRANSPARENT);
 	}
-
-	SetTextColor(hdc, 0x00);
-	TextOut(hdc, x+1, y+1, text, str_len(text));
 
 	SetTextColor(hdc, color);
 	TextOut(hdc, x, y, text, str_len(text));
@@ -289,6 +286,8 @@ int __stdcall fennec_skin_initialize(struct skin_data *indata, struct skin_data_
 	gr_init(&gr_main);
 	gr_main.dc = hdc;
 	SetBkMode(hdc, TRANSPARENT);
+
+	typo_create_fonts();
 
 	SetClassLong(wnd, GCL_STYLE, GetClassLong(wnd, GCL_STYLE) | CS_DROPSHADOW);
 
@@ -1342,11 +1341,18 @@ void vis_update()
 
 }
 
-void neo_display_update()
+void text_display_update()
 {
 	HRGN trgn;
 	SIZE  txtsz;
 	letter dur_str[32], pos_str[64];
+	int     win_h, win_w;
+	RECT    rct;
+
+	GetClientRect(wnd, &rct);
+
+	win_h = rct.bottom;
+	win_w = rct.right;
 
 
 	
@@ -1357,37 +1363,37 @@ void neo_display_update()
 	str_cat(pos_str, dur_str);
 
 
-	if(display_content_x < -10)
-	{
-		trgn = CreateRectRgn(105, 7, 105 + 270 + display_content_x, 7 + 106);
-		SelectClipRgn(gr_main.dc, trgn);
-	}else{
-		SelectClipRgn(gr_main.dc, display_clip);
-	}
+	//if(display_content_x < -10)
+	//{
+	//	trgn = CreateRectRgn(105, 7, 105 + 270 + display_content_x, 7 + 106);
+	//	SelectClipRgn(gr_main.dc, trgn);
+	//}else{
+	//	SelectClipRgn(gr_main.dc, display_clip);
+	//}
 
 	
-	typo_print_shadow(gr_main.dc, title,  116 + display_content_x - dpoffset_title, 10 + display_content_y, 0xffffff, typo_song_title);
+	typo_print_shadow(gr_main.dc, title,  4 + display_content_x - dpoffset_title, (win_h - 117) + 4, 0x656565, typo_song_title);
 	
 	if(dpoffset_update){
 		GetTextExtentPoint32(gr_main.dc, title, (int)str_len(title), &txtsz);
 		dpoffset_max_title = txtsz.cx - 270;
 	}
 
-	typo_print_shadow(gr_main.dc, artist, 116 + display_content_x - dpoffset_artist, 40 + display_content_y, 0xffffff, typo_song_artist);
+	typo_print_shadow(gr_main.dc, artist, 4 + display_content_x - dpoffset_artist, (win_h - 117) + 4 + 10, 0x656565, typo_song_artist);
 	
 	if(dpoffset_update){
 		GetTextExtentPoint32(gr_main.dc, artist, (int)str_len(artist), &txtsz);
 		dpoffset_max_artist = txtsz.cx - 270;
 	}
 
-	typo_print_shadow(gr_main.dc, album_year,  116 + display_content_x - dpoffset_album_year, 62 + display_content_y, 0xffffff, typo_song_album);
+	typo_print_shadow(gr_main.dc, album_year,  4 + display_content_x - dpoffset_album_year, (win_h - 117) + 4 + 10 + 10, 0x656565, typo_song_album);
 	
 	if(dpoffset_update){
 		GetTextExtentPoint32(gr_main.dc, album_year, (int)str_len(album_year), &txtsz);
 		dpoffset_max_album_year = txtsz.cx - 270;
 	}
 
-	typo_print_shadow(gr_main.dc, pos_str, 116 + display_content_x, 83 + display_content_y, 0xffffff, typo_song_position);
+	typo_print_shadow(gr_main.dc, pos_str, 4 + display_content_x, (win_h - 117) + 4 + 10 + 20, 0x656565, typo_song_position);
 
 	dpoffset_update = 0;
 
@@ -1452,7 +1458,7 @@ void neo_display_update()
 
 
 
-	SelectClipRgn(gr_main.dc, 0);
+	//SelectClipRgn(gr_main.dc, 0);
 
 
 
@@ -1493,6 +1499,8 @@ void CALLBACK display_timer(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime
 
 	gr_rect(&gr_main, 0x9d9181, 10, win_h - 75 + 6, win_w - 20, 6);
 	gr_rect(&gr_main, 0xff2e3e, 10, win_h - 75 + 6, ((int)(win_w - 20) * pos), 6);
+
+	text_display_update();
 
 	/*
 	return;
