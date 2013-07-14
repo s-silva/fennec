@@ -328,12 +328,12 @@ void fill_skin_coords(void)
 	coords.window_main.pos_text_x = 200;
 	coords.window_main.pos_text_y = 15;
 
-	scontrol(&coords.window_main.button_play,       10, 55, 55, 55, coord_align_bottom_left, 0x656565, 0xf42e3e, 0, uni('t'), 36);
-	scontrol(&coords.window_main.button_stop,       65, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xf42e3e, 0, uni('b'), 19);
-	scontrol(&coords.window_main.button_previous,  101, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xf42e3e, 0, uni('c'), 19);
-	scontrol(&coords.window_main.button_next,      135, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xf42e3e, 0, uni('d'), 19);
+	scontrol(&coords.window_main.button_play,       10, 55, 55, 55, coord_align_bottom_left, 0x656565, 0xff2e3e, 0, uni('t'), 36);
+	scontrol(&coords.window_main.button_stop,       65, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff2e3e, 0, uni('b'), 19);
+	scontrol(&coords.window_main.button_previous,  101, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff2e3e, 0, uni('c'), 19);
+	scontrol(&coords.window_main.button_next,      135, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff2e3e, 0, uni('d'), 19);
 	// volume                                    169,
-	scontrol(&coords.window_main.button_open,      204, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xf42e3e, 0, uni('f'), 19);
+	scontrol(&coords.window_main.button_open,      204, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff2e3e, 0, uni('f'), 19);
 
 
 	/*
