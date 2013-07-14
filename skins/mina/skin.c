@@ -106,6 +106,9 @@ HRGN                    wndmainrgn = 0;
 letter                  artist[512];
 letter                  title[512];
 letter                  album[512];
+letter                  year[512];
+letter                  album_year[512];
+letter                  position[512];
 
 int                     seekmode = 0;
 
@@ -131,7 +134,131 @@ letter                  skin_sheet_table[v_sys_maxpath];
 graphic_context         gr_main;
 float                   beat_level = 0.0f;
 
+
+
+int                     dpoffset_artist = 0, dpoffset_max_artist = 0, dpoffset_rollback_artist = 0;
+int                     dpoffset_title = 0, dpoffset_max_title = 0, dpoffset_rollback_title = 0;
+int                     dpoffset_album_year = 0, dpoffset_max_album_year = 0, dpoffset_rollback_album_year = 0;
+int						dpoffset_update = 0;
+
+int                     display_content_x = 0, display_content_y = 0;
+HRGN					display_clip;
+
 /* code ---------------------------------------------------------------------*/
+
+HFONT     typo_fonts[20];
+int       last_font = -1;
+enum
+{
+	typo_song_title = 0,
+	typo_song_album,
+	typo_song_artist,
+	typo_song_position,
+
+	typo_count
+};
+
+
+void misc_time_to_string(int seconds, string buf)
+{
+	int     p = seconds;
+	letter  pbuf[32], tbuf[32];
+
+	memset(pbuf, 0, sizeof(pbuf));
+	memset(tbuf, 0, sizeof(tbuf));
+	
+
+	{
+		int x;
+
+		memset(pbuf, 0, sizeof(pbuf));
+		
+		if(p / 60 < 60)
+		{
+			_itow(p / 60, pbuf, 10);
+			pbuf[str_len(pbuf)] = uni(':');
+
+			if((p % 60) < 10)
+			{	
+				pbuf[str_len(pbuf)] = uni('0');
+				_itow(p % 60, pbuf + str_len(pbuf), 10);
+			}else{
+				_itow(p % 60, pbuf + str_len(pbuf), 10);
+			}
+
+		}else{
+
+			x = p / 3600;
+			_itow(x, pbuf, 10);
+			str_cat(pbuf, uni(":"));
+
+			x = (p - (x * 3600)) / 60;
+
+
+			if(x < 10)
+			{
+				_itow(x, tbuf, 10);
+				str_cat(pbuf, uni("0"));
+				str_cat(pbuf, tbuf);
+				str_cat(pbuf, uni(":"));
+			}else{
+				_itow(x, tbuf, 10);
+				str_cat(pbuf, tbuf);
+				str_cat(pbuf, uni(":"));
+			}
+
+			x = p % 60;
+
+			if(x < 10)
+			{
+				_itow(x, tbuf, 10);
+				str_cat(pbuf, uni("0"));
+				str_cat(pbuf, tbuf);
+			}else{
+				_itow(x, tbuf, 10);
+				str_cat(pbuf, tbuf);
+			}
+		}
+	}
+
+	str_cpy(buf, pbuf);
+}
+
+
+HFONT typo_makefont(const string fface, int size, int bold, int italic)
+{
+	return CreateFont(-MulDiv(size, GetDeviceCaps(hdc, LOGPIXELSY), 72), 0, 0, 0,
+		(bold ? FW_BOLD : FW_NORMAL), italic, 0, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+			    CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY , DEFAULT_PITCH, fface);
+}
+
+void typo_create_fonts(void)
+{
+	
+	typo_fonts[typo_song_title]    = typo_makefont(uni("Verdana"), 18, 1, 0);
+	typo_fonts[typo_song_artist]   = typo_makefont(uni("Verdana"), 12, 1, 0);
+	typo_fonts[typo_song_album]    = typo_makefont(uni("Verdana"), 12, 0, 1);
+	typo_fonts[typo_song_position] = typo_makefont(uni("Verdana"), 12, 1, 0);
+
+}
+
+void typo_print_shadow(HDC hdc, const string text, int x, int y, COLORREF color, int ifont)
+{
+	if(ifont != last_font)
+	{
+		SelectObject(hdc, typo_fonts[ifont]);
+		last_font = ifont;
+		SetBkMode(hdc, TRANSPARENT);
+	}
+
+	SetTextColor(hdc, 0x00);
+	TextOut(hdc, x+1, y+1, text, str_len(text));
+
+	SetTextColor(hdc, color);
+	TextOut(hdc, x, y, text, str_len(text));
+
+	
+}
 
 /*
  * initialization callback.
@@ -1212,6 +1339,122 @@ void vis_update()
 
 	if(beat_level > 20.0f) beat_level = 20.0f;
 	else if(beat_level < 0.0f) beat_level = 0.0f;
+
+}
+
+void neo_display_update()
+{
+	HRGN trgn;
+	SIZE  txtsz;
+	letter dur_str[32], pos_str[64];
+
+
+	
+	misc_time_to_string((int)(skin.shared->audio.output.getduration_ms() / 1000), dur_str);
+	misc_time_to_string((int)(skin.shared->audio.output.getposition_ms() / 1000), pos_str);
+
+	str_cat(pos_str, uni(" / "));
+	str_cat(pos_str, dur_str);
+
+
+	if(display_content_x < -10)
+	{
+		trgn = CreateRectRgn(105, 7, 105 + 270 + display_content_x, 7 + 106);
+		SelectClipRgn(gr_main.dc, trgn);
+	}else{
+		SelectClipRgn(gr_main.dc, display_clip);
+	}
+
+	
+	typo_print_shadow(gr_main.dc, title,  116 + display_content_x - dpoffset_title, 10 + display_content_y, 0xffffff, typo_song_title);
+	
+	if(dpoffset_update){
+		GetTextExtentPoint32(gr_main.dc, title, (int)str_len(title), &txtsz);
+		dpoffset_max_title = txtsz.cx - 270;
+	}
+
+	typo_print_shadow(gr_main.dc, artist, 116 + display_content_x - dpoffset_artist, 40 + display_content_y, 0xffffff, typo_song_artist);
+	
+	if(dpoffset_update){
+		GetTextExtentPoint32(gr_main.dc, artist, (int)str_len(artist), &txtsz);
+		dpoffset_max_artist = txtsz.cx - 270;
+	}
+
+	typo_print_shadow(gr_main.dc, album_year,  116 + display_content_x - dpoffset_album_year, 62 + display_content_y, 0xffffff, typo_song_album);
+	
+	if(dpoffset_update){
+		GetTextExtentPoint32(gr_main.dc, album_year, (int)str_len(album_year), &txtsz);
+		dpoffset_max_album_year = txtsz.cx - 270;
+	}
+
+	typo_print_shadow(gr_main.dc, pos_str, 116 + display_content_x, 83 + display_content_y, 0xffffff, typo_song_position);
+
+	dpoffset_update = 0;
+
+
+	if(dpoffset_max_title > 0 + 50)
+	{
+		if(!dpoffset_rollback_title)
+		{
+			dpoffset_title+=2;
+			if(dpoffset_title > dpoffset_max_title)
+				dpoffset_rollback_title = 1;
+		}else{
+			dpoffset_title *= 6;
+			dpoffset_title /= 7;
+			if(dpoffset_title <= 0)
+			{
+				dpoffset_rollback_title = 0;
+				dpoffset_title = 0;
+			}
+		}
+	}
+
+	if(dpoffset_max_artist > 0 + 50)
+	{
+		if(!dpoffset_rollback_artist)
+		{
+			dpoffset_artist+=2;
+			if(dpoffset_artist > dpoffset_max_artist)
+				dpoffset_rollback_artist = 1;
+		}else{
+			dpoffset_artist *= 6;
+			dpoffset_artist /= 7;
+			if(dpoffset_artist <= 0)
+			{
+				dpoffset_rollback_artist = 0;
+				dpoffset_artist = 0;
+			}
+		}
+
+	}
+
+	if(dpoffset_max_album_year > + 50)
+	{
+		if(!dpoffset_rollback_album_year)
+		{
+			dpoffset_album_year+=2;
+			if(dpoffset_album_year > dpoffset_max_album_year)
+				dpoffset_rollback_album_year = 1;
+		}else{
+			dpoffset_album_year *= 6;
+			dpoffset_album_year /= 7;
+			if(dpoffset_album_year <= 0)
+			{
+				dpoffset_rollback_album_year = 0;
+				dpoffset_album_year = 0;
+			}
+		}
+
+	}
+
+
+
+
+
+	SelectClipRgn(gr_main.dc, 0);
+
+
 
 }
 
