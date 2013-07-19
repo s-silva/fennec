@@ -1814,11 +1814,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_MOUSEMOVE:
 		{
 			int x = (int)(short)LOWORD(lParam), y = (int)(short)HIWORD(lParam);
+			RECT rct;
+			GetClientRect(hwnd, &rct);
+
 
 			{
-				RECT rct;
-				GetClientRect(hwnd, &rct);
-
+				
 				if((x > rct.right - 5 && x < rct.right) || downid == skin_main_endl)
 					SetCursor(LoadCursor(0, IDC_SIZEWE));
 				if((y > rct.bottom - 5 && y < rct.bottom) || downid == skin_main_endb)
@@ -1837,18 +1838,30 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				break;
 			}
 
+			if(x > 10 && x < rct.right - 10 && y > rct.bottom - 76 && y < rct.bottom - 60)
+			{
+				SetCursor(LoadCursor(0, IDC_HAND));
+			}
+
 			if(downid == skin_main_button_seek)
 			{
-				int v = x - cr(coords.window_main.bar_seek.x);
+				//int v = x - cr(coords.window_main.bar_seek.x);
 				double  pos;
 
-				if(v < 0)   v = 0;
+				
+
+				/*if(v < 0)   v = 0;
 				if(v > cr(coords.window_main.bar_seek.w)) v = cr(coords.window_main.bar_seek.w);
 
 				blt_coord(hdc, mdc_sheet, 0, &coords.window_main.bar_seek);
 				blt_coord_ew(hdc, mdc_sheet, 1, &coords.window_main.bar_seek, (int)((float)v / coords.zoom));
 
-				pos =  (((double)v) / ((double)coords.window_main.bar_seek.w)) / ((double)coords.zoom);
+				pos =  (((double)v) / ((double)coords.window_main.bar_seek.w)) / ((double)coords.zoom);*/
+
+				pos = (double)(x - 10) / (double)(rct.right - 10 - 10);
+
+				if(pos < 0.0) pos = 0.0;
+
 				if(pos <= 1.0)
 					skin.shared->audio.output.setposition(pos);
 				else
@@ -2030,6 +2043,11 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			if(dx > rct.right  - 5)downid = skin_main_endr;
 			if(dy > rct.bottom - 5)downid = skin_main_endb;
+
+			if(dx > 10 && dx < rct.right - 10 && dy > rct.bottom - 76 && dy < rct.bottom - 60)
+			{
+				downid = skin_main_button_seek;
+			}
 		
 
 			if(downid == 0 || downid == skin_main_button_seek || downid == skin_main_button_volume || downid == skin_main_endr || downid == skin_main_endb)
