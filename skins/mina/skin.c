@@ -2217,7 +2217,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 
 			gr_line(&gr_main, 1, 0xcccccc, 0, 45, 0, win_h);
-			gr_line(&gr_main, 1, 0xcccccc, 0, 0, 0, win_w);
+			//gr_line(&gr_main, 1, 0xcccccc, 0, 0, 0, win_w);
 			gr_line(&gr_main, 1, 0xcccccc, win_w -1 , 45, win_w -1, win_h);
 			gr_line(&gr_main, 1, 0xcccccc, 0, win_h-1, win_w, win_h-1);
 
