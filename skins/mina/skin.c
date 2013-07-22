@@ -1271,10 +1271,32 @@ int skin_move_window(HWND hwnd, int dx, int dy)
 		y = wrct.bottom - cr(coords.window_main.height);
 
 
-	if(hwnd)
-		SetWindowPos(hwnd, 0, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
-	else
-		SetWindowPos(wnd, 0, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+	if(y < 40 && y > -100) /* -100 check to ensure multi-monitor support, if the OS has only a single plane for all monitors */
+	{
+		
+		WINDOWPLACEMENT  wp;
+		GetWindowPlacement(hwnd ? hwnd : wnd, &wp);
+
+		if(wp.showCmd != SW_MAXIMIZE)
+		{
+			ShowWindow(hwnd ? hwnd : wnd, SW_MAXIMIZE);
+		}
+
+	}else{ /* move window */
+
+		WINDOWPLACEMENT  wp;
+		GetWindowPlacement(hwnd ? hwnd : wnd, &wp);
+
+		if(wp.showCmd == SW_MAXIMIZE)
+		{
+			ShowWindow(hwnd ? hwnd : wnd, SW_RESTORE);
+		}
+
+		if(hwnd)
+			SetWindowPos(hwnd, 0, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+		else
+			SetWindowPos(wnd, 0, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+	}
 
 	skin_settings.main_x = x;
 	skin_settings.main_y = y;
