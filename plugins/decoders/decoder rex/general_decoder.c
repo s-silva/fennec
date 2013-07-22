@@ -34,7 +34,7 @@ int                   plugin_busy    = 0;
 string info_base = uni("REX Decoder");
 
 
-
+int                   plugin_error = 0;
 
 /* functions ----------------------------------------------------------------*/
 
@@ -95,7 +95,13 @@ int callc fennec_plugin_initialize(void)
 
 	if(pstreams_count)return 0;
 
-	REXLoadDLL();
+	if(REXLoadDLL() != kREXError_NoError)
+	{
+		pstreams_count = 0;
+		plugin_busy = 0;
+		plugin_error = 1;
+		return 0;
+	}
 
 	plugin_busy = 1;
 
@@ -131,6 +137,12 @@ unsigned long callc fennec_plugin_open(unsigned long otype, unsigned long osize,
 
 	while(plugin_busy)
 		sys_pass();
+
+	if(plugin_error)
+	{
+		plugin_busy = 0;
+		return 0;
+	}
 
 	plugin_busy = 1;
 
@@ -326,6 +338,13 @@ int callc fennec_plugin_read(unsigned long id, unsigned long dsize, unsigned lon
 	while(plugin_busy)sys_pass();
 	plugin_busy = 1;
 
+	if(plugin_error)
+	{
+		plugin_busy = 0;
+		return 0;
+	}
+
+
 	*dread = decoder_read(id, rdata, dsize);
 
 	plugin_busy = 0;
@@ -448,6 +467,13 @@ int callc fennec_plugin_close(unsigned long id)
 
 	while(plugin_busy)sys_pass();
 	plugin_busy = 1;
+
+	if(plugin_error)
+	{
+		plugin_busy = 0;
+		return 0;
+	}
+
 
 	decoder_close(id);
 

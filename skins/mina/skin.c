@@ -961,20 +961,22 @@ int skin_getdata(int id, void *rdata, int dsize)
 		{
 			int prevst = 0;
 
-			if(rdata)
-			{
+			//if(rdata)
+			//{
 				prevst = skin_settings.vid_show;
 
 				skin_settings.vid_show = 1;
 				vid_create(skin.wnd);
+			//	Beep(1000, 1000);
 
-			}else{
+			//}else{
 
-				prevst = skin_settings.vid_show;
+			//	prevst = skin_settings.vid_show;
 
-				skin_settings.vis_show = 0;
-				vid_close();
-			}
+			//	skin_settings.vis_show = 0;
+			//	vid_close();
+			//	Beep(1000, 1000);
+			//}
 			return prevst;
 		}
 
@@ -1067,7 +1069,7 @@ int skin_get_button_index(int x, int y)
 	if(in_control(x, y, win_w, win_h, &coords.window_main.button_minimize))     return skin_main_button_minimize;
 	if(in_control(x, y, win_w, win_h, &coords.window_main.button_exit    ))     return skin_main_button_exit;
 
-	if(in_control(x, y, win_w, win_h, &coords.window_main.bar_seek       ))     return skin_main_button_seek;
+	//if(in_control(x, y, win_w, win_h, &coords.window_main.bar_seek       ))     return skin_main_button_seek;
 	if(in_control(x, y, win_w, win_h, &coords.window_main.bar_volume     ))     return skin_main_button_volume;
 
 	if(in_control(x, y, win_w, win_h, &coords.window_main.button_settings))     return skin_main_button_settings;
@@ -2178,8 +2180,15 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			RECT rct;
 			GetClientRect(hwnd, &rct);
-			SetWindowPos(window_ml, 0, 0, 0, rct.right, rct.bottom - 117 - 45, SWP_NOMOVE | SWP_NOZORDER);
+			SetWindowPos(window_ml, 0, 4, 45, rct.right - 6, rct.bottom - 117 - 45, SWP_NOZORDER);
 		}	
+
+		if(window_vid)
+		{
+			RECT rct;
+			GetClientRect(hwnd, &rct);
+			SetWindowPos(window_vid, 0, 0, 45, rct.right, rct.bottom - 117, SWP_NOZORDER);
+		}
 		break;
 
 	case WM_LBUTTONDBLCLK:
@@ -2233,6 +2242,30 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			gr_text(&gr_main, 0, uni("h"), win_w - 62, win_h - 44, 0, 0);
 			gr_text(&gr_main, 0, uni("i"), win_w - 89, win_h - 44, 0, 0);
 
+			gr_setfont(&gr_main, uni("Your Icons"), 13, 0, 0, 0, 0);
+			gr_settextcolor(&gr_main, 0xc4c4c4, 0, 0);
+
+			gr_rect(&gr_main, 0x6f6f6f, win_w - (27 * 1) - 10, 10, 25, 25);
+			gr_rect(&gr_main, 0x6f6f6f, win_w - (27 * 2) - 10, 10, 25, 25);
+			gr_rect(&gr_main, 0x6f6f6f, win_w - (27 * 3) - 10, 10, 25, 25);
+			gr_rect(&gr_main, 0x6f6f6f, win_w - (27 * 4) - 10, 10, 25, 25);
+			gr_rect(&gr_main, 0x6f6f6f, win_w - (27 * 5) - 10, 10, 25, 25);
+			gr_rect(&gr_main, 0x6f6f6f, win_w - (27 * 6) - 10, 10, 25, 25);
+			gr_rect(&gr_main, 0x6f6f6f, win_w - (27 * 7) - 10, 10, 25, 25);
+
+			gr_text(&gr_main, 0, uni("r"), win_w - (27 * 1) - 6, 14, 0, 0);
+			gr_text(&gr_main, 0, uni("q"), win_w - (27 * 2) - 6, 14, 0, 0);
+			gr_text(&gr_main, 0, uni("p"), win_w - (27 * 3) - 6, 14, 0, 0);
+			gr_text(&gr_main, 0, uni("o"), win_w - (27 * 4) - 6, 14, 0, 0);
+			gr_text(&gr_main, 0, uni("n"), win_w - (27 * 5) - 6, 14, 0, 0);
+			gr_text(&gr_main, 0, uni("m"), win_w - (27 * 6) - 6, 14, 0, 0);
+			gr_text(&gr_main, 0, uni("l"), win_w - (27 * 7) - 6, 14, 0, 0);
+
+
+			gr_text(&gr_main, 0, uni("s"), 14, 14, 0, 0);
+
+			gr_setfont(&gr_main, uni("Arial"), 9, 1, 0, 0, 0);
+			gr_text(&gr_main, 0, uni("Fennec Media Suite"), 42, 16, 0, 0);
 
 			gr_line(&gr_main, 1, 0xcccccc, 0, 45, 0, win_h);
 			//gr_line(&gr_main, 1, 0xcccccc, 0, 0, 0, win_w);

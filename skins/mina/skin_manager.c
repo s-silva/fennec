@@ -339,8 +339,8 @@ void fill_skin_coords(void)
 	/*
 	scoord(&coords.window_main.button_playlist,  194, 40, 36, 15, 191, 117, 191, 133, 191, 149);
 	scoord(&coords.window_main.button_eq,        232, 40, 36, 15, 229, 117, 229, 133, 229, 149); */
-	scoord(&coords.window_main.button_exit,      36, 22, 27, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('i'), 19);				
-	scoord(&coords.window_main.button_minimize,  64, 22, 27, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('h'), 19);
+	scontrol(&coords.window_main.button_exit,      36, 22, 27, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('i'), 19);				
+	scontrol(&coords.window_main.button_minimize,  64, 22, 27, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('h'), 19);
 														   
 	scoord(&coords.window_main.button_settings,  187, 3,  9,  9,  46,  165, 100, 165, 100, 165);
 	scoord(&coords.window_main.button_convert,   198, 3,  9,  9,  57,  165, 111, 165, 111, 165);
