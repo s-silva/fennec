@@ -23,6 +23,7 @@ int   keep_cursor = 0;
 void vid_create(HWND hwndp)
 {
 	WNDCLASS wndc;
+	RECT rct;
 
 	if(vid_init)return;
 	if(!skin_settings.vid_show)return;
@@ -44,10 +45,10 @@ void vid_create(HWND hwndp)
 
 	/* create window */
 	
-	window_vid = CreateWindow(vid_window_class, uni("vidualization"), WS_POPUP, skin_settings.vid_x, skin_settings.vid_y, max(skin_settings.vid_w, 30), max(skin_settings.vid_h, 30), hwndp, 0, instance_skin, 0);
+	GetClientRect(hwndp, &rct);
+	window_vid = CreateWindow(vid_window_class, uni("vidualization"), WS_CHILD, 0, 45, rct.right, rct.bottom - 117, hwndp, 0, instance_skin, 0);
 
-	setwinpos_clip(window_vid, 0, skin_settings.vid_x, skin_settings.vid_y, max(skin_settings.vid_w, 30), max(skin_settings.vid_h, 30), SWP_NOSIZE | SWP_NOZORDER);
-	
+
 	ShowWindow(window_vid, SW_SHOW);
 	UpdateWindow(window_vid);
 
@@ -111,68 +112,8 @@ void vid_draw_background(int maxd)
 
 	GetClientRect(window_vid, &rct);	
 
-	/* maximized mode won't need a border */
-
-	if(maxd)
-	{
-		SetWindowRgn(window_vid, 0, 1);
-
-		drawrect(hdc_vid, 0, 0, rct.right, rct.bottom, 0);
-		return;
-
-	}else{
-		if(rgn_vid)DeleteObject(rgn_vid);
-		rgn_vid = CreateRoundRectRgn(0, 0, rct.right, rct.bottom, coords.window_vid.window_edge, coords.window_vid.window_edge);
-		SetWindowRgn(window_vid, rgn_vid, 1);
-	}
-
-	/* drawing stuff */
-
-	drawrect(hdc_vid, coords.window_vid.crop_ml.w, coords.window_vid.crop_tm.h, rct.right - coords.window_vid.crop_ml.w - coords.window_vid.crop_mr.w, rct.bottom - coords.window_vid.crop_tm.h - coords.window_vid.crop_bm.h, 0);
-
-	/* top */
-
-	c = (rct.right - coords.window_vid.crop_tl.w - coords.window_vid.crop_tr.w);
-
-	for(i=0; i<c; i+=coords.window_vid.crop_tm.w)
-	{
-		BitBlt(hdc_vid, coords.window_vid.crop_tl.w + i, 0, coords.window_vid.crop_tm.w, coords.window_vid.crop_tm.h, mdc_sheet, coords.window_vid.crop_tm.sx_n, coords.window_vid.crop_tm.sy_n, SRCCOPY);
-	}
-
-	/* bottom */
-
-	c = (rct.right - coords.window_vid.crop_bl.w - coords.window_vid.crop_br.w);
-
-	for(i=0; i<c; i+=coords.window_vid.crop_bm.w)
-	{
-		BitBlt(hdc_vid, coords.window_vid.crop_bl.w + i, rct.bottom - coords.window_vid.crop_bm.h, coords.window_vid.crop_bm.w, coords.window_vid.crop_bm.h, mdc_sheet, coords.window_vid.crop_bm.sx_n, coords.window_vid.crop_bm.sy_n, SRCCOPY);
-	}
-
-	/* left */
-
-	c = (rct.bottom - coords.window_vid.crop_tl.h - coords.window_vid.crop_bl.h);
-
-	for(i=0; i<c; i+=coords.window_vid.crop_ml.h)
-	{
-		BitBlt(hdc_vid, 0, coords.window_vid.crop_tl.h + i, coords.window_vid.crop_ml.w, coords.window_vid.crop_ml.h, mdc_sheet, coords.window_vid.crop_ml.sx_n, coords.window_vid.crop_ml.sy_n, SRCCOPY);
-	}
-
-	/* right */
-
-	c = (rct.bottom - coords.window_vid.crop_tl.h - coords.window_vid.crop_bl.h);
-
-	for(i=0; i<c; i+=coords.window_vid.crop_mr.h)
-	{
-		BitBlt(hdc_vid, rct.right - coords.window_vid.crop_mr.w, coords.window_vid.crop_tl.h + i, coords.window_vid.crop_mr.w, coords.window_vid.crop_mr.h, mdc_sheet, coords.window_vid.crop_mr.sx_n, coords.window_vid.crop_mr.sy_n, SRCCOPY);
-	}
-
-
-	/* finalize */
-
-	BitBlt(hdc_vid, 0, 0, coords.window_vid.crop_tl.w, coords.window_vid.crop_tl.h, mdc_sheet, coords.window_vid.crop_tl.sx_n, coords.window_vid.crop_tl.sy_n, SRCCOPY);
-	BitBlt(hdc_vid, rct.right - coords.window_vid.crop_tr.w, 0, coords.window_vid.crop_tr.w, coords.window_vid.crop_tr.h, mdc_sheet, coords.window_vid.crop_tr.sx_n, coords.window_vid.crop_tr.sy_n, SRCCOPY);
-	BitBlt(hdc_vid, 0, rct.bottom - coords.window_vid.crop_bl.h, coords.window_vid.crop_bl.w, coords.window_vid.crop_bl.h, mdc_sheet, coords.window_vid.crop_bl.sx_n, coords.window_vid.crop_bl.sy_n, SRCCOPY);
-	BitBlt(hdc_vid, rct.right - coords.window_vid.crop_br.w, rct.bottom - coords.window_vid.crop_br.h, coords.window_vid.crop_br.w, coords.window_vid.crop_br.h, mdc_sheet, coords.window_vid.crop_br.sx_n, coords.window_vid.crop_br.sy_n, SRCCOPY);
+	drawrect(hdc_vid, 0, 0, rct.right, rct.bottom, 0);
+	return;
 }
 
 int vid_refresh(void)
@@ -217,10 +158,10 @@ int vid_get_position(RECT *retp)
 
 	}else{
 
-		retp->left   = coords.window_vid.vid_l;
-		retp->top    = coords.window_vid.vid_t;
-		retp->right  = rct.right  - coords.window_vid.vid_r;
-		retp->bottom = rct.bottom - coords.window_vid.vid_b;
+		retp->left   = 0;
+		retp->top    = 0;
+		retp->right  = rct.right;
+		retp->bottom = rct.bottom;
 		video_window_maximized = 0;
 	}
 	return 1;

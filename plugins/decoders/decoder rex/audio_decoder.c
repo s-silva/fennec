@@ -123,7 +123,7 @@ int decoder_seek(unsigned long id, double pos)
 }
 
 
-unsigned long decoder_read(unsigned long id, char* adata, unsigned long dsize)
+unsigned long decoder_read(unsigned long id, void* adata, unsigned long dsize)
 {
 	int i = 0; 
 	int sc = dsize / sizeof(double) / 2;
