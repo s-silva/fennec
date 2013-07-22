@@ -339,10 +339,15 @@ void fill_skin_coords(void)
 	/*
 	scoord(&coords.window_main.button_playlist,  194, 40, 36, 15, 191, 117, 191, 133, 191, 149);
 	scoord(&coords.window_main.button_eq,        232, 40, 36, 15, 229, 117, 229, 133, 229, 149); */
-	scontrol(&coords.window_main.button_exit,      36, 22, 27, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('i'), 19);				
-	scontrol(&coords.window_main.button_minimize,  64, 22, 27, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('h'), 19);
-														   
-	scoord(&coords.window_main.button_settings,  187, 3,  9,  9,  46,  165, 100, 165, 100, 165);
+	scontrol(&coords.window_main.button_exit,      (27 * 1) - 6 + 12, 14, 25, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('r'), 13);				
+	scontrol(&coords.window_main.button_minimize,  (27 * 2) - 6 + 12, 14, 25, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('q'), 13);
+	scontrol(&coords.window_main.button_eq,        (27 * 3) - 6 + 12, 14, 25, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('p'), 13);
+	scontrol(&coords.window_main.button_vis,       (27 * 4) - 6 + 12, 14, 25, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('o'), 13);
+	scontrol(&coords.window_main.button_convert,   (27 * 5) - 6 + 12, 14, 25, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('n'), 13);
+	scontrol(&coords.window_main.button_rip,       (27 * 6) - 6 + 12, 14, 25, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('m'), 13);
+	scontrol(&coords.window_main.button_settings,  (27 * 7) - 6 + 12, 14, 25, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('l'), 13);
+
+	/*scoord(&coords.window_main.button_settings,  187, 3,  9,  9,  46,  165, 100, 165, 100, 165);
 	scoord(&coords.window_main.button_convert,   198, 3,  9,  9,  57,  165, 111, 165, 111, 165);
 	scoord(&coords.window_main.button_rip,       209, 3,  9,  9,  68,  165, 122, 165, 122, 165);
 	scoord(&coords.window_main.button_join,      220, 3,  9,  9,  79,  165, 133, 165, 133, 165);
@@ -355,11 +360,11 @@ void fill_skin_coords(void)
 
 	scoord(&coords.window_main.display_area,     0, 14, 273, 24,  0,  14, 0,  14, 0,  14);
 	
-	scoord(&coords.window_main.display_text_area, 5, 15, 261, 14,  5, 15, 5, 15, 5, 15);
+	scoord(&coords.window_main.display_text_area, 5, 15, 261, 14,  5, 15, 5, 15, 5, 15); 
 
-	scoord(&coords.window_main.display_region,   5, 15, 180 + 5, 14 + 15, 0, 0, 0, 0, 0, 0);
+	scoord(&coords.window_main.display_region,   5, 15, 180 + 5, 14 + 15, 0, 0, 0, 0, 0, 0); 
 	scoord(&coords.window_main.bar_seek,         7, 30, 209, 5, 1, 175, 1, 181, 0, 0);
-	scoord(&coords.window_main.bar_volume,       219, 30, 46, 5, 211, 175, 211, 181, 0, 0);
+	scoord(&coords.window_main.bar_volume,       219, 30, 46, 5, 211, 175, 211, 181, 0, 0); */
 
 	/* equalizer */
 
