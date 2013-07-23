@@ -49,6 +49,9 @@ void vid_create(HWND hwndp)
 	window_vid = CreateWindow(vid_window_class, uni("vidualization"), WS_CHILD, 0, 45, rct.right, rct.bottom - 117, hwndp, 0, instance_skin, 0);
 
 
+	if(window_ml) ShowWindow(window_ml, SW_HIDE);
+	if(window_vis) ShowWindow(window_vis, SW_HIDE);
+
 	ShowWindow(window_vid, SW_SHOW);
 	UpdateWindow(window_vid);
 
@@ -98,6 +101,9 @@ void vid_close(void)
 	while(video_thread_terminate)
 		Sleep(0);
 	DeleteCriticalSection(&video_cs); */
+
+	if(window_ml) ShowWindow(window_ml, SW_SHOW);
+	if(window_vis) ShowWindow(window_vis, SW_SHOW);
 
 	if(hdc_vid)DeleteDC(hdc_vid);
 	DestroyWindow(window_vid);
