@@ -272,7 +272,7 @@ int __stdcall fennec_skin_initialize(struct skin_data *indata, struct skin_data_
 	outdata->refresh      = skin_refresh;
 	outdata->uninitialize = skin_uninitialize;
 	outdata->callback     = WindowProc;
-	outdata->woptions     = WS_POPUP | WS_SYSMENU | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_MINIMIZEBOX;
+	outdata->woptions     = WS_POPUP | WS_SYSMENU | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
 	outdata->subs_get     = skin_subskins_get;
 	outdata->subs_select  = skin_subskins_select;
 
@@ -458,6 +458,8 @@ void skin_recreate(void)
 	//wndmainrgn = CreateRoundRectRgn(0, 0, cr(coords.window_main.width), cr(coords.window_main.height), cr(coords.window_main.window_edge), cr(coords.window_main.window_edge));
 	//SetWindowRgn(wnd, wndmainrgn, 1);
 
+	if(skin_settings.main_w < 400) skin_settings.main_w = 400;
+	if(skin_settings.main_h < 300) skin_settings.main_h = 300;
 
 	SetWindowPos(wnd, 0, skin_settings.main_x, skin_settings.main_y, skin_settings.main_w, skin_settings.main_h, SWP_NOZORDER);
 	//setwinpos_clip(wnd, 0, skin_settings.main_x, skin_settings.main_y,
@@ -956,29 +958,27 @@ int skin_getdata(int id, void *rdata, int dsize)
 
 	case get_window_video_state:
 		return 0;
-
+		/*
 	case set_video_window:
 		{
 			int prevst = 0;
 
-			//if(rdata)
-			//{
+			if(rdata)
+			{
 				prevst = skin_settings.vid_show;
 
 				skin_settings.vid_show = 1;
-				vid_create(skin.wnd);
-			//	Beep(1000, 1000);
+				vid_close();
 
-			//}else{
+			}else{
 
-			//	prevst = skin_settings.vid_show;
+				prevst = skin_settings.vid_show;
 
-			//	skin_settings.vis_show = 0;
-			//	vid_close();
-			//	Beep(1000, 1000);
-			//}
+				skin_settings.vis_show = 0;
+			 	vid_create(skin.wnd);
+			}
 			return prevst;
-		}
+		}*/
 
 	}
 
@@ -2198,19 +2198,26 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_SIZE:
 	case WM_SIZING:
 
-		if(window_ml)
-		{
-			RECT rct;
-			GetClientRect(hwnd, &rct);
-			SetWindowPos(window_ml, 0, 4, 45, rct.right - 6, rct.bottom - 117 - 45, SWP_NOZORDER);
-		}	
-
 		if(window_vid)
 		{
 			RECT rct;
 			GetClientRect(hwnd, &rct);
 			SetWindowPos(window_vid, 0, 0, 45, rct.right, rct.bottom - 117, SWP_NOZORDER);
 		}
+
+		if(window_vis)
+		{
+			RECT rct;
+			GetClientRect(hwnd, &rct);
+			SetWindowPos(window_vis, 0, 0, 45, rct.right, rct.bottom - 117 - 45, SWP_NOZORDER);
+		}
+
+		if(window_ml)
+		{
+			RECT rct;
+			GetClientRect(hwnd, &rct);
+			SetWindowPos(window_ml, 0, 4, 45, rct.right - 6, rct.bottom - 117 - 45, SWP_NOZORDER);
+		}	
 		break;
 
 	case WM_LBUTTONDBLCLK:
@@ -2220,6 +2227,28 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 		if(HIWORD(lParam) < 45) ShowWindow(hwnd, SW_MAXIMIZE);
 		break;
+
+	case WM_GETMINMAXINFO:
+		{
+			MINMAXINFO *mmi = (MINMAXINFO*)lParam;
+	        int monitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+
+	        if(monitor != 0)
+	        {
+	            MONITORINFO monitorInfo;
+	            monitorInfo.cbSize = sizeof(MONITORINFO);
+
+	            GetMonitorInfo(monitor, &monitorInfo);
+
+	            RECT rcWorkArea = monitorInfo.rcWork;
+	            RECT rcMonitorArea = monitorInfo.rcMonitor;
+	            mmi->ptMaxPosition.x = 0;//abs(rcWorkArea.left - rcMonitorArea.left);
+	            mmi->ptMaxPosition.y = 0;//abs(rcWorkArea.top - rcMonitorArea.top);
+	            mmi->ptMaxSize.x = rcWorkArea.right - rcWorkArea.left;
+	            mmi->ptMaxSize.y = rcWorkArea.bottom - rcWorkArea.top;
+	        }
+    	}
+        return 0;
 
 	case WM_PAINT:
 		{

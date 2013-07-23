@@ -73,6 +73,7 @@ int		 vis_lyrics_font_size = 20;
 void vis_create(HWND hwndp)
 {
 	WNDCLASS wndc;
+	RECT rct;
 
 	if(vis_init)return;
 	if(!skin_settings.vis_show)return;
@@ -91,13 +92,20 @@ void vis_create(HWND hwndp)
 	RegisterClass(&wndc);
 
 	/* create window */
-	
-	window_vis = CreateWindow(vis_window_class, uni("Visualization"), WS_POPUP, skin_settings.vis_x, skin_settings.vis_y, max(skin_settings.vis_w, 30), max(skin_settings.vis_h, 30), hwndp, 0, instance_skin, 0);
+	GetClientRect(hwndp, &rct);
 
-	setwinpos_clip(window_vis, 0, skin_settings.vis_x, skin_settings.vis_y, max(skin_settings.vis_w, 30), max(skin_settings.vis_h, 30), SWP_NOSIZE | SWP_NOZORDER);
+	window_vis = CreateWindow(vis_window_class, uni("Visualization"), WS_CHILD, 0, 45, rct.right, rct.bottom - 117 - 45, hwndp, 0, instance_skin, 0);
+
+	//setwinpos_clip(window_vis, 0, skin_settings.vis_x, skin_settings.vis_y, max(skin_settings.vis_w, 30), max(skin_settings.vis_h, 30), SWP_NOSIZE | SWP_NOZORDER);
 	
+	if(window_ml) ShowWindow(window_ml, SW_HIDE);
+	if(window_vid) ShowWindow(window_vid, SW_HIDE);
+
 	ShowWindow(window_vis, SW_SHOW);
 	UpdateWindow(window_vis);
+
+	str_cpy(skin.shared->settings.general->visualizations.selected, skin_settings.current_vis);
+	skin.shared->call_function(call_visualizations_select_next, 0, 0, 0);
 
 	vis_init = 1;
 
@@ -111,6 +119,9 @@ void vis_close(void)
 {
 	if(!vis_init)return;
 
+	if(window_ml) ShowWindow(window_ml, SW_SHOW);
+
+	str_cpy(skin_settings.current_vis, skin.shared->settings.general->visualizations.selected);
 	skin.shared->call_function(call_visualizations_select_none, 0, 0, 0);
 
 	if(hdc_vis)DeleteDC(hdc_vis);
@@ -146,7 +157,7 @@ void vis_draw_background(int maxd)
 
 	if(maxd)
 	{
-		SetWindowRgn(window_vis, 0, 1);
+		//SetWindowRgn(window_vis, 0, 1);
 
 		drawrect(hdc_vis, 0, 0, rct.right, rct.bottom, 0);
 		
@@ -154,58 +165,10 @@ void vis_draw_background(int maxd)
 		return;
 
 	}else{
-		if(rgn_vis)DeleteObject(rgn_vis);
-		rgn_vis = CreateRoundRectRgn(0, 0, rct.right, rct.bottom, coords.window_vis.window_edge, coords.window_vis.window_edge);
-		SetWindowRgn(window_vis, rgn_vis, 1);
+		drawrect(hdc_vis, 0, 0, rct.right, rct.bottom, 0);
+		
+		skin.shared->call_function(call_visualizations_refresh, v_fennec_refresh_force_less, 0, 0);
 	}
-
-	/* drawing stuff */
-
-	drawrect(hdc_vis, coords.window_vis.crop_ml.w, coords.window_vis.crop_tm.h, rct.right - coords.window_vis.crop_ml.w - coords.window_vis.crop_mr.w, rct.bottom - coords.window_vis.crop_tm.h - coords.window_vis.crop_bm.h, 0);
-
-	/* top */
-
-	c = (rct.right - coords.window_vis.crop_tl.w - coords.window_vis.crop_tr.w);
-
-	for(i=0; i<c; i+=coords.window_vis.crop_tm.w)
-	{
-		BitBlt(hdc_vis, coords.window_vis.crop_tl.w + i, 0, coords.window_vis.crop_tm.w, coords.window_vis.crop_tm.h, mdc_sheet, coords.window_vis.crop_tm.sx_n, coords.window_vis.crop_tm.sy_n, SRCCOPY);
-	}
-
-	/* bottom */
-
-	c = (rct.right - coords.window_vis.crop_bl.w - coords.window_vis.crop_br.w);
-
-	for(i=0; i<c; i+=coords.window_vis.crop_bm.w)
-	{
-		BitBlt(hdc_vis, coords.window_vis.crop_bl.w + i, rct.bottom - coords.window_vis.crop_bm.h, coords.window_vis.crop_bm.w, coords.window_vis.crop_bm.h, mdc_sheet, coords.window_vis.crop_bm.sx_n, coords.window_vis.crop_bm.sy_n, SRCCOPY);
-	}
-
-	/* left */
-
-	c = (rct.bottom - coords.window_vis.crop_tl.h - coords.window_vis.crop_bl.h);
-
-	for(i=0; i<c; i+=coords.window_vis.crop_ml.h)
-	{
-		BitBlt(hdc_vis, 0, coords.window_vis.crop_tl.h + i, coords.window_vis.crop_ml.w, coords.window_vis.crop_ml.h, mdc_sheet, coords.window_vis.crop_ml.sx_n, coords.window_vis.crop_ml.sy_n, SRCCOPY);
-	}
-
-	/* right */
-
-	c = (rct.bottom - coords.window_vis.crop_tl.h - coords.window_vis.crop_bl.h);
-
-	for(i=0; i<c; i+=coords.window_vis.crop_mr.h)
-	{
-		BitBlt(hdc_vis, rct.right - coords.window_vis.crop_mr.w, coords.window_vis.crop_tl.h + i, coords.window_vis.crop_mr.w, coords.window_vis.crop_mr.h, mdc_sheet, coords.window_vis.crop_mr.sx_n, coords.window_vis.crop_mr.sy_n, SRCCOPY);
-	}
-
-
-	/* finalize */
-
-	BitBlt(hdc_vis, 0, 0, coords.window_vis.crop_tl.w, coords.window_vis.crop_tl.h, mdc_sheet, coords.window_vis.crop_tl.sx_n, coords.window_vis.crop_tl.sy_n, SRCCOPY);
-	BitBlt(hdc_vis, rct.right - coords.window_vis.crop_tr.w, 0, coords.window_vis.crop_tr.w, coords.window_vis.crop_tr.h, mdc_sheet, coords.window_vis.crop_tr.sx_n, coords.window_vis.crop_tr.sy_n, SRCCOPY);
-	BitBlt(hdc_vis, 0, rct.bottom - coords.window_vis.crop_bl.h, coords.window_vis.crop_bl.w, coords.window_vis.crop_bl.h, mdc_sheet, coords.window_vis.crop_bl.sx_n, coords.window_vis.crop_bl.sy_n, SRCCOPY);
-	BitBlt(hdc_vis, rct.right - coords.window_vis.crop_br.w, rct.bottom - coords.window_vis.crop_br.h, coords.window_vis.crop_br.w, coords.window_vis.crop_br.h, mdc_sheet, coords.window_vis.crop_br.sx_n, coords.window_vis.crop_br.sy_n, SRCCOPY);
 
 
 	skin.shared->call_function(call_visualizations_refresh, v_fennec_refresh_force_less, 0, 0);
@@ -257,10 +220,6 @@ int vis_get_position(RECT *retp)
 		retp->right  = rct.right  - coords.window_vis.vis_r - retp->left;
 		retp->bottom = rct.bottom - coords.window_vis.vis_b - retp->top;
 	}
-	
-	//if(vis_markers)
-	//	retp->bottom -= 20;
-	return 1;
 }
 
 int visualization_messages(int id, int mdata, int sdata)

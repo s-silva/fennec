@@ -117,6 +117,7 @@ typedef struct _local_skin_settings
 
 	letter          font_display[256];
 	letter          skin_file_name[256];
+	letter          current_vis[256];
 
 	
 	int             vid_x, vid_y, vid_w, vid_h, vid_d, vid_show;
