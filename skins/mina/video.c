@@ -51,6 +51,7 @@ void vid_create(HWND hwndp)
 
 	if(window_ml) ShowWindow(window_ml, SW_HIDE);
 	if(window_vis) ShowWindow(window_vis, SW_HIDE);
+	if(window_eq) ShowWindow(window_eq, SW_HIDE);
 
 	ShowWindow(window_vid, SW_SHOW);
 	UpdateWindow(window_vid);

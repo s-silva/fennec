@@ -2143,7 +2143,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				{
 					skin_settings.eq_show = 1;
 					eq_create(hwnd);
-					
 				}else{
 					eq_close();
 					skin_settings.eq_show = 0;
@@ -2197,27 +2196,31 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 	case WM_SIZE:
 	case WM_SIZING:
-
-		if(window_vid)
 		{
 			RECT rct;
 			GetClientRect(hwnd, &rct);
-			SetWindowPos(window_vid, 0, 0, 45, rct.right, rct.bottom - 117, SWP_NOZORDER);
+
+			if(window_vid)
+			{
+				SetWindowPos(window_vid, 0, 0, 45, rct.right, rct.bottom - 117, SWP_NOZORDER);
+			}
+
+			if(window_vis)
+			{
+				SetWindowPos(window_vis, 0, 0, 45, rct.right, rct.bottom - 117 - 45, SWP_NOZORDER);
+			}
+
+			if(window_eq)
+			{
+				SetWindowPos(window_eq, 1, 0, 45, rct.right - 1, rct.bottom - 117 - 45, SWP_NOZORDER);
+			}	
+
+			if(window_ml)
+			{
+				SetWindowPos(window_ml, 1, 0, 45, rct.right - 1, rct.bottom - 117 - 45, SWP_NOZORDER);
+			}	
+
 		}
-
-		if(window_vis)
-		{
-			RECT rct;
-			GetClientRect(hwnd, &rct);
-			SetWindowPos(window_vis, 0, 0, 45, rct.right, rct.bottom - 117 - 45, SWP_NOZORDER);
-		}
-
-		if(window_ml)
-		{
-			RECT rct;
-			GetClientRect(hwnd, &rct);
-			SetWindowPos(window_ml, 0, 4, 45, rct.right - 6, rct.bottom - 117 - 45, SWP_NOZORDER);
-		}	
 		break;
 
 	case WM_LBUTTONDBLCLK:
@@ -2319,7 +2322,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			gr_text(&gr_main, 0, uni("Fennec Media Suite"), 42, 16, 0, 0);
 
 			gr_line(&gr_main, 1, 0xcccccc, 0, 45, 0, win_h);
-			//gr_line(&gr_main, 1, 0xcccccc, 0, 0, 0, win_w);
 			gr_line(&gr_main, 1, 0xcccccc, win_w -1 , 45, win_w -1, win_h);
 			gr_line(&gr_main, 1, 0xcccccc, 0, win_h-1, win_w, win_h-1);
 
