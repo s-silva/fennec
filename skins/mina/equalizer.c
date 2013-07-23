@@ -93,6 +93,7 @@ const RECT coord_scrolls[] = {
 void eq_create(HWND hwndp)
 {
 	WNDCLASS wndc;
+	RECT rct;
 
 	if(!skin_settings.eq_show) return;
 	if(eq_init) return;
@@ -110,14 +111,15 @@ void eq_create(HWND hwndp)
 
 	RegisterClass(&wndc);
 	
-	window_eq = CreateWindow(eq_window_class, uni("Equalizer"), WS_POPUP, skin_settings.eq_x, skin_settings.eq_y, cr(coords.window_eq.width), cr(coords.window_eq.height), hwndp, 0, instance_skin, 0);
+	GetClientRect(hwndp, &rct);
+	window_eq = CreateWindow(eq_window_class, uni("Equalizer"), WS_CHILD, 0, 45, rct.right, rct.bottom - 117 - 45, hwndp, 0, instance_skin, 0);
 	
-	setwinpos_clip(window_eq, 0, skin_settings.eq_x, skin_settings.eq_y, cr(coords.window_eq.width), cr(coords.window_eq.height), SWP_NOSIZE | SWP_NOZORDER);
+	//setwinpos_clip(window_eq, 0, skin_settings.eq_x, skin_settings.eq_y, cr(coords.window_eq.width), cr(coords.window_eq.height), SWP_NOSIZE | SWP_NOZORDER);
 
 
-	rgn_eq = CreateRoundRectRgn(0, 0, cr(coords.window_eq.width), cr(coords.window_eq.height), cr(5), cr(5));
-	SetWindowRgn(window_eq, rgn_eq, 1);
-
+	//rgn_eq = CreateRoundRectRgn(0, 0, cr(coords.window_eq.width), cr(coords.window_eq.height), cr(5), cr(5));
+	//SetWindowRgn(window_eq, rgn_eq, 1);
+	if(window_ml) ShowWindow(window_ml, SW_HIDE);
 	ShowWindow(window_eq, SW_SHOW);										  
 	UpdateWindow(window_eq);											  
 
@@ -131,6 +133,8 @@ void eq_create(HWND hwndp)
 void eq_close(void)
 {
 	if(!eq_init) return;
+
+	if(window_ml) ShowWindow(window_ml, SW_SHOW);
 	
 	DeleteDC(hdc_eq);
 	DestroyWindow(window_eq);
@@ -156,65 +160,71 @@ void eq_draw(void)
 {
 	float preampv; /* preamp value */
 	float eb[10];  /* bands */
+	RECT  rct;
+	POINT pts[12];
+	int   i;
+	HPEN   pn, po;
+	HBRUSH br, bo;
+
+
+	GetClientRect(window_eq, &rct);
 
 	/* draw background */
 
 
-	StretchBlt(hdc_eq, 0, 0, cr(coords.window_eq.width), cr(coords.window_eq.height), mdc_sheet, coords.window_eq.background_sx, coords.window_eq.background_sy, coords.window_eq.width, coords.window_eq.height, SRCCOPY);
+	//StretchBlt(hdc_eq, 0, 0, cr(coords.window_eq.width), cr(coords.window_eq.height), mdc_sheet, coords.window_eq.background_sx, coords.window_eq.background_sy, coords.window_eq.width, coords.window_eq.height, SRCCOPY);
 	//BitBlt(hdc_eq, 0, 0, equalizer_window_w, equalizer_window_h, mdc_sheet, equalizer_window_sx, equalizer_window_sy, SRCCOPY);
-	
+	drawrect(hdc_eq, 0, 0, rct.right, rct.bottom, RGB(0xe6, 0xe6, 0xe6));
 	/* draw preamp */
 
 	preampv = skin.shared->audio.equalizer.get_preamp(eq_channel == -1 ? 0 : eq_channel);
 
-	blt_button_on_coord_vb(hdc_eq, mdc_sheet, &coords.window_eq.bands[0], &coords.window_eq.bandbutton, -preampv / 24.0f);
+	//blt_button_on_coord_vb(hdc_eq, mdc_sheet, &coords.window_eq.bands[0], &coords.window_eq.bandbutton, -preampv / 24.0f);
 	//BitBlt(hdc_eq, 8   + 1, (8 + (39 / 2)) + (int)(preampv * -1.625) - 2, equalizer_sbutton_w, equalizer_sbutton_h, mdc_sheet, equalizer_sbutton_sx, equalizer_sbutton_sy, SRCCOPY);
 	
 	skin.shared->audio.equalizer.get_bands(eq_channel == -1 ? 0 : eq_channel, 10, eb);
 
-	/* draw band buttons */
+	pts[0].x = 0;
+	pts[0].y = rct.bottom / 2;
+	pts[11].x = rct.right - 1;
+	pts[11].y = rct.bottom / 2;
 
-	blt_button_on_coord_vb(hdc_eq, mdc_sheet, &coords.window_eq.bands[1], &coords.window_eq.bandbutton,  -eb[0] / 24.0f);
-	blt_button_on_coord_vb(hdc_eq, mdc_sheet, &coords.window_eq.bands[2], &coords.window_eq.bandbutton,  -eb[1] / 24.0f);
-	blt_button_on_coord_vb(hdc_eq, mdc_sheet, &coords.window_eq.bands[3], &coords.window_eq.bandbutton,  -eb[2] / 24.0f);
-	blt_button_on_coord_vb(hdc_eq, mdc_sheet, &coords.window_eq.bands[4], &coords.window_eq.bandbutton,  -eb[3] / 24.0f);
-	blt_button_on_coord_vb(hdc_eq, mdc_sheet, &coords.window_eq.bands[5], &coords.window_eq.bandbutton,  -eb[4] / 24.0f);
-	blt_button_on_coord_vb(hdc_eq, mdc_sheet, &coords.window_eq.bands[6], &coords.window_eq.bandbutton,  -eb[5] / 24.0f);
-	blt_button_on_coord_vb(hdc_eq, mdc_sheet, &coords.window_eq.bands[7], &coords.window_eq.bandbutton,  -eb[6] / 24.0f);
-	blt_button_on_coord_vb(hdc_eq, mdc_sheet, &coords.window_eq.bands[8], &coords.window_eq.bandbutton,  -eb[7] / 24.0f);
-	blt_button_on_coord_vb(hdc_eq, mdc_sheet, &coords.window_eq.bands[9], &coords.window_eq.bandbutton,  -eb[8] / 24.0f);
-	blt_button_on_coord_vb(hdc_eq, mdc_sheet, &coords.window_eq.bands[10], &coords.window_eq.bandbutton, -eb[9] / 24.0f);
+	for(i=0; i<10; i++)
+	{
+		pts[i+1].x = i * (rct.right / 10);
+		pts[i+1].y = (int)(-eb[i] /  24.0f * (float)(rct.bottom / 2)) + (rct.bottom / 2);
+		drawrect(hdc_eq, i * (rct.right / 10), pts[i+1].y , 5, 5, RGB(255, 0, 0));
+	}
 
 	
-	/*
-	BitBlt(hdc_eq, 28  + 1, (8 + (39 / 2)) + (int)(eb[0] * -1.625) - 2, equalizer_sbutton_w, equalizer_sbutton_h, mdc_sheet, equalizer_sbutton_sx, equalizer_sbutton_sy, SRCCOPY);
-	BitBlt(hdc_eq, 44  + 1, (8 + (39 / 2)) + (int)(eb[1] * -1.625) - 2, equalizer_sbutton_w, equalizer_sbutton_h, mdc_sheet, equalizer_sbutton_sx, equalizer_sbutton_sy, SRCCOPY);
-	BitBlt(hdc_eq, 59  + 1, (8 + (39 / 2)) + (int)(eb[2] * -1.625) - 2, equalizer_sbutton_w, equalizer_sbutton_h, mdc_sheet, equalizer_sbutton_sx, equalizer_sbutton_sy, SRCCOPY);
-	BitBlt(hdc_eq, 74  + 1, (8 + (39 / 2)) + (int)(eb[3] * -1.625) - 2, equalizer_sbutton_w, equalizer_sbutton_h, mdc_sheet, equalizer_sbutton_sx, equalizer_sbutton_sy, SRCCOPY);
-	BitBlt(hdc_eq, 89  + 1, (8 + (39 / 2)) + (int)(eb[4] * -1.625) - 2, equalizer_sbutton_w, equalizer_sbutton_h, mdc_sheet, equalizer_sbutton_sx, equalizer_sbutton_sy, SRCCOPY);
-	BitBlt(hdc_eq, 104 + 1, (8 + (39 / 2)) + (int)(eb[5] * -1.625) - 2, equalizer_sbutton_w, equalizer_sbutton_h, mdc_sheet, equalizer_sbutton_sx, equalizer_sbutton_sy, SRCCOPY);
-	BitBlt(hdc_eq, 119 + 1, (8 + (39 / 2)) + (int)(eb[6] * -1.625) - 2, equalizer_sbutton_w, equalizer_sbutton_h, mdc_sheet, equalizer_sbutton_sx, equalizer_sbutton_sy, SRCCOPY);
-	BitBlt(hdc_eq, 134 + 1, (8 + (39 / 2)) + (int)(eb[7] * -1.625) - 2, equalizer_sbutton_w, equalizer_sbutton_h, mdc_sheet, equalizer_sbutton_sx, equalizer_sbutton_sy, SRCCOPY);
-	BitBlt(hdc_eq, 149 + 1, (8 + (39 / 2)) + (int)(eb[8] * -1.625) - 2, equalizer_sbutton_w, equalizer_sbutton_h, mdc_sheet, equalizer_sbutton_sx, equalizer_sbutton_sy, SRCCOPY);
-	BitBlt(hdc_eq, 164 + 1, (8 + (39 / 2)) + (int)(eb[9] * -1.625) - 2, equalizer_sbutton_w, equalizer_sbutton_h, mdc_sheet, equalizer_sbutton_sx, equalizer_sbutton_sy, SRCCOPY);
-	*/
-
-	/* others */
-
-	if(skin.shared->settings.general->player.equalizer_enable)
-		blt_coord(hdc_eq, mdc_sheet, 0, &coords.window_eq.button_power_on);
-	else
-		blt_coord(hdc_eq, mdc_sheet, 0, &coords.window_eq.button_power_off);
-
-	/* mode */
-	if(eq_channel == -1)
-		blt_coord(hdc_eq, mdc_sheet, 0, &coords.window_eq.button_channel_u);
-	else
-		blt_coord(hdc_eq, mdc_sheet, 0, &coords.window_eq.button_channel_s);
 
 
-	blt_coord(hdc_eq, mdc_sheet, 0, &coords.window_eq.button_presets);
-	blt_coord(hdc_eq, mdc_sheet, 0, &coords.window_eq.button_reset);
+
+	
+
+	pn = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
+	br = CreateSolidBrush(RGB(255, 0, 0));
+
+	po = (HPEN) SelectObject(hdc_eq, pn);
+	bo = (HBRUSH) SelectObject(hdc_eq, br);
+
+	PolyBezierTo(hdc_eq, pts, 12);
+
+	SelectObject(hdc_eq, po);
+	SelectObject(hdc_eq, bo);
+
+	DeleteObject(pn);
+	DeleteObject(br);
+	
+
+	/* draw band buttons */
+
+	//blt_button_on_coord_vb(hdc_eq, mdc_sheet, &coords.window_eq.bands[1], &coords.window_eq.bandbutton,  -eb[0] / 24.0f);
+
+	//blt_button_on_coord_vb(hdc_eq, mdc_sheet, &coords.window_eq.bands[1], &coords.window_eq.bandbutton,  -eb[0] / 24.0f);
+
+	
+
 }
 
 
@@ -603,11 +613,11 @@ void eq_skinchange(void)
 		}
 	}
 
-	SetWindowRgn(window_eq, 0, 0);
+	//SetWindowRgn(window_eq, 0, 0);
 
 	if(rgn_eq) DeleteObject(rgn_eq);
-	rgn_eq = CreateRoundRectRgn(0, 0, cr(coords.window_eq.width), cr(coords.window_eq.height), cr(5), cr(5));
-	SetWindowRgn(window_eq, rgn_eq, 1);
+	//rgn_eq = CreateRoundRectRgn(0, 0, cr(coords.window_eq.width), cr(coords.window_eq.height), cr(5), cr(5));
+	//SetWindowRgn(window_eq, rgn_eq, 1);
 
 	
 	setwinpos_clip(window_eq, 0, skin_settings.eq_x, skin_settings.eq_y, cr(coords.window_eq.width), cr(coords.window_eq.height), SWP_NOZORDER);

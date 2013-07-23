@@ -100,6 +100,7 @@ void vis_create(HWND hwndp)
 	
 	if(window_ml) ShowWindow(window_ml, SW_HIDE);
 	if(window_vid) ShowWindow(window_vid, SW_HIDE);
+	if(window_eq) ShowWindow(window_eq, SW_HIDE);
 
 	ShowWindow(window_vis, SW_SHOW);
 	UpdateWindow(window_vis);
