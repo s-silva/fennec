@@ -161,7 +161,7 @@ void eq_draw(void)
 	float preampv; /* preamp value */
 	float eb[10];  /* bands */
 	RECT  rct;
-	POINT pts[12];
+	POINT pts[13];
 	int   i;
 	HPEN   pn, po;
 	HBRUSH br, bo;
@@ -188,11 +188,13 @@ void eq_draw(void)
 	pts[0].y = rct.bottom / 2;
 	pts[11].x = rct.right - 1;
 	pts[11].y = rct.bottom / 2;
+	pts[12].x = 0;
+	pts[12].y = rct.bottom / 2;
 
 	for(i=0; i<10; i++)
 	{
 		pts[i+1].x = i * (rct.right / 10);
-		pts[i+1].y = (int)(-eb[i] /  24.0f * (float)(rct.bottom / 2)) + (rct.bottom / 2);
+		pts[i+1].y = (int)(-eb[i] /  12.0f * (float)(rct.bottom / 2)) + (rct.bottom / 2);
 		drawrect(hdc_eq, i * (rct.right / 10), pts[i+1].y , 5, 5, RGB(255, 0, 0));
 	}
 
@@ -208,7 +210,9 @@ void eq_draw(void)
 	po = (HPEN) SelectObject(hdc_eq, pn);
 	bo = (HBRUSH) SelectObject(hdc_eq, br);
 
-	PolyBezierTo(hdc_eq, pts, 12);
+	SetViewportOrgEx(hdc_eq, 0, 0, NULL); 
+
+	PolyBezier(hdc_eq, pts, 13);
 
 	SelectObject(hdc_eq, po);
 	SelectObject(hdc_eq, bo);
@@ -473,15 +477,26 @@ int eq_mousemsg(int x, int y, int m)
 	if(m == mm_down_l)
 	{
 		int i;
+		RECT rct;
 
-		for(i=0; i<sizeof(coord_scrolls)/sizeof(coord_scrolls[0]); i++)
+		GetClientRect(window_eq, &rct);
+
+		if(y > rct.bottom - 40 && x > rct.right - 200)
+		{
+			/* buttons */
+		}else{
+			selband = (int)( ((float)x / (float)rct.right) * 10.0f ) + 1;
+			return 1;
+		}
+
+		/*for(i=0; i<sizeof(coord_scrolls)/sizeof(coord_scrolls[0]); i++)
 		{
 			if(incoordx(x, y, &coords.window_eq.bands[i]))
 			{
 				selband = i;
 				return 1;
 			}
-		}
+		}*/
 		return 0;
 	}
 
@@ -490,7 +505,11 @@ int eq_mousemsg(int x, int y, int m)
 	if((m == mm_move) && ldown)
 	{
 		int i;
+		RECT rct;
 
+		GetClientRect(window_eq, &rct);
+
+		/*
 		for(i=0; i<sizeof(coord_scrolls)/sizeof(coord_scrolls[0]); i++)
 		{
 			if(incoordx(x, y, &coords.window_eq.bands[i]))
@@ -498,15 +517,19 @@ int eq_mousemsg(int x, int y, int m)
 				selband = i;
 				break;
 			}
-		}
+		}*/
+
+		
+			selband = (int)( ((float)x / (float)rct.right) * 10.0f ) + 1;
+			
 
 		if(selband >= scroll_band_start)
 		{
 			float v, eb[10];
 			int   i, cb, j, sb_y, sb_h;
 
-			sb_y = cr(coords.window_eq.bands[selband].y);
-			sb_h = cr(coords.window_eq.bands[selband].h);
+			sb_y = 0;
+			sb_h = rct.bottom;
 
 			v = (float)y;
 			if(v < sb_y)v = (float)sb_y;
