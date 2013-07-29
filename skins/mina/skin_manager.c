@@ -336,9 +336,9 @@ void fill_skin_coords(void)
 	scontrol(&coords.window_main.button_open,      204, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff2e3e, 0, uni('f'), 19);
 
 
-	/*
-	scoord(&coords.window_main.button_playlist,  194, 40, 36, 15, 191, 117, 191, 133, 191, 149);
-	scoord(&coords.window_main.button_eq,        232, 40, 36, 15, 229, 117, 229, 133, 229, 149); */
+	
+	scontrol(&coords.window_main.button_playlist,  44, 89, 25, 25, coord_align_bottom_right, 0xc8c8c8, 0xffffff, 0, uni('g'), 17);	
+	/*scoord(&coords.window_main.button_eq,        232, 40, 36, 15, 229, 117, 229, 133, 229, 149); */
 	scontrol(&coords.window_main.button_exit,      (27 * 1) - 6 + 12, 14, 25, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('r'), 13);				
 	scontrol(&coords.window_main.button_minimize,  (27 * 2) - 6 + 12, 14, 25, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('q'), 13);
 	scontrol(&coords.window_main.button_eq,        (27 * 3) - 6 + 12, 14, 25, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('p'), 13);
