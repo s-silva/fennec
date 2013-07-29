@@ -2292,9 +2292,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			gr_setfont(&gr_main, uni("Your Icons"), 17, 0, 0, 0, 0);
 			gr_settextcolor(&gr_main, 0xbbbcbc, 0, 0);
-			gr_text(&gr_main, 0, uni("g"), win_w - 34, win_h - 44, 0, 0);
+			gr_text(&gr_main, 0, uni("i"), win_w - 34, win_h - 44, 0, 0);
 			gr_text(&gr_main, 0, uni("h"), win_w - 62, win_h - 44, 0, 0);
-			gr_text(&gr_main, 0, uni("i"), win_w - 89, win_h - 44, 0, 0);
+			gr_text(&gr_main, 0, uni("g"), win_w - 89, win_h - 44, 0, 0);
 
 			gr_setfont(&gr_main, uni("Your Icons"), 13, 0, 0, 0, 0);
 			gr_settextcolor(&gr_main, 0xc4c4c4, 0, 0);
