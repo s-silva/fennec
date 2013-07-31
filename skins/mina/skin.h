@@ -454,6 +454,8 @@ void gr_blit(graphic_context *grdst, int sx, int sy, int dx, int dy, int w, int 
 void gr_blitto(graphic_context *grsrc, int sx, int sy, int dx, int dy, int w, int h);
 void gr_settextcolor(graphic_context *gr, uint32_t fcolor, uint32_t bkcolor, int bkmode);
 
+void DrawCurve(HDC context, POINT *points, int npoints, float tension, int color);
+
 /*-----------------------------------------------------------------------------
   eof.
 -----------------------------------------------------------------------------*/

@@ -212,7 +212,10 @@ void eq_draw(void)
 
 	SetViewportOrgEx(hdc_eq, 0, 0, NULL); 
 
-	PolyBezier(hdc_eq, pts, 13);
+	//PolyBezier(hdc_eq, pts, 13);
+	DrawCurve(hdc_eq, pts, 13, 0.5, RGB(255, 0, 0));
+
+
 
 	SelectObject(hdc_eq, po);
 	SelectObject(hdc_eq, bo);
