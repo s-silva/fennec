@@ -69,21 +69,27 @@ int local_downsample(void* dout, void *idata, unsigned long dsize)
 		short  dout;
 		uint16_t cw;
 
-		__asm fnstcw cw
-		cw |= ~((uint16_t)(3 << 10));
-		__asm fldcw cw
-
+		#ifdef _MSC_VER
+			__asm fnstcw cw
+			cw |= ~((uint16_t)(3 << 10));
+			__asm fldcw cw
+		#endif
 
 		for(i=0; i<msize; i++)
 		{
 			din = (double)ifdata[i];
 
-			__asm
-			{
-				fld   din
-				fmul  mval
-				fistp dout
-			}
+			#ifdef _MSC_VER
+				__asm
+				{
+					fld   din
+					fmul  mval
+					fistp dout
+				}
+
+			#else
+				dout = (short) round(din * mval);
+			#endif
 
 			sout[i] = dout;
 		}
@@ -104,21 +110,26 @@ int local_downsample(void* dout, void *idata, unsigned long dsize)
 		uint16_t       cw;
 		unsigned long  j;
 
-		__asm fnstcw cw
-		cw |= ~((uint16_t)(3 << 10));
-		__asm fldcw cw
-
+		#ifdef _MSC_VER
+			__asm fnstcw cw
+			cw |= ~((uint16_t)(3 << 10));
+			__asm fldcw cw
+		#endif
 
 		for(i=0, j=0; i<msize; i++, j+=3)
 		{
 			din = (double)ifdata[i];
 
-			__asm
-			{
-				fld   din
-				fmul  mval
-				fistp dout
-			}
+			#ifdef _MSC_VER
+				__asm
+				{
+					fld   din
+					fmul  mval
+					fistp dout
+				}
+			#else
+				dout = (int32_t) round(din * dout);
+			#endif
 
 			sout[j]     = (int8_t)((dout >> 0));
 			sout[j + 1] = (int8_t)((dout >> 8));
@@ -154,21 +165,26 @@ int local_downsample(void* dout, void *idata, unsigned long dsize)
 			int32_t  dout;
 			uint16_t cw;
 
-			__asm fnstcw cw
-			cw |= ~((uint16_t)(3 << 10));
-			__asm fldcw cw
-
+			#ifdef _MSC_VER
+				__asm fnstcw cw
+				cw |= ~((uint16_t)(3 << 10));
+				__asm fldcw cw
+			#endif
 
 			for(i=0; i<msize; i++)
 			{
 				din = (double)ifdata[i];
 
-				__asm
-				{
-					fld   din
-					fmul  mval
-					fistp dout
-				}
+				#ifdef _MSC_VER
+					__asm
+					{
+						fld   din
+						fmul  mval
+						fistp dout
+					}
+				#else
+					dout = (int32_t) round(din * mval);
+				#endif
 
 				sout[i] = (uint8_t)(dout + 127);
 			}
@@ -196,21 +212,28 @@ int local_def_downsample(void* dout, void *idata, unsigned long dsize)
 	short  ddout;
 	uint16_t cw;
 
+	#ifdef _MSC_VER
+
 	__asm fnstcw cw
 	cw |= ~((uint16_t)(3 << 10));
 	__asm fldcw cw
+
+	#endif
 
 
 	for(i=0; i<msize; i++)
 	{
 		din = (double)ifdata[i];
-
-		__asm
-		{
-			fld   din
-			fmul  mval
-			fistp ddout
-		}
+		#ifdef _MSC_VER
+			__asm
+			{
+				fld   din
+				fmul  mval
+				fistp ddout
+			}
+		#else
+			ddout = (short)round(din * mval);
+		#endif
 
 		sout[i] = ddout;
 	}
