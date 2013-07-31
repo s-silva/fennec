@@ -297,3 +297,86 @@ int setwinpos_clip(HWND hwnd, HWND hwa, int x, int y, int w, int h, UINT flags)
 	rv = SetWindowPos(hwnd, hwa, rx, ry, w, h, flags);
 	return rv;
 }
+
+
+void DrawLine(HDC context, int x1, int y1, int x2, int y2, int color)
+{
+	MoveToEx(context, x1, y1, (LPPOINT) NULL);
+	LineTo(context, x2, y2);
+}
+
+
+void DrawCurveSegment(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, float tension, int color, HDC context)
+{
+	// Determine distances between controls points (bounding rect) to find the optimal stepsize
+	float StepFactor = 2.0f;
+	float minX = min(x1, min(x2, min(x3, x4)));
+	float minY = min(y1, min(y2, min(y3, y4)));
+	float maxX = max(x1, max(x2, max(x3, x4)));
+	float maxY = max(y1, max(y2, max(y3, y4)));
+
+	// Get slope
+	float lenx = maxX - minX;
+	float len = maxY - minY;
+	float t;
+
+	if (lenx > len)
+	{
+		len = lenx;
+	}
+
+	// Prevent divison by zero
+	if (len != 0)
+	{
+		// Init vars
+		float step = StepFactor / len;
+		int tx1 = x2;
+		int ty1 = y2;
+		int tx2, ty2;
+
+		// Calculate factors
+		float sx1 = tension * (x3 - x1);
+		float sy1 = tension * (y3 - y1);
+		float sx2 = tension * (x4 - x2);
+		float sy2 = tension * (y4 - y2);
+		float ax = sx1 + sx2 + 2 * x2 - 2 * x3;
+		float ay = sy1 + sy2 + 2 * y2 - 2 * y3;
+		float bx = -2 * sx1 - sx2 - 3 * x2 + 3 * x3;
+		float by = -2 * sy1 - sy2 - 3 * y2 + 3 * y3;
+
+		// Interpolate
+		for (t = step; t <= 1; t += step)
+		{
+		   float tSq = t * t;
+
+		   tx2 = (int)(ax * tSq * t + bx * tSq + sx1 * t + x2);
+		   ty2 = (int)(ay * tSq * t + by * tSq + sy1 * t + y2);
+
+		   // Draw line
+		   DrawLine(context, tx1, ty1, tx2, ty2, color);
+		   tx1 = tx2;
+		   ty1 = ty2;
+		}
+
+		// Prevent rounding gap
+		DrawLine(context, tx1, ty1, x3, y3, color);
+	}
+}
+
+void DrawCurve(HDC context, POINT *points, int npoints, float tension, int color)
+{
+
+	// First segment
+	DrawCurveSegment(points[0].x, points[0].y, points[0].x, points[0].y, points[1].x, points[1].y, points[2].x, points[2].y, tension, color, context);
+
+	// Middle segments
+	int i;
+	for (i = 1; i < npoints - 2; i += 1)
+	{
+	   DrawCurveSegment(points[i - 1].x, points[i - 1].y, points[i].x, points[i].y, points[i + 1].x, points[i + 1].y, points[i + 2].x, points[i + 2].y, tension, color, context);
+	}
+
+	// Last segment
+	//DrawCurveSegment(points[i - 1].x, points[i - 1].y, points[i].x, points[i].y, points[i + 1].x, points[i + 1].y, points[i + 2].x, points[i + 2].y, tension, color, context);
+
+}
