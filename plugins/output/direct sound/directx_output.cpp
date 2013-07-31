@@ -20,7 +20,14 @@ int                  preview_device_combo_index = 0;
 /*
  * initialize plug-in.
  */
-unsigned long __stdcall fennec_initialize_output(struct general_output_data *gin, string pname)
+
+ extern "C"
+ {
+	unsigned long __stdcall __declspec(dllexport)fennec_initialize_output(struct general_output_data *gin, string pname);
+
+ }
+
+unsigned long __stdcall __declspec(dllexport)fennec_initialize_output(struct general_output_data *gin, string pname)
 {
 	memcpy(&sfennec, gin->shared, sizeof(struct fennec));
 
@@ -53,7 +60,6 @@ unsigned long __stdcall fennec_initialize_output(struct general_output_data *gin
 	return 1;
 }
 
-
 /*
  * show settings dialog.
  */
@@ -69,6 +75,8 @@ int show_settings(void* vdata)
  */
 int show_about(void* vdata)
 {
+	char str[10];
+	 MessageBoxA(0, itoa((int)plugin_instance, str, 10), "The value of num is", 0);
 	MessageBox(0, uni("DirectX audio output plug-in for Fennec Player."), uni("About"), MB_ICONINFORMATION);
 	return 1;
 }
@@ -277,7 +285,7 @@ int audio_load(const string spath)
 	/* mono fix */
 	if(splayer.wfx.Format.nChannels == 1)
 	{
-		splayer.wfx.dwChannelMask = SPEAKER_FRONT_LEFT | SPEAKER_FRONT_RIGHT;
+		splayer.wfx.dwChannelMask = SPEAKER_FRONT_LEFT;
 	}
 
 	/* 7.1 fix */
@@ -1208,12 +1216,31 @@ int CALLBACK DialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-
-/*
- * DLL callback (just to get the module handle).
- */
-BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
+extern "C"
 {
-    if(fdwReason == DLL_PROCESS_ATTACH) plugin_instance = hinstDLL;
-	return 1;
+
+BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
+{
+  switch (fdwReason)
+  {
+    case DLL_PROCESS_ATTACH:
+      plugin_instance = hinstDLL;
+      break;
+
+    case DLL_THREAD_ATTACH:
+      /* Code path executed when a new thread is created within the process. */
+      break;
+
+    case DLL_THREAD_DETACH:
+      /* Code path executed when a thread within the process has exited *cleanly*. */
+      break;
+
+    case DLL_PROCESS_DETACH:
+      /* Code path executed when DLL is unloaded from a process's address space. */
+      break;
+  }
+
+  return TRUE;
+}
+
 }
