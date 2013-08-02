@@ -43,7 +43,7 @@ int  skin_set_color(int hue, unsigned long combsl);
 int  skin_get_themes(int id, string name, int osize);
 int  skin_set_theme(int id);
 int  skin_getdata(int id, void *rdata, int dsize);
-
+void skin_draw_volume_bar(int showhide, int size);
 
 
 
@@ -67,6 +67,9 @@ int  skin_getdata(int id, void *rdata, int dsize);
 #define skin_main_button_join       0xf
 #define skin_main_button_visual     0x10
 #define skin_main_button_video      0x11
+#define skin_main_button_search     0x17
+#define skin_main_button_repeat     0x18
+
 #define skin_main_endl              0x11
 #define skin_main_endr              0x12
 #define skin_main_endt              0x13
@@ -1068,9 +1071,11 @@ int skin_get_button_index(int x, int y)
 	if(in_control(x, y, win_w, win_h, &coords.window_main.button_eq      ))     return skin_main_button_equalizer;
 	if(in_control(x, y, win_w, win_h, &coords.window_main.button_minimize))     return skin_main_button_minimize;
 	if(in_control(x, y, win_w, win_h, &coords.window_main.button_exit    ))     return skin_main_button_exit;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.button_repeat  ))     return skin_main_button_repeat;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.button_search  ))     return skin_main_button_search;
 
 	//if(in_control(x, y, win_w, win_h, &coords.window_main.bar_seek       ))     return skin_main_button_seek;
-	if(in_control(x, y, win_w, win_h, &coords.window_main.bar_volume     ))     return skin_main_button_volume;
+	if(in_control(x, y, win_w, win_h, &coords.window_main.button_volume))     return skin_main_button_volume;
 
 	if(in_control(x, y, win_w, win_h, &coords.window_main.button_settings))     return skin_main_button_settings;
 	if(in_control(x, y, win_w, win_h, &coords.window_main.button_convert ))     return skin_main_button_convert;
@@ -1113,6 +1118,9 @@ int skin_draw_button_normal(int id, HDC dc)
 	case skin_main_button_equalizer: draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_eq);       break;
 	case skin_main_button_minimize:  draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_minimize); break;
 	case skin_main_button_exit:      draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_exit);     break;
+	case skin_main_button_search:    draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_search);   break;
+	case skin_main_button_repeat:    draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_repeat);   break;
+	case skin_main_button_volume:    draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_volume);   break;
 
 	case skin_main_button_settings:  draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_settings); break; 
 	case skin_main_button_convert:   draw_control(&gr_main, 0, 0, win_w, win_h, &coords.window_main.button_convert);  break;
@@ -1143,23 +1151,29 @@ int skin_draw_button_hover(int id, HDC dc)
 
 	switch(id)
 	{
-	case skin_main_button_play:      draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_play);     show_tip(oooo_skins_play_pause,          0); break;
-	case skin_main_button_stop:      draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_stop);     show_tip(oooo_skins_stop,                0); break;
-	case skin_main_button_previous:  draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_previous); show_tipex(oooo_skins_previous, oooo_skins_rewind,        0, uni("\nRight: ")); break;
-	case skin_main_button_next:      draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_next);     show_tipex(oooo_skins_next,     oooo_skins_fast_forward,  1, uni("\nRight: ")); break;
-	case skin_main_button_open:      draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_open);     show_tipex(oooo_skins_open,     oooo_skins_add_files,     2, uni("\nRight: ")); break;
-	case skin_main_button_playlist:  draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_playlist); show_tip(oooo_skins_show_playlist,       0); break;
-	case skin_main_button_equalizer: draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_eq);       show_tip(oooo_skins_show_equalizer,      0); break;
-	case skin_main_button_minimize:  draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_minimize); show_tip(oooo_skins_minimize,            0); break;
-	case skin_main_button_exit:      draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_exit);     show_tip(oooo_skins_close,               0); break;
-						
-	case skin_main_button_settings:  draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_settings); show_tip(oooo_skins_show_preferences,    0); break;
-	case skin_main_button_convert:   draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_convert);  show_tip(oooo_skins_show_conversion,     0); break;
-	case skin_main_button_rip:       draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_rip);      show_tip(oooo_skins_show_ripping,        0); break;
-	case skin_main_button_join:      draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_join);     show_tip(oooo_skins_show_joining,        0); break;
-	case skin_main_button_visual:    draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_vis);      show_tip(oooo_skins_Show_visualizations, 0); break;
-	case skin_main_button_video:     draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_video);    show_tip(0, uni("Show/Hide video window")); break;
-	case skin_main_button_dsp:       draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_dsp);      show_tip(0, uni("DSP/Effects")); break;
+	case skin_main_button_play:      draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_play);     SetCursor(LoadCursor(0, IDC_HAND)); show_tip(oooo_skins_play_pause,          0); break;
+	case skin_main_button_stop:      draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_stop);     SetCursor(LoadCursor(0, IDC_HAND)); show_tip(oooo_skins_stop,                0); break;
+	case skin_main_button_previous:  draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_previous); SetCursor(LoadCursor(0, IDC_HAND)); show_tipex(oooo_skins_previous, oooo_skins_rewind,        0, uni("\nRight: ")); break;
+	case skin_main_button_next:      draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_next);     SetCursor(LoadCursor(0, IDC_HAND)); show_tipex(oooo_skins_next,     oooo_skins_fast_forward,  1, uni("\nRight: ")); break;
+	case skin_main_button_open:      draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_open);     SetCursor(LoadCursor(0, IDC_HAND)); show_tipex(oooo_skins_open,     oooo_skins_add_files,     2, uni("\nRight: ")); break;
+	case skin_main_button_playlist:  draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_playlist); SetCursor(LoadCursor(0, IDC_HAND)); show_tip(oooo_skins_show_playlist,       0); break;
+	case skin_main_button_equalizer: draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_eq);       SetCursor(LoadCursor(0, IDC_HAND)); show_tip(oooo_skins_show_equalizer,      0); break;
+	case skin_main_button_minimize:  draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_minimize); SetCursor(LoadCursor(0, IDC_HAND)); show_tip(oooo_skins_minimize,            0); break;
+	case skin_main_button_exit:      draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_exit);     SetCursor(LoadCursor(0, IDC_HAND)); show_tip(oooo_skins_close,               0); break;
+	case skin_main_button_search:    draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_search);   SetCursor(LoadCursor(0, IDC_HAND));   break;
+	case skin_main_button_repeat:    draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_repeat);   SetCursor(LoadCursor(0, IDC_HAND));   break;
+	case skin_main_button_volume:    draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_volume);   
+		skin_draw_volume_bar(1, 150);
+		SetCursor(LoadCursor(0, IDC_HAND));   break;
+															
+	case skin_main_button_settings:  draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_settings); SetCursor(LoadCursor(0, IDC_HAND)); show_tip(oooo_skins_show_preferences,    0); break;
+	case skin_main_button_convert:   draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_convert);  SetCursor(LoadCursor(0, IDC_HAND)); show_tip(oooo_skins_show_conversion,     0); break;
+	case skin_main_button_rip:       draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_rip);      SetCursor(LoadCursor(0, IDC_HAND)); show_tip(oooo_skins_show_ripping,        0); break;
+	case skin_main_button_join:      draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_join);     SetCursor(LoadCursor(0, IDC_HAND)); show_tip(oooo_skins_show_joining,        0); break;
+	case skin_main_button_visual:    draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_vis);      SetCursor(LoadCursor(0, IDC_HAND)); show_tip(oooo_skins_Show_visualizations, 0); break;
+	case skin_main_button_video:     draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_video);    SetCursor(LoadCursor(0, IDC_HAND)); show_tip(0, uni("Show/Hide video window")); break;
+	case skin_main_button_dsp:       draw_control(&gr_main, 0, 1, win_w, win_h, &coords.window_main.button_dsp);      SetCursor(LoadCursor(0, IDC_HAND)); show_tip(0, uni("DSP/Effects")); break;
+	
 	}
 
 	if(id == 0 || id != lid)
@@ -1196,6 +1210,9 @@ int skin_draw_button_down(int id, HDC dc)
 	case skin_main_button_equalizer: draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_eq);       break;
 	case skin_main_button_minimize:  draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_minimize); break;
 	case skin_main_button_exit:      draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_exit);     break;
+	case skin_main_button_repeat:    draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_repeat);   break;
+	case skin_main_button_search:    draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_search);   break;
+	case skin_main_button_volume:    draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_volume);   break;
 
 	case skin_main_button_settings:  draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_settings); break; 
 	case skin_main_button_convert:   draw_control(&gr_main, 0, 2, win_w, win_h, &coords.window_main.button_convert);  break;
@@ -1501,6 +1518,28 @@ void text_display_update()
 
 
 
+}
+
+void skin_draw_volume_bar(int showhide, int size)
+{
+	RECT    rct;
+	GetClientRect(wnd, &rct);
+
+	if(showhide == 1)
+	{
+		double dl, dr;
+		skin.shared->audio.output.getvolume(&dl, &dr);
+
+		if     (dl > 1) dl = 1;
+		else if(dl < 0) dl = 0;
+
+		if     (dr > 1) dr = 1;
+		else if(dr < 0) dr = 0;
+
+		gr_rect(&gr_main, 0x9d9181, 240, rct.bottom - 75 + 42, 150, 6);
+		gr_rect(&gr_main, 0xff2e3e, 240, rct.bottom - 75 + 42, ((int)(150) * dl), 6);
+
+	}
 }
 
 
@@ -2221,6 +2260,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			}	
 
 		}
+		break;
+
+	case WM_MOUSEWHEEL:
+		skin_draw_volume_bar(1, 150);
 		break;
 
 	case WM_LBUTTONDBLCLK:

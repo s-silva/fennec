@@ -163,6 +163,9 @@ typedef struct _skin_coords
 		struct coord   button_open;
 		struct coord   button_playlist;
 		struct coord   button_eq;
+		struct coord   button_search;
+		struct coord   button_repeat;
+		struct coord   button_volume;
 
 		struct coord   button_rewind;
 		struct coord   button_forward;
@@ -455,7 +458,7 @@ void gr_blitto(graphic_context *grsrc, int sx, int sy, int dx, int dy, int w, in
 void gr_settextcolor(graphic_context *gr, uint32_t fcolor, uint32_t bkcolor, int bkmode);
 
 void DrawCurve(HDC context, POINT *points, int npoints, float tension, int color);
-
+void DrawLine(HDC context, int x1, int y1, int x2, int y2, int color);
 /*-----------------------------------------------------------------------------
   eof.
 -----------------------------------------------------------------------------*/

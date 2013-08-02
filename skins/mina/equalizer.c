@@ -199,10 +199,45 @@ void eq_draw(void)
 	}
 
 	
+	pn = CreatePen(PS_SOLID, 1, RGB(200, 200, 200));
+	br = CreateSolidBrush(RGB(200, 200, 200));
 
+	po = (HPEN) SelectObject(hdc_eq, pn);
+	bo = (HBRUSH) SelectObject(hdc_eq, br);
 
+	/* horizontal lines (volume) */
 
-	
+	for(i=0; i<12; i++)
+	{	
+		DrawLine(hdc_eq, 0, (i * rct.bottom) / 12, rct.right, (i * rct.bottom) / 12, 0);
+	}
+
+	/* vertical  lines (20Hz - 100Hz) */
+
+	for(i=20; i<100; i+=10)
+	{	
+		int x = (log10(i) / log10(2.0) - 4.32) / (14.28 - 4.32) * (double)rct.right;
+		DrawLine(hdc_eq, x, 0, x, rct.bottom, 0);
+	}
+
+	for(i=100; i<1000; i+=100)
+	{	
+		int x = (log10(i) / log10(2.0) - 4.32) / (14.28 - 4.32) * (double)rct.right;
+		DrawLine(hdc_eq, x, 0, x, rct.bottom, 0);
+	}
+
+	for(i=1000; i<10000; i+=1000)
+	{	
+		int x = (log10(i) / log10(2.0) - 4.32) / (14.28 - 4.32) * (double)rct.right;
+		DrawLine(hdc_eq, x, 0, x, rct.bottom, 0);
+	}
+
+	SelectObject(hdc_eq, po);
+	SelectObject(hdc_eq, bo);
+
+	DeleteObject(pn);
+	DeleteObject(br);
+
 
 	pn = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
 	br = CreateSolidBrush(RGB(255, 0, 0));
