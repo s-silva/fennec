@@ -1040,22 +1040,26 @@ void draw_control(graphic_context *gr, graphic_context *gr_sc, int state, int wi
 	switch(sc->align)
 	{
 	case coord_align_top_left:
-		gr_rect(gr, 0, sc->x, sc->y, sc->font_size, sc->font_size);
+		if(sc->bk)
+			gr_rect(gr, (state == 1 ? sc->bk_hcolor : sc->bk_ncolor), sc->x, sc->y, 100, 100);
 		gr_text(gr, 0, stext, sc->x, sc->y, 0, 0);
 		break;
 
 	case coord_align_top_right:
-		gr_rect(gr, 0, sc->x, sc->y, sc->font_size, sc->font_size);
+		if(sc->bk)
+			gr_rect(gr, (state == 1 ? sc->bk_hcolor : sc->bk_ncolor), win_w - sc->x, sc->y, 100, 100);
 		gr_text(gr, 0, stext, win_w - sc->x, sc->y, 0, 0);
 		break;
 
 	case coord_align_bottom_left:
-		gr_rect(gr, 0, sc->x, sc->y, sc->font_size, sc->font_size);
+		if(sc->bk)
+			gr_rect(gr, (state == 1 ? sc->bk_hcolor : sc->bk_ncolor), sc->x, win_h - sc->y, sc->w, sc->h);
 		gr_text(gr, 0, stext, sc->x, win_h - sc->y, 0, 0);
 		break;
 
 	case coord_align_bottom_right:
-		gr_rect(gr, 0, sc->x, sc->y, sc->font_size, sc->font_size);
+		if(sc->bk)
+			gr_rect(gr, (state == 1 ? sc->bk_hcolor : sc->bk_ncolor), win_w - sc->x, win_h - sc->y, sc->w, sc->h);
 		gr_text(gr, 0, stext, win_w - sc->x, win_h - sc->y, 0, 0);
 		break;
 	}

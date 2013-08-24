@@ -287,6 +287,24 @@ void scontrol(struct coord *c, int x, int y, int w, int h, int align, uint32_t n
 	c->font_id   = 0;
 }
 
+void scontrol_exa(struct coord *c, int x, int y, int w, int h, int align, uint32_t ncolor, uint32_t hcolor, uint32_t bkcolor, int mode, letter icon_text, int font_size)
+{
+	c->x = x;
+	c->y = y;
+	c->w = w;
+	c->h = h;
+	c->align     = align; 
+	c->ncolor    = ncolor;
+	c->hcolor    = hcolor;
+	c->mode      = mode;
+	c->icon_text = icon_text;
+	c->font_size = font_size;
+	c->bk        = 1;
+	c->bk_ncolor = bkcolor;
+	c->bk_hcolor = bkcolor;
+	c->font_id   = 0;
+}
+
 void scontrol_ex(struct coord *c, int x, int y, int w, int h, int align, uint32_t ncolor, uint32_t hcolor, int mode, letter icon_text, int font_size, int usebk, uint32_t bk_ncolor, uint32_t bk_hcolor, int font_id)
 {
 	c->x = x;
@@ -328,17 +346,17 @@ void fill_skin_coords(void)
 	coords.window_main.pos_text_x = 200;
 	coords.window_main.pos_text_y = 15;
 
-	scontrol(&coords.window_main.button_play,       10, 55, 55, 55, coord_align_bottom_left, 0x656565, 0xff2e3e, 0, uni('t'), 36);
-	scontrol(&coords.window_main.button_stop,       65, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff2e3e, 0, uni('b'), 19);
-	scontrol(&coords.window_main.button_previous,  101, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff2e3e, 0, uni('c'), 19);
-	scontrol(&coords.window_main.button_next,      135, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff2e3e, 0, uni('d'), 19);
-	scontrol(&coords.window_main.button_volume,    169, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff2e3e, 0, uni('e'), 19);
-	scontrol(&coords.window_main.button_open,      204, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff2e3e, 0, uni('f'), 19);
+	scontrol_exa(&coords.window_main.button_play,       10, 55, 55, 55, coord_align_bottom_left, 0x656565, 0xff2e3e, 0xf5f5f5, 0, uni('t'), 36);
+	scontrol_exa(&coords.window_main.button_stop,       65, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff2e3e, 0xf5f5f5, 0, uni('b'), 19);
+	scontrol_exa(&coords.window_main.button_previous,  101, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff2e3e, 0xf5f5f5, 0, uni('c'), 19);
+	scontrol_exa(&coords.window_main.button_next,      135, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff2e3e, 0xf5f5f5, 0, uni('d'), 19);
+	scontrol_exa(&coords.window_main.button_volume,    169, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff2e3e, 0xf5f5f5, 0, uni('e'), 19);
+	scontrol_exa(&coords.window_main.button_open,      204, 45, 33, 33, coord_align_bottom_left, 0x656565, 0xff2e3e, 0xf5f5f5, 0, uni('f'), 19);
 
 	
-	scontrol(&coords.window_main.button_playlist,  89,  44, 25, 25, coord_align_bottom_right, 0x656565, 0xff2e3e, 0, uni('g'), 17);
-	scontrol(&coords.window_main.button_repeat,    62,  44, 25, 25, coord_align_bottom_right, 0x656565, 0xff2e3e, 0, uni('h'), 17);	
-	scontrol(&coords.window_main.button_search,    34,  44, 25, 25, coord_align_bottom_right, 0x656565, 0xff2e3e, 0, uni('i'), 17);	
+	scontrol_exa(&coords.window_main.button_playlist,  89,  44, 25, 25, coord_align_bottom_right, 0x656565, 0xff2e3e, 0xf5f5f5, 0, uni('g'), 17);
+	scontrol_exa(&coords.window_main.button_repeat,    62,  44, 25, 25, coord_align_bottom_right, 0x656565, 0xff2e3e, 0xf5f5f5, 0, uni('h'), 17);	
+	scontrol_exa(&coords.window_main.button_search,    34,  44, 25, 25, coord_align_bottom_right, 0x656565, 0xff2e3e, 0xf5f5f5, 0, uni('i'), 17);	
 
 	/*scoord(&coords.window_main.button_eq,        232, 40, 36, 15, 229, 117, 229, 133, 229, 149); */
 	scontrol(&coords.window_main.button_exit,      (27 * 1) - 6 + 12, 14, 25, 25, coord_align_top_right, 0xc8c8c8, 0xffffff, 0, uni('r'), 13);				
