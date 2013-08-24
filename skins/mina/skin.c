@@ -98,6 +98,9 @@ int                     last_dx = 0, last_dy = 0;
 HDC                     mdc_sheet = 0;
 HBITMAP                 bmp_sheet = 0;
 HBITMAP                 oldbmp_sheet;
+HDC                     mdc_main = 0;
+HBITMAP                 bmp_mdc_main, bmp_old_mdc_main;
+HDC                     main_dc;
 
 HDC     				ldcmem = 0;
 HBITMAP 				lbmp;
@@ -161,6 +164,23 @@ enum
 	typo_count
 };
 
+static void misc_createmdc(HDC pdc, int w, int h)
+{
+	if(mdc_main)
+	{
+		SelectObject(mdc_main, bmp_old_mdc_main);
+		DeleteObject(bmp_mdc_main);
+		DeleteDC(mdc_main);
+		mdc_main = 0;
+	}
+
+	mdc_main = CreateCompatibleDC(pdc);
+	bmp_mdc_main = CreateCompatibleBitmap(pdc, w, h);
+
+	bmp_old_mdc_main = (HBITMAP) SelectObject(mdc_main, bmp_mdc_main);
+
+	SetBkMode(mdc_main, TRANSPARENT);
+}
 
 void misc_time_to_string(int seconds, string buf)
 {
@@ -286,8 +306,9 @@ int __stdcall fennec_skin_initialize(struct skin_data *indata, struct skin_data_
 	wnd = indata->wnd;
 	hdc = GetDC(wnd);
 
+
 	gr_init(&gr_main);
-	gr_main.dc = hdc;
+	gr_main.dc = main_dc = hdc;
 	SetBkMode(hdc, TRANSPARENT);
 
 	typo_create_fonts();
@@ -433,7 +454,12 @@ int __stdcall fennec_skin_initialize(struct skin_data *indata, struct skin_data_
 	
 	ShowWindow(wnd, SW_SHOW);
 
+
+	misc_createmdc(hdc, skin_settings.main_w, skin_settings.main_h);
+
 	ml_create(skin.wnd);
+	gr_main.dc = mdc_main;
+	SetBkMode(mdc_main, TRANSPARENT);
 	/*eq_create(skin.wnd);
 	vis_create(skin.wnd);
 	vid_create(skin.wnd);*/
@@ -736,24 +762,6 @@ int skin_get_themes(int id, string name, int osize)
 	switch(id)
 	{
 	case 0:  str_cpy(name, uni("Default")); break;
-	case 1:  str_cpy(name, uni("Theme Mode: Bright")); break;
-	case 2:  str_cpy(name, uni("Theme Mode: Middle")); break;
-	case 3:  str_cpy(name, uni("Theme Mode: Dark")); break;
-	case 4:  str_cpy(name, uni("Theme Mode: Average")); break;
-	case 5:  str_cpy(name, uni("")); break;
-	case 6:  str_cpy(name, uni("Mission")); break;
-	case 7:  str_cpy(name, uni("Shiny Ice")); break;
-	case 8:  str_cpy(name, uni("Platinum")); break;
-	case 9:  str_cpy(name, uni("Valentine")); break;
-	case 10: str_cpy(name, uni("Copper")); break;
-	case 11: str_cpy(name, uni("Metal")); break;
-	case 12: str_cpy(name, uni("")); break;
-	case 13: str_cpy(name, uni("Electronic")); break;
-	case 14: str_cpy(name, uni("Vine")); break;
-	case 15: str_cpy(name, uni("Classic Wood")); break;
-	case 16: str_cpy(name, uni("Artificial")); break;
-	case 17: str_cpy(name, uni("Soft & Bright")); break;
-	case 18: str_cpy(name, uni("Mono")); break;
 	default:
 		return 0;
 	}
@@ -1032,18 +1040,22 @@ void draw_control(graphic_context *gr, graphic_context *gr_sc, int state, int wi
 	switch(sc->align)
 	{
 	case coord_align_top_left:
+		gr_rect(gr, 0, sc->x, sc->y, sc->font_size, sc->font_size);
 		gr_text(gr, 0, stext, sc->x, sc->y, 0, 0);
 		break;
 
 	case coord_align_top_right:
+		gr_rect(gr, 0, sc->x, sc->y, sc->font_size, sc->font_size);
 		gr_text(gr, 0, stext, win_w - sc->x, sc->y, 0, 0);
 		break;
 
 	case coord_align_bottom_left:
+		gr_rect(gr, 0, sc->x, sc->y, sc->font_size, sc->font_size);
 		gr_text(gr, 0, stext, sc->x, win_h - sc->y, 0, 0);
 		break;
 
 	case coord_align_bottom_right:
+		gr_rect(gr, 0, sc->x, sc->y, sc->font_size, sc->font_size);
 		gr_text(gr, 0, stext, win_w - sc->x, win_h - sc->y, 0, 0);
 		break;
 	}
@@ -1580,269 +1592,10 @@ void CALLBACK display_timer(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime
 
 	text_display_update();
 
-	/*
-	return;
+	gr_roundrect(&gr_main, 28, 0xb6b6b6, win_w - 50, win_h - 110, 75, 28);
 
-
-	static string  current_title_buf = 0;
-	
-	static int title_rev_stay = 0;
-	static int title_rev = 0;
-	static int hp = 0;
-	static int cp = 0;
-	static int mp = 0;
-	static int left_pos = 0;
-	static int left_max = 0;
-
-	ml_pl_preview_display_timer();
-
-	if(uMsg == WM_USER + 222)
-	{
-		mp = cp = hp = 0;
-	}
-	
-	if(uMsg == WM_USER + 221 && (hwnd == (HWND)-1))
-	{
-		DeleteDC(ldcmem);
-		DeleteObject(lbmp);
-		ldcmem = 0;
-		lbmp = 0;
-	}
-
-
-	if(!ldcmem)
-	{
-		ldcmem = CreateCompatibleDC(hdc);
-		lbmp   = CreateCompatibleBitmap(hdc, cr(coords.window_main.width), cr(coords.window_main.height));
-
-		SelectObject(ldcmem, lbmp);
-		SelectObject(ldcmem, displayfont);
-	}
-
-	if(uMsg == (UINT)-1)
-	{
-		DeleteDC(ldcmem);
-		DeleteObject(lbmp);
-		ldcmem = 0;
-		return;
-	}
-
-				
-	SetStretchBltMode(ldcmem, HALFTONE);
-	SetBrushOrgEx(ldcmem, 0, 0, 0);
-
-
-	if(uMsg == WM_USER + 221)
-		StretchBlt(ldcmem, 0, 0, cr(coords.window_main.width), cr(coords.window_main.height), mdc_sheet, 0, 0, coords.window_main.width, coords.window_main.height, SRCCOPY);
-	else
-	{
-		blt_coord(ldcmem, mdc_sheet, 0, &coords.window_main.display_area);
-	}
-	if(!skin_settings.skin_lock)
-		blt_coord(ldcmem, mdc_sheet, 0, &coords.window_main.button_unlock);
-
-	
-	ps = skin.shared->audio.output.getplayerstate();
-	
-	SetTextColor(hdc, display_normal);
-	SetBkMode(ldcmem, TRANSPARENT);
-
-	blt_coord(ldcmem, mdc_sheet, 0, &coords.window_main.display_text_area);
-
-	p = (int)(skin.shared->audio.output.getduration_ms() / 1000);
-	
-	
-	memset(pbuf, 0, sizeof(pbuf));
-	
-	if(p / 60 <= 60)
-	{
-		_itow(p / 60, pbuf, 10);
-		pbuf[str_len(pbuf)] = uni(':');
-
-		if((p % 60) < 10)
-		{	
-			pbuf[str_len(pbuf)] = uni('0');
-			_itow(p % 60, pbuf + str_len(pbuf), 10);
-		}else{
-			_itow(p % 60, pbuf + str_len(pbuf), 10);
-		}
-
-	}else{
-		_itow(p / 3600, pbuf, 10);
-		str_cat(pbuf, uni("h"));
-	}
-
-	TextOut(ldcmem, cr(coords.window_main.dur_text_x), cr(coords.window_main.dur_text_y), pbuf, (int)str_len(pbuf));
-
-	p = (int)(skin.shared->audio.output.getposition_ms() / 1000);
-
-	memset(pbuf, 0, sizeof(pbuf));
-	
-	if(p / 60 <= 60)
-	{
-		_itow(p / 60, pbuf, 10);
-		pbuf[str_len(pbuf)] = uni(':');
-		
-		if(p % 60 < 10)
-		{	
-			pbuf[str_len(pbuf)] = uni('0');
-			_itow(p % 60, pbuf + str_len(pbuf), 10);
-		}else{
-			_itow(p % 60, pbuf + str_len(pbuf), 10);
-		}
-
-	}else{
-		_itow(p / 3600, pbuf, 10);
-		str_cat(pbuf, uni("h"));
-	}
-
-
-	TextOut(ldcmem, cr(coords.window_main.pos_text_x), cr(coords.window_main.pos_text_y), pbuf, (int)str_len(pbuf));
-
-	SelectClipRgn(ldcmem, cliprgn);
-
-	
-	switch(ps)
-	{
-	case v_audio_playerstate_playingandbuffering:
-	case v_audio_playerstate_playing:
-		SetTextColor(ldcmem, display_normal);
-		break;
-
-	case v_audio_playerstate_paused:
-		SetTextColor(ldcmem, display_paused);
-		break;
-
-	case v_audio_playerstate_stopped:
-	case v_audio_playerstate_init:
-	case v_audio_playerstate_loaded:
-		SetTextColor(ldcmem, display_stopped);
-		break;
-
-	case v_audio_playerstate_buffering:
-		SetTextColor(ldcmem, RGB(0, 192, 0));
-		break;
-
-	case v_audio_playerstate_notinit:
-		SetTextColor(ldcmem, RGB(255, 0, 0));
-		break;
-	}
-
-	if(title[0] && (!artist[0] && !album[0]))
-	{
-		mp = 0;
-		cp = 0;
-		hp = 0;
-	}
-
-	switch(mp)
-	{
-	case 0: current_title_buf = title;  break;
-	case 1: current_title_buf = artist; break;
-	case 2: current_title_buf = album;  break;
-	}
-
-	if(!current_title_buf)mp++;
-	else if(!current_title_buf[0])mp++;
-
-	TextOut(ldcmem, cr(coords.window_main.infotext_x) - left_pos, cr(coords.window_main.infotext_y) - cp, current_title_buf, (int)str_len(current_title_buf)); 
-
-	SelectClipRgn(ldcmem, 0);
-
-
-	if(uMsg != WM_USER + 221)
-	{
-		hp++;
-
-		if(cp < 0)cp++;
-
-		if(hp > 50)
-		{
-			cp++;
-		}else if(cp == 0){
-			if(!left_max)
-			{
-				SIZE  extsz;
-
-					GetTextExtentPoint32(ldcmem, current_title_buf, (int)str_len(current_title_buf), &extsz);
-					if(extsz.cx >  cr(coords.window_main.display_region.w))
-						left_max = extsz.cx;
-			}
-
-			if(!title_rev)
-			{
-				if(left_max + 30> (left_pos + cr(coords.window_main.display_region.w)))
-				{
-					left_pos++;
-					hp = 0;
-				}else{
-					if(left_max)
-					{
-						title_rev = 1;
-						title_rev_stay = 20;
-					}
-				}
-			}else{
-				left_pos -= 5;
-				
-				if(left_pos <= 0)
-				{
-					left_pos = 0;
-					title_rev_stay--;
-
-					if(title_rev_stay <= 0)
-					{
-						left_max = 0;
-						hp = 51;
-						title_rev = 0;
-						title_rev_stay = 0;
-					}
-				}
-			}
-		}
-
-		if(cp > cr(coords.window_main.infotext_y + 2))
-		{
-			cp = -cr(coords.window_main.infotext_x + 2);
-			hp = 0;
-			mp++;
+	BitBlt(main_dc, 0, win_h - 117, win_w, 117, gr_main.dc, 0, win_h - 117, SRCCOPY);
 			
-			if(mp >= ((artist[0] != 0) + (album[0] != 0) + (title[0] != 0)))
-				mp = 0;
-		}
-	}
-
-
-	skin.shared->audio.output.getposition(&d);
-	if     (d > 1) d = 1;
-	else if(d < 0) d = 0;
-
-
-	v = (int)(d * coords.window_main.bar_seek.w);
-
-	blt_coord(ldcmem, mdc_sheet, 0, &coords.window_main.bar_seek);
-	blt_coord_ew(ldcmem, mdc_sheet, 1, &coords.window_main.bar_seek, v);
-
-	skin.shared->audio.output.getvolume(&dl, &dr);
-
-	if     (dl > 1) dl = 1;
-	else if(dl < 0) dl = 0;
-
-	if     (dr > 1) dr = 1;
-	else if(dr < 0) dr = 0;
-
-	v = (int)(((dl + dr) / 2) * coords.window_main.bar_volume.w);
-
-	blt_coord(ldcmem, mdc_sheet, 0, &coords.window_main.bar_volume);
-	blt_coord_ew(ldcmem, mdc_sheet, 1, &coords.window_main.bar_volume, v);
-
-	if(uMsg == WM_USER + 221)
-		BitBlt(hdc, 0, 0, cr(coords.window_main.width), cr(coords.window_main.height), ldcmem, 0, 0, SRCCOPY);
-	else		
-		blt_coord_nozoom(hdc, ldcmem, 0, &coords.window_main.display_area);
-
-	*/
-
 }
 
 
@@ -2259,6 +2012,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				SetWindowPos(window_ml, 1, 0, 45, rct.right - 1, rct.bottom - 117 - 45, SWP_NOZORDER);
 			}	
 
+			misc_createmdc(main_dc, rct.right, rct.bottom);
+			gr_main.dc = mdc_main;
+
 		}
 		break;
 
@@ -2377,6 +2133,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			EndPaint(hwnd, &ps);
 
 			display_timer(0, WM_USER + 221, 0, 0);
+
+			BitBlt(main_dc, 0, 0, win_w, win_h, gr_main.dc, 0, 0, SRCCOPY);
 		}
 		break;
 
