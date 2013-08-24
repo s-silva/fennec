@@ -482,7 +482,11 @@ void gr_rect(graphic_context *gr, uint32_t color, int x, int y, int w, int h)
 
 void gr_roundrect(graphic_context *gr, int cornor, uint32_t color, int x, int y, int w, int h)
 {
-	
+	if(!gr) return; if(!gr->dc) return;
+
+	gr_setcolor(gr, color, color);
+
+	RoundRect(gr->dc, x, y, x + w, y + h, cornor, cornor);
 }
 
 void gr_circle(graphic_context *gr, uint32_t color, int x, int y, int w, int h)
