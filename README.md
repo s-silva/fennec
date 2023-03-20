@@ -1,12 +1,11 @@
-Fennec-Media-Project
-====================
+# Fennec Media Project
 
 Complete multimedia suite with an audio/video player, converter, CD ripper, tag editor, DSP effect host and a visualization host. Supports playing/converting almost all media formats.
 Project Page: http://fennec.sourceforge.net
 
 ![Screenshot](/misc/sc.png)
 
-##Features
+## Features
 
 
 * Supports playing and converting: mpg, mpeg, avi, vob, flv, 3gp, mov, qt, asf, wmv, divx, mkv, mp4, ogm, rm, rmvb, swf, mp4, m2a, m4a, aac, amr, flac, ape, mpc, raw, aif, aiff, wav, wave, au, caf, snd, svx, paf, fap, gsm, nist, ircam, sf, voc, w64, mat4, mat5, mat, xi, pvf, sds, sd2, vox, spx, ogg, wv, ac3, mod, nst, mdz, mdr, m15, s3m, stm, s3z, xm, xmz, it, itz, mtm, 669, ult, wow, far, mdl, okt, dmf, ptm, med, ams, dbm, dsm, umx, amf, psm, mt2, mid, midi, rmi, smf, mp1, mp2, mp3, cda, wma...
@@ -41,7 +40,7 @@ Project Page: http://fennec.sourceforge.net
 * Supports reading over 50 subtitle formats and over 10 playlist formats (with Unicode support).
 
 
-##Compiling
+## Compiling
 
 Older source code archives can be downloaded from SourceForge project page, the git repository is created with
 an updated version of 2010 source archive (http://prdownloads.sourceforge.net/fennec/fennec_source_july_16th_2010.7z?download).
